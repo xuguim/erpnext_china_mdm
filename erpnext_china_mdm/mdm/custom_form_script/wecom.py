@@ -7,12 +7,13 @@
 """
 import frappe
 import requests
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def get_access_token():
 	setting = frappe.get_cached_doc("WeCom Setting")
 	return setting.access_token
 
-def get_checkin_groups(access_token):
+def get_checkin_groups(access_token)->list[dict]:
 	url = 'https://qyapi.weixin.qq.com/cgi-bin/checkin/getcorpcheckinoption'
 
 	params = {
@@ -25,7 +26,7 @@ def get_checkin_groups(access_token):
 	return result.get('group')
 
 
-def get_checkin_userid_from_tag(access_token, tag_id):
+def get_tag_users(access_token, tag_id)->list[dict]:
 	url = 'https://qyapi.weixin.qq.com/cgi-bin/tag/get'
 	params = {
 		'access_token': access_token,
@@ -65,32 +66,42 @@ def get_user_detail(access_token, user_id):
 		"department": result.get('department', [])
 	}
 
-def get_tag_users_from_group(access_token, group_id):
-	group_doc = frappe.db.exists("Checkin Group", group_id)
-	if not group_doc:
-		return []
-	group_doc = frappe.get_cached_doc("Checkin Group", group_id)
-	tag_list = group_doc.tags
-	tag_user_id_set = set()
-	for tag in tag_list:
-		tag_user_list = get_checkin_userid_from_tag(access_token, int(tag.tag))
-		tag_user_id_set = tag_user_id_set.union(set([user.get('userid') for user in tag_user_list]))
-	return tag_user_id_set
 
+def get_tags(access_token):
+	url = 'https://qyapi.weixin.qq.com/cgi-bin/tag/list'
+	params = {
+		'access_token': access_token
+	}
+	resp = requests.get(url, params=params)
+	result = resp.json()
+	if result.get('errcode') != 0:
+		raise Exception('get tags error: ' + result.get('errmsg', ''))
+	return result.get('taglist')
+
+
+def build_user_detail(access_token, user_id, departments_dict):
+	user_detail = get_user_detail(access_token, user_id)
+	user_department = user_detail.get('department', [])
+	detail = {
+		"name": user_detail.get('name', ''),
+		"department": '；'.join([departments_dict.get(dept) for dept in user_department])
+	}
+	return user_id, detail
 
 def build_user_detail_list(access_token, users, departments_dict):
 	user_details = {}
-	for user_id in users:
-		try:
-			user_detail = get_user_detail(access_token, user_id)
-			user_department = user_detail.get('department', [])
-			detail = {
-				"name": user_detail.get('name', ''),
-				"department": '；'.join([departments_dict.get(dept) for dept in user_department])
-			}
-			user_details[user_id] = detail
-		except:
-			pass
+	with ThreadPoolExecutor(max_workers=6) as t:
+		obj_list = []
+		for user_id in users:
+			obj = t.submit(build_user_detail, access_token, user_id, departments_dict)
+			obj_list.append(obj)
+
+		for future in as_completed(obj_list):
+			try:
+				user_id, data = future.result()
+				user_details[user_id] = data
+			except:
+				pass
 	return user_details
 
 def get_will_change_users(access_token, group_users_set, tag_users_set, departments_dict):
@@ -111,17 +122,27 @@ def get_checkin_group_users(**kwargs):
 	# {1: "xxxx"}
 	departments_dict = {dept['id']: dept['name'] for dept in departments}
 
+	tags = get_tags(access_token)
+	# {"xxxx": 1}
+	tags_dict = {tag['tagname']: tag['tagid'] for tag in tags}
+	
 	will_add = []
 	will_del = []
 	for group in groups:
 		group_id = group.get('groupid')
 		group_create_userid = group.get('create_userid')
 		group_name = group.get('groupname')
+		
 		group_user_id_list = group.get('range').get('userid')
-
 		group_user_id_set = set(group_user_id_list)
 
-		tag_user_id_set = get_tag_users_from_group(access_token, group_id)
+		# 如果规则名和标签名没有匹配，则跳过
+		tag_id = tags_dict.get(group_name)
+		if not tag_id:
+			continue
+		tag_user_list = get_tag_users(access_token, int(tag_id))
+		tag_user_id_set = set([user.get('userid') for user in tag_user_list])
+
 		add_users, del_users = get_will_change_users(access_token, group_user_id_set, tag_user_id_set, departments_dict)
 		if len(add_users) > 0:
 			data = {
