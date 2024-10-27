@@ -47,7 +47,31 @@ class CustomItem(Item):
 
     def before_save(self):
         self.set_custom_uoms_string()
+        
+    @property
+    def custom_qr_code(self):
+        from io import BytesIO
+        import qrcode
+        import base64
+        def generate_qrcode(data):
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=10,
+                border=4,
+            )
+            qr.add_data(data)
+            qr.make(fit=True)
+        
+            img = qr.make_image(fill='black', back_color='white')
 
+            img_buffer = BytesIO()
+            img.save(img_buffer)
+            img_buffer.seek(0)
+            res = img_buffer.read()
+            img_buffer.close()
+            return 'data:image/png;base64,' + base64.b64encode(res).decode("utf-8")
+        return  generate_qrcode(self.name)
 
 @frappe.whitelist()
 def get_item_default_warehouse(**kwargs):
