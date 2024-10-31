@@ -137,7 +137,7 @@ def get_checkin_group_users(**kwargs):
 		group_user_id_set = set(group_user_id_list)
 
 		# 如果规则名和标签名没有匹配，则跳过
-		tag_id = tags_dict.get(group_name)
+		tag_id = tags_dict.get('考勤-' + group_name)
 		if not tag_id:
 			continue
 		tag_user_list = get_tag_users(access_token, int(tag_id))
