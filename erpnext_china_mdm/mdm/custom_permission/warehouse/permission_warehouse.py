@@ -39,11 +39,13 @@ def has_query_permission(user):
 		warehouses = get_user_all_warehouses(users)
 		warehouses = tuple(set([w['name'] for w in warehouses]))
 		string = str(warehouses).replace(',)', ')')
-		conditions = """('')"""
+		
 		if len(warehouses) > 0:
-			conditions = f"""
-				name in {string}
-			"""
+			conditions = f"""name in {string}"""
+		else:
+			conditions = """name in ('')"""
+	else:
+		conditions = ''
 	return conditions
 
 def has_permission(doc, user, permission_type=None):
