@@ -1,4 +1,5 @@
 import frappe
+from .oa_item_code import codes
 from erpnext.stock.doctype.item.item import Item
 
 class CustomItem(Item):
@@ -56,9 +57,16 @@ class CustomItem(Item):
                 'uom': self.stock_uom
             })
 
+    def validate_oa_item_code(self):
+        custom_oa_item_code = str(self.custom_oa_item_code or '').strip()
+        if custom_oa_item_code and custom_oa_item_code not in codes:
+            frappe.throw('原OA物料编码不存在！')
+        self.custom_oa_item_code = custom_oa_item_code
+
     def before_save(self):
         self.set_custom_uoms_string()
         self.set_barcodes()
+        self.validate_oa_item_code()
         
     @property
     def custom_qr_code(self):
