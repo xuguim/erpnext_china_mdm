@@ -63,11 +63,14 @@ class CustomItem(Item):
             frappe.throw('原OA物料编码不存在！')
         self.custom_oa_item_code = custom_oa_item_code
 
+    def validate(self):
+        self.validate_oa_item_code()
+        return super().validate()
+
     def before_save(self):
         self.set_custom_uoms_string()
         self.set_barcodes()
-        self.validate_oa_item_code()
-        
+
     @property
     def custom_qr_code(self):
         from io import BytesIO
