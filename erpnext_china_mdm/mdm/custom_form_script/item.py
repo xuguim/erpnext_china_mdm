@@ -45,8 +45,20 @@ class CustomItem(Item):
             if self.custom_uoms_string[0] == ';':
                 self.custom_uoms_string = self.custom_uoms_string[1:]
 
+    def set_barcodes(self):
+        if not frappe.db.get_value('Item Barcode', filters={
+             'parent': self.name,
+             'parentfield': 'barcodes',
+             'parenttype': 'item'
+        }):
+            self.append('barcodes', {
+                'barcode': self.name,
+                'uom': self.stock_uom
+            })
+
     def before_save(self):
         self.set_custom_uoms_string()
+        self.set_barcodes()
         
     @property
     def custom_qr_code(self):
