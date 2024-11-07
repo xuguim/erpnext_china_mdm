@@ -13,7 +13,7 @@ Document No Type,文号类型
 Document No Type Name,文号类型名称
 Document No Name,文号
 Parent Document No Type,上级
-Administrative Permits of Companies,公司行政许可
+APC,公司行政许可
 Administrative Permits of Companies Type,公司行政许可类型
 Administrative Permits of Companies Type Name,公司行政许可类型名称
 Parent Administrative Permits of Companies Type,上级
@@ -39,6 +39,11 @@ Notes,注
 Warehouse Employee,仓库员工
 OA Item Code,原OA物料编码
 Warehouse Item Name,仓库内部名称
-
-
-	
+APC Name,产品名称或者资质类别及等级
+APC StartDate,证书生效时间
+APC EndDate,证书截止时间
+APC No,证书编号
+APC TypeDesc,证书类型	
+APC InstitutionList,发证机构
+APC Status,证书状态
+APC Detailed Information,详细信息

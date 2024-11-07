@@ -1,0 +1,102 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:apc_no",
+ "creation": "2024-11-05 15:23:31.082045",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "apc_id",
+  "apc_name",
+  "apc_type",
+  "apc_startdate",
+  "apc_enddate",
+  "apc_no",
+  "apc_typedesc",
+  "apc_institutionlist",
+  "apc_status",
+  "apc_detailed_information"
+ ],
+ "fields": [
+  {
+   "fieldname": "apc_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "APC Id"
+  },
+  {
+   "fieldname": "apc_name",
+   "fieldtype": "Small Text",
+   "label": "APC Name",
+   "length": 255
+  },
+  {
+   "fieldname": "apc_type",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "APC Type"
+  },
+  {
+   "fieldname": "apc_startdate",
+   "fieldtype": "Data",
+   "label": "APC StartDate"
+  },
+  {
+   "fieldname": "apc_enddate",
+   "fieldtype": "Data",
+   "label": "APC EndDate"
+  },
+  {
+   "fieldname": "apc_no",
+   "fieldtype": "Data",
+   "label": "APC No",
+   "unique": 1
+  },
+  {
+   "fieldname": "apc_typedesc",
+   "fieldtype": "Link",
+   "label": "APC TypeDesc",
+   "options": "Administrative Permits of Companies Type"
+  },
+  {
+   "fieldname": "apc_institutionlist",
+   "fieldtype": "Data",
+   "label": "APC InstitutionList"
+  },
+  {
+   "fieldname": "apc_status",
+   "fieldtype": "Data",
+   "label": "APC Status"
+  },
+  {
+   "fieldname": "apc_detailed_information",
+   "fieldtype": "JSON",
+   "label": "APC Detailed Information"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-11-07 09:10:36.894958",
+ "modified_by": "Administrator",
+ "module": "mdm",
+ "name": "APC",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
