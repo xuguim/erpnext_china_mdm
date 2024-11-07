@@ -214,6 +214,13 @@ required_apps = ['saoxia/erpnext_china']
 # auth_hooks = [
 #	"erpnext_china.auth.validate"
 # ]
+# scheduler_events = {
+# 	"cron": { 
+#         "0 3 * * *": [
+# 			"erpnext_china_mdm.mdm.doctype.apc.apc.update_apc",
+# 		],   
+# 	},
+# }
 
 override_doctype_class = {
     'Item':'erpnext_china_mdm.mdm.custom_form_script.item.CustomItem',

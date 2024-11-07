@@ -66,8 +66,16 @@ class CustomItem(Item):
     def validate(self):
         self.validate_oa_item_code()
         return super().validate()
-
+    
+    def replace_bracket(self):
+        self.item_name = self.item_name.replace('（','(')
+        self.item_name = self.item_name.replace('）',')')
+        self.warehouse_item_name = self.warehouse_item_name.replace('（','(')
+        self.warehouse_item_name = self.warehouse_item_name.replace('）',')')
+         
     def before_save(self):
+
+        self.replace_bracket()
         self.set_custom_uoms_string()
         self.set_barcodes()
 
