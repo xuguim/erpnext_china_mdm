@@ -216,9 +216,9 @@ required_apps = ['saoxia/erpnext_china']
 # ]
 scheduler_events = {
 	"cron": { 
-        "0 3 * * *": [
-			"erpnext_china_mdm.mdm.doctype.apc.apc.update_apc",
-		],   
+        # "0 3 * * *": [
+		# 	"erpnext_china_mdm.mdm.doctype.apc.apc.update_apc",
+		# ],   
 	},
 }
 
