@@ -69,10 +69,12 @@ class CustomItem(Item):
     
     def replace_bracket(self):
         if self.item_name: 
+            self.item_name = str(self.item_name).strip()
             self.item_name = self.item_name.replace('（','(')
             self.item_name = self.item_name.replace('）',')')
 
         if self.warehouse_item_name:
+            self.warehouse_item_name = str(self.warehouse_item_name).strip()
             self.warehouse_item_name = self.warehouse_item_name.replace('（','(')
             self.warehouse_item_name = self.warehouse_item_name.replace('）',')')
          
