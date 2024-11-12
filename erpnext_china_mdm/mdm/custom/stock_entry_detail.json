@@ -314,7 +314,7 @@
     "name": "Stock Entry Detail-allow_zero_valuation_rate-default",
     "owner": "Administrator",
     "property": "default",
-    "property_type": "Text",
+    "property_type": "Check",
     "row_name": null,
     "value": "1"
    }
