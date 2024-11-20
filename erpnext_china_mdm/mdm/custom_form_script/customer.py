@@ -53,9 +53,11 @@ class CustomCustomer(Customer):
 	def set_primary_address(self):
 		# 如果首选地址没填，则设置一个默认首选地址
 		if not self.customer_primary_address:
-			dynamic_link_doc = frappe.get_last_doc('Dynamic Link', filters={'link_name': self.customer_name})
-			address_doc = frappe.get_doc('Address', dynamic_link_doc.parent)
-			self.customer_primary_address = address_doc.name
+			name = frappe.db.get_value('Dynamic Link', filters={
+				'link_name': self.customer_name,
+				'parenttype': 'address'
+				}, fieldname='parent')
+			self.customer_primary_address = name
 	
 	def set_check(self):
 		# 修改被关联主客户的是否主客户勾选款
