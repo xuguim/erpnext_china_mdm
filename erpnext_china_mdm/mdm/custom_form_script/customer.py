@@ -50,6 +50,22 @@ class CustomCustomer(Customer):
 		if old and old.customer_type == 'Company' and self.customer_type == "Individual":
 			frappe.throw("公司客户不可转化为个人客户！")
 
+	def set_primary_address(self):
+		# 如果首选地址没填，则设置一个默认首选地址
+		if not self.customer_primary_address:
+			name = frappe.db.get_value('Dynamic Link', filters={
+				'link_name': self.customer_name,
+				'parenttype': 'address'
+				}, fieldname='parent')
+			self.customer_primary_address = name
+	
+	def set_check(self):
+		# 修改被关联主客户的是否主客户勾选款
+		if self.custom_parent_customer:
+			doc = frappe.get_doc('Customer', self.custom_parent_customer)
+			doc.custom_is_parent_customer = 1
+			doc.save(ignore_permissions=True)
+
 	def before_save(self):
 		# 如果客户关联的线索发生变化，同时修改客户联系方式子表
 		if self.has_value_changed("lead_name"):
@@ -57,6 +73,8 @@ class CustomCustomer(Customer):
 			if self.lead_name:
 				lead = frappe.get_doc("Lead", self.lead_name)
 				self.add_customer_contact_item(lead)
+		self.set_primary_address()
+		self.set_check()
 		
 	def add_customer_contact_item(self, lead):
 		contact_name = lead.first_name
