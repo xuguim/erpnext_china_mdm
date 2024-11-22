@@ -236,7 +236,8 @@ override_whitelisted_methods = {
 after_install = "erpnext_china_mdm.setup.after_install.operations.install_fixtures.install"
 
 doctype_js = {
-    'Address': 'mdm/custom_form_script/address.js'
+    'Address': 'mdm/custom_form_script/address.js',
+    'Customer': 'mdm/custom_form_script/customer.js'
 }
 
 permission_query_conditions = {
