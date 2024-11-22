@@ -67,7 +67,7 @@ class ImportPaymentEntry(Document):
 
 	def validate_amount(self, amount):
 		if amount is None or float(amount) < 0:
-			frappe.throw(f'导入的文件中存在错误数据的数据格式：{amount}！')
+			frappe.throw(f'导入的文件中存在错误的数据格式：{amount}！')
 	
 	def validate_str_date_format(self, date_str):
 		try:
@@ -75,7 +75,7 @@ class ImportPaymentEntry(Document):
 		except Exception:
 			datetime.strptime(date_str, r"%Y-%m-%d %H:%M:%S")
 		except:
-			frappe.throw(f'导入的文件中存在错误数据的数据格式：{date_str}！')
+			frappe.throw(f'导入的文件中存在错误的数据格式：{date_str}！')
 
 	def get_paid_to(self, company, bank_account, mode_of_payment):
 		bank = get_default_bank_cash_account(
