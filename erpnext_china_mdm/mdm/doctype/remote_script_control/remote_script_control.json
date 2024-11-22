@@ -1,0 +1,89 @@
+{
+ "actions": [],
+ "autoname": "field:title",
+ "creation": "2024-11-12 10:22:01.776520",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "host",
+  "port",
+  "username",
+  "password",
+  "local_script",
+  "remote_script",
+  "result"
+ ],
+ "fields": [
+  {
+   "fieldname": "host",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Host"
+  },
+  {
+   "fieldname": "port",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Port"
+  },
+  {
+   "fieldname": "username",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Username"
+  },
+  {
+   "fieldname": "password",
+   "fieldtype": "Data",
+   "label": "Password"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "unique": 1
+  },
+  {
+   "fieldname": "local_script",
+   "fieldtype": "Text",
+   "label": "Local Script"
+  },
+  {
+   "fieldname": "result",
+   "fieldtype": "Text",
+   "label": "Result"
+  },
+  {
+   "fieldname": "remote_script",
+   "fieldtype": "Text",
+   "label": "Remote Script"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-11-13 10:53:08.923732",
+ "modified_by": "Administrator",
+ "module": "mdm",
+ "name": "Remote Script Control",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
