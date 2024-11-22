@@ -69,14 +69,6 @@ class ImportPaymentEntry(Document):
 		if amount is None or float(amount) < 0:
 			frappe.throw(f'导入的文件中存在错误的数据格式：{amount}！')
 	
-	def validate_str_date_format(self, date_str):
-		try:
-			datetime.strptime(date_str, r"%Y-%m-%d")
-		except Exception:
-			datetime.strptime(date_str, r"%Y-%m-%d %H:%M:%S")
-		except:
-			frappe.throw(f'导入的文件中存在错误的数据格式：{date_str}！')
-
 	def get_paid_to(self, company, bank_account, mode_of_payment):
 		bank = get_default_bank_cash_account(
 			company, "Bank", mode_of_payment=mode_of_payment, account=bank_account
@@ -143,12 +135,6 @@ class ImportPaymentEntry(Document):
 				amount = record.get('贷方发生额/元(收入)')
 				self.validate_amount(amount)
 
-				posting_date = record.get('记账日期')
-				self.validate_str_date_format(posting_date)
-
-				reference_date = record.get('交易时间')
-				self.validate_str_date_format(reference_date)
-
 				party_account = record.get('对方户名')
 				if not party_account:
 					frappe.throw('对方户名必须有值')
@@ -192,11 +178,14 @@ class ImportPaymentEntry(Document):
 
 			party_bank_account = self.create_party_bank_account(record.get('对方户名'), record.get('对方开户机构'), record.get('对方账号'), '其他')
 			reference_date = record.get('交易时间')
+			reference_date = datetime.strptime(reference_date, r'%Y%m%d %H:%M:%S').strftime(r"%Y-%m-%d %H:%M:%S")
+			posting_date = record.get('记账日期')
+			posting_date = datetime.strptime(str(posting_date), r'%Y%m%d').strftime(r"%Y-%m-%d")
 			data = {
 				'custom_original_code': original_code,
 				'custom_payment_note': record.get('备注'),
 				'custom_payment_record_from': self.name,
-				'posting_date': record.get('记账日期'),
+				'posting_date': posting_date,
 				'party_bank_account': party_bank_account,
 				'paid_amount': amount,
 				'received_amount': amount,
