@@ -1,0 +1,121 @@
+{
+ "actions": [],
+ "autoname": "format:IPE-{YYYY}-{MM}-{DD}-{#####}",
+ "creation": "2024-11-21 14:06:44.319495",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "bank_type",
+  "bank",
+  "bank_file",
+  "bank_account",
+  "mode_of_payment",
+  "temporary_customer",
+  "paid_to",
+  "paid_from",
+  "result"
+ ],
+ "fields": [
+  {
+   "fieldname": "bank_file",
+   "fieldtype": "Attach",
+   "label": "Bank File",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bank_account",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Bank Account",
+   "options": "Bank Account",
+   "reqd": 1
+  },
+  {
+   "fieldname": "mode_of_payment",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Mode of Payment",
+   "options": "Mode of Payment",
+   "reqd": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "result",
+   "fieldtype": "Text",
+   "label": "Result",
+   "read_only": 1
+  },
+  {
+   "description": "\u5982\u679c\u5f53\u524d\u7cfb\u7edf\u4e2d\u4e0d\u5b58\u5728\u6587\u4ef6\u4e2d\u7684\u5ba2\u6237\uff0c\u6536\u4ed8\u6b3e\u51ed\u8bc1\u5c06\u81ea\u52a8\u8bbe\u7f6e\u5f80\u6765\u5355\u4f4d\u4e3a\u4e34\u65f6\u5ba2\u6237",
+   "fieldname": "temporary_customer",
+   "fieldtype": "Link",
+   "label": "Temporary Customer",
+   "link_filters": "[[\"Customer\",\"customer_name\",\"like\",\"%\u4e34\u65f6\u5ba2\u6237%\"]]",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "paid_to",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Account Paid To",
+   "options": "Account"
+  },
+  {
+   "fieldname": "paid_from",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Account Paid From",
+   "options": "Account"
+  },
+  {
+   "fieldname": "bank_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Bank Type",
+   "options": "\u4e2d\u56fd\u5efa\u8bbe\u94f6\u884c",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bank",
+   "fieldtype": "Link",
+   "label": "Bank",
+   "options": "Bank",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-11-23 15:55:07.238322",
+ "modified_by": "Administrator",
+ "module": "mdm",
+ "name": "Import Payment Entry",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

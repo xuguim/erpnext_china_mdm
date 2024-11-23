@@ -228,7 +228,8 @@ override_doctype_class = {
     'Address': 'erpnext_china_mdm.mdm.custom_form_script.address.CustomAddress',
     #'Stock Entry':'erpnext_china_mdm.mdm.custom_form_script.stock_entry.CustomStockEntry',
     'Supplier': 'erpnext_china_mdm.mdm.custom_form_script.supplier.CustomSupplier',
-    'Contact': 'erpnext_china_mdm.mdm.custom_form_script.contact.CustomContact'
+    'Contact': 'erpnext_china_mdm.mdm.custom_form_script.contact.CustomContact',
+    'Journal Entry': 'erpnext_china_mdm.mdm.custom_form_script.journal_entry.CustomJournalEntry'
 }
 override_whitelisted_methods = {
     "erpnext_china.utils.oauth2_logins.login_via_wecom": "erpnext_china_mdm.utils.oauth2_logins.login_via_wecom",
@@ -236,7 +237,8 @@ override_whitelisted_methods = {
 after_install = "erpnext_china_mdm.setup.after_install.operations.install_fixtures.install"
 
 doctype_js = {
-    'Address': 'mdm/custom_form_script/address.js'
+    'Address': 'mdm/custom_form_script/address.js',
+    'Customer': 'mdm/custom_form_script/customer.js'
 }
 
 permission_query_conditions = {
