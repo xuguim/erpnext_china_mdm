@@ -5,7 +5,7 @@ from erpnext.accounts.doctype.journal_entry.journal_entry import JournalEntry
 class CustomJournalEntry(JournalEntry):
 
     def before_save(self):
-        name = frappe.db.exists("Payment Entry", {"custom_bank_serial_number": self.custom_bank_serial_number})
+        name = frappe.db.exists("Payment Entry", {"custom_original_code": self.custom_bank_serial_number})
         if name:
             docstatus = frappe.db.get_value('Payment Entry', name, 'docstatus')
             if docstatus == 0:
