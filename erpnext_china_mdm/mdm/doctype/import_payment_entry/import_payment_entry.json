@@ -1,12 +1,12 @@
 {
  "actions": [],
- "autoname": "field:title",
+ "autoname": "format:IPE-{YYYY}-{MM}-{DD}-{#####}",
  "creation": "2024-11-21 14:06:44.319495",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "title",
   "company",
+  "bank_type",
   "bank",
   "bank_file",
   "bank_account",
@@ -20,7 +20,8 @@
   {
    "fieldname": "bank_file",
    "fieldtype": "Attach",
-   "label": "Bank File"
+   "label": "Bank File",
+   "reqd": 1
   },
   {
    "fieldname": "bank_account",
@@ -47,21 +48,6 @@
    "reqd": 1
   },
   {
-   "fieldname": "title",
-   "fieldtype": "Data",
-   "label": "Title",
-   "unique": 1
-  },
-  {
-   "fieldname": "bank",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Bank",
-   "options": "\u4e2d\u56fd\u5efa\u8bbe\u94f6\u884c",
-   "reqd": 1
-  },
-  {
    "fieldname": "result",
    "fieldtype": "Text",
    "label": "Result",
@@ -72,6 +58,7 @@
    "fieldname": "temporary_customer",
    "fieldtype": "Link",
    "label": "Temporary Customer",
+   "link_filters": "[[\"Customer\",\"customer_name\",\"like\",\"%\u4e34\u65f6\u5ba2\u6237%\"]]",
    "options": "Customer",
    "reqd": 1
   },
@@ -88,15 +75,31 @@
    "hidden": 1,
    "label": "Account Paid From",
    "options": "Account"
+  },
+  {
+   "fieldname": "bank_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Bank Type",
+   "options": "\u4e2d\u56fd\u5efa\u8bbe\u94f6\u884c",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bank",
+   "fieldtype": "Link",
+   "label": "Bank",
+   "options": "Bank",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-11-22 15:04:19.941140",
+ "modified": "2024-11-23 15:55:07.238322",
  "modified_by": "Administrator",
  "module": "mdm",
  "name": "Import Payment Entry",
- "naming_rule": "By fieldname",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

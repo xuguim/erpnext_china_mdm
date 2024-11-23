@@ -203,7 +203,7 @@ class ImportPaymentEntry(Document):
 
 	@frappe.whitelist()
 	def import_payment_entry(self):
-		if self.bank == '中国建设银行':
+		if self.bank_type == '中国建设银行':
 			total, count, amount_0_count, exist_count = self.ccb()
 			self.result = '\n'.join([
 				f'共{total}条数据',
@@ -212,3 +212,15 @@ class ImportPaymentEntry(Document):
 				f'忽略流水号已经存在的{exist_count}条',
 			])
 			frappe.msgprint(self.result)
+	
+	@frappe.whitelist()
+	def get_bank_account(self):
+		name = frappe.db.get_value('Bank Account', filters={'bank': self.bank}, fieldname='name')
+		if name:
+			return {'account': name}
+	
+	@frappe.whitelist()
+	def get_temporary_customer(self):
+		name = frappe.db.get_value('Customer', filters={'name': '临时客户'}, fieldname='name')
+		if name:
+			return {'customer': name}
