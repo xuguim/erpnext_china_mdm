@@ -51,3 +51,10 @@ From Other Lead,其他关联线索
 Parent Customer,关联主客户
 Is Parent Customer,是主客户
 Bank Serial Number,银行原始流水号
+Original Code,原始流水号
+Payment Note,转账备注
+Bank File,交易明细文件
+Payment Record From,记录导入来源
+Import Payment Entry,收付款记录导入
+Import Payment Entry Log,收付款记录导入日志
+Temporary Customer,临时客户

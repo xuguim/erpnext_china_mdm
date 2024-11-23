@@ -1,0 +1,78 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-11-21 15:17:43.866264",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "import_payment_entry",
+  "original_code",
+  "payment_entry",
+  "success",
+  "error"
+ ],
+ "fields": [
+  {
+   "fieldname": "import_payment_entry",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Import Payment Entry",
+   "options": "Import Payment Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payment_entry",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Payment Entry",
+   "options": "Payment Entry",
+   "read_only": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "success",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Success",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Error",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Original Code",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-11-22 11:28:27.396346",
+ "modified_by": "Administrator",
+ "module": "mdm",
+ "name": "Import Payment Entry Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
