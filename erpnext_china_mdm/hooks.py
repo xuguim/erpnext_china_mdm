@@ -223,9 +223,9 @@ required_apps = ['saoxia/erpnext_china']
 # }
 
 override_doctype_class = {
-    'Item':'erpnext_china_mdm.mdm.custom_form_script.item.CustomItem',
-    'Customer': 'erpnext_china_mdm.mdm.custom_form_script.customer.CustomCustomer',
-    'Address': 'erpnext_china_mdm.mdm.custom_form_script.address.CustomAddress',
+    'Item':'erpnext_china_mdm.mdm.custom_form_script.item.item.CustomItem',
+    'Customer': 'erpnext_china_mdm.mdm.custom_form_script.customer.customer.CustomCustomer',
+    'Address': 'erpnext_china_mdm.mdm.custom_form_script.address.address.CustomAddress',
     #'Stock Entry':'erpnext_china_mdm.mdm.custom_form_script.stock_entry.CustomStockEntry',
     'Supplier': 'erpnext_china_mdm.mdm.custom_form_script.supplier.CustomSupplier',
     'Contact': 'erpnext_china_mdm.mdm.custom_form_script.contact.CustomContact',
@@ -237,8 +237,9 @@ override_whitelisted_methods = {
 after_install = "erpnext_china_mdm.setup.after_install.operations.install_fixtures.install"
 
 doctype_js = {
-    'Address': 'mdm/custom_form_script/address.js',
-    'Customer': 'mdm/custom_form_script/customer.js'
+    'Address': 'mdm/custom_form_script/address/address.js',
+    'Customer': 'mdm/custom_form_script/customer/customer.js',
+    'Item': 'mdm/custom_form_script/item/item.js'
 }
 
 permission_query_conditions = {

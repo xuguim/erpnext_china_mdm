@@ -20,8 +20,7 @@
   {
    "fieldname": "bank_file",
    "fieldtype": "Attach",
-   "label": "Bank File",
-   "reqd": 1
+   "label": "Bank File"
   },
   {
    "fieldname": "bank_account",
@@ -88,14 +87,14 @@
   {
    "fieldname": "bank",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Bank",
-   "options": "Bank",
-   "reqd": 1
+   "options": "Bank"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-11-23 15:55:07.238322",
+ "modified": "2024-11-26 11:19:53.715960",
  "modified_by": "Administrator",
  "module": "mdm",
  "name": "Import Payment Entry",
