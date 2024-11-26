@@ -146,7 +146,6 @@ class ImportPaymentEntry(Document):
 	def validate_bank_records(self):
 		bank_file = self.bank_file
 		base_path = frappe.utils.get_site_path()
-		self.result = ''
 		if not bank_file:
 			frappe.msgprint('未添加交易明细文件')
 			self.result = '未添加交易明细文件'
@@ -244,6 +243,7 @@ class ImportPaymentEntry(Document):
 				f'忽略流水号已经存在的{exist_count}条',
 			])
 			frappe.msgprint(self.result)
+			self.db_update()
 	
 	# @frappe.whitelist()
 	# def get_bank_account(self):
