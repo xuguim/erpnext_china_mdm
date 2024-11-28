@@ -18,7 +18,7 @@ def has_query_permission(user):
 		users_str = str(tuple(users)).replace(',)',')')
 
 		conditions = f'''
-			name in 
+			`tabStock Entry`.name in 
 			(select distinct parent from `tabStock Entry Detail`
 				where (
 					s_warehouse in 
