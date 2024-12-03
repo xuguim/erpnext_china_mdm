@@ -8,6 +8,7 @@
   "import_payment_entry",
   "original_code",
   "payment_entry",
+  "bank_transaction",
   "success",
   "error"
  ],
@@ -49,11 +50,19 @@
    "in_list_view": 1,
    "label": "Original Code",
    "read_only": 1
+  },
+  {
+   "fieldname": "bank_transaction",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Bank Transaction",
+   "options": "Bank Transaction",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-11-22 11:28:27.396346",
+ "modified": "2024-12-03 16:59:10.544046",
  "modified_by": "Administrator",
  "module": "mdm",
  "name": "Import Payment Entry Log",
