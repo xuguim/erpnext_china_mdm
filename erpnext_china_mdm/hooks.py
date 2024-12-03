@@ -239,8 +239,28 @@ after_install = "erpnext_china_mdm.setup.after_install.operations.install_fixtur
 doctype_js = {
     'Address': 'mdm/custom_form_script/address/address.js',
     'Customer': 'mdm/custom_form_script/customer/customer.js',
-    'Item': 'mdm/custom_form_script/item/item.js'
+    'Item': 'mdm/custom_form_script/item/item.js',
+	'Sales Order': 'mdm/custom_form_script/sales_order/sales_order.js',
 }
+
+doc_events = {
+	"Sales Order": {
+		"validate": "erpnext_china_mdm.mdm.custom_form_script.sales_order.sales_order.validate_sales_team",
+	}
+}
+
+scheduler_events = {
+	"cron": { 
+        "0 1 * * *": [
+			"erpnext_china_mdm.mdm.custom_form_script.scheduler_events.sales_person.auto_generate_sales_person",
+		],   
+	},
+}
+
+fixtures = [
+    {"dt": "Custom Field", "filters": [["module", "=", "ERPNext China MDM"]]},
+    {"dt": "Property Setter", "filters": [["module", "=", "ERPNext China MDM"]]},
+]
 
 permission_query_conditions = {
     'Customer': "erpnext_china_mdm.mdm.custom_permission.customer.permission_customer.has_query_permission",
