@@ -367,7 +367,30 @@
    "property_type": "Check",
    "row_name": null,
    "value": "1"
-  }
+  },
+  {
+    "_assign": null,
+    "_comments": null,
+    "_liked_by": null,
+    "_user_tags": null,
+    "creation": "2024-12-04 14:47:28.556803",
+    "default_value": null,
+    "doc_type": "Stock Entry Detail",
+    "docstatus": 0,
+    "doctype_or_field": "DocField",
+    "field_name": "use_serial_batch_fields",
+    "idx": 0,
+    "is_system_generated": 1,
+    "modified": "2024-12-04 14:47:28.556803",
+    "modified_by": "Administrator",
+    "module": null,
+    "name": "Stock Entry Detail-use_serial_batch_fields-default",
+    "owner": "Administrator",
+    "property": "default",
+    "property_type": "Check",
+    "row_name": null,
+    "value": "1"
+   }
  ],
  "sync_on_migrate": 1
 }
