@@ -60,9 +60,15 @@ def clean_file_field(row:dict, mapping_row):
 					if field_type == '字符串':
 						value = str(value)
 					elif field_type == '整数':
-						value = int(value)
+						if not value:
+							value = 0
+						else:
+							value = int(value.replace(',', ''))
 					elif field_type == '浮点数':
-						value = float(value)
+						if not value:
+							value = 0
+						else:
+							value = float(value.replace(',', ''))
 					elif field_type == '日期':
 						value = datetime.strptime(value, mapping.file_field_format)
 					elif field_type == '日期时间':
@@ -194,7 +200,7 @@ def create_records(results, company, bank_account, from_name):
 	payment_entry_count = 0
 	for result in results:
 		original_code = result.get('reference_number')
-		name = frappe.db.exists('Bank Transaction', {'reference_number': original_code})
+		name = frappe.db.exists('Bank Transaction', {'reference_number': original_code, 'bank_account': bank_account})
 		if name:
 			add_import_payment_entry_log(from_name, '', name, original_code, False, '银行交易已经存在')
 			bank_transaction_exists_count += 1
@@ -203,7 +209,7 @@ def create_records(results, company, bank_account, from_name):
 			add_import_payment_entry_log(from_name, '', doc.name, original_code, True, '')
 			bank_transaction_count += 1
 		
-		name = frappe.db.exists('Payment Entry', {'custom_original_code': original_code})
+		name = frappe.db.exists('Payment Entry', {'custom_original_code': original_code, 'bank_account': bank_account})
 		if name:
 			add_import_payment_entry_log(from_name, name, '', original_code, False, '收付款凭证已经存在')
 			payment_entry_exists_count += 1
