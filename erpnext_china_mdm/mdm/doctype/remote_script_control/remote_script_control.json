@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_rename": 1,
  "autoname": "field:title",
  "creation": "2024-11-12 10:22:01.776520",
  "doctype": "DocType",
@@ -10,6 +11,8 @@
   "port",
   "username",
   "password",
+  "send_db_file",
+  "remote_file_path",
   "local_script",
   "remote_script",
   "result"
@@ -46,24 +49,42 @@
    "unique": 1
   },
   {
+   "default": "# \u5907\u4efd\u672c\u5730\u6570\u636e\u5e93\n# cd /home/frappe/frappe-bench && bench backup\n# \u5982\u679c\u9700\u8981\u4f20\u8f93\u6700\u65b0\u7684\u5907\u4efd\u6570\u636e\u5e93\u6587\u4ef6\uff0c\u5fc5\u987b\u52fe\u9009\u4e0a\u9762\u7684 \u3010\u4f20\u8f93\u6700\u65b0\u7684\u6570\u636e\u5e93\u6587\u4ef6\u3011\u52fe\u9009\u6846\uff0c\u5728\u6267\u884c\u5b8c\u672c\u5730\u547d\u4ee4\u540e\uff0c\u5c06\u6570\u636e\u5e93\u6587\u4ef6\u4f20\u8f93\u81f3\u76ee\u6807\u670d\u52a1\u5668/home/frappe/backup.sql.gz",
+   "description": "\u6bcf\u884c\u4e00\u6761\u547d\u4ee4\uff0c\u4f7f\u7528#\u53f7\u5f00\u5934\u7684\u5219\u4e3a\u6ce8\u91ca",
    "fieldname": "local_script",
    "fieldtype": "Text",
    "label": "Local Script"
   },
   {
    "fieldname": "result",
-   "fieldtype": "Text",
+   "fieldtype": "Long Text",
    "label": "Result"
   },
   {
+   "default": "# \u6ce8\u610f\u5728\u8fdc\u7a0b\u6267\u884c\u547d\u4ee4\u65f6\uff0c\u547d\u4ee4\u5c06\u683c\u5f0f\u5316\u4e3a bash -ic '\u547d\u4ee4'\u7684\u5f62\u5f0f\u6765\u52a0\u8f7d\u73af\u5883\u53d8\u91cf\n# \u67e5\u770b\u73af\u5883\u53d8\u91cf\n# env\n# \u6570\u636e\u5e93\u540c\u6b65\n# cd /home/frappe/frappe-bench && bench --site ebc.zhushigroup.cn restore /home/frappe/backup.sql.gz\n# \u5408\u5e76\u6570\u636e\u5e93\n# cd /home/frappe/frappe-bench && bench --site ebc.zhushigroup.cn migrate\n# \u8986\u76d6\u66f4\u65b0\n# cd /home/frappe/frappe-bench && bench update --reset",
+   "description": "\u6bcf\u884c\u4e00\u6761\u547d\u4ee4\uff0c\u4f7f\u7528#\u53f7\u5f00\u5934\u7684\u5219\u4e3a\u6ce8\u91ca",
    "fieldname": "remote_script",
    "fieldtype": "Text",
    "label": "Remote Script"
+  },
+  {
+   "default": "0",
+   "description": "\u5982\u52fe\u9009\uff0c\u5c06\u5728\u672c\u5730\u811a\u672c\u6267\u884c\u5b8c\u540e\uff0c\u9009\u62e9\u6700\u65b0\u7684\u6570\u636e\u5e93\u5907\u4efd\u6587\u4ef6\u4f20\u8f93",
+   "fieldname": "send_db_file",
+   "fieldtype": "Check",
+   "label": "Send Latest DB File"
+  },
+  {
+   "default": "/home/frappe/backup.sql.gz",
+   "description": "\u6570\u636e\u5e93\u6587\u4ef6\u4f20\u8f93\u76ee\u7684\u8def\u5f84",
+   "fieldname": "remote_file_path",
+   "fieldtype": "Data",
+   "label": "Remote File Path"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-11-13 10:53:08.923732",
+ "modified": "2024-12-05 16:36:13.893332",
  "modified_by": "Administrator",
  "module": "mdm",
  "name": "Remote Script Control",
