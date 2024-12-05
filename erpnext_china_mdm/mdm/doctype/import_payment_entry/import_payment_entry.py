@@ -25,7 +25,7 @@ def get_paid_to(company, bank_account, mode_of_payment):
 	)
 	return bank
 
-def add_import_payment_entry_log(import_payment_entry, payment_entry, original_code, success:bool, error):
+def add_import_payment_entry_log(import_payment_entry, payment_entry, bank_transaction, original_code, success:bool, error):
 	if success:
 		error = ''
 	doc = frappe.new_doc('Import Payment Entry Log')
@@ -34,225 +34,246 @@ def add_import_payment_entry_log(import_payment_entry, payment_entry, original_c
 		doc.payment_entry = payment_entry
 	if original_code:
 		doc.original_code = original_code
+	if bank_transaction:
+		doc.bank_transaction = bank_transaction
 	doc.success = success
 	doc.error = error
 	doc.insert(ignore_permissions=True)
 
-def get_reference_no(bank_account_name, reference_date):
-	bank_account = frappe.get_doc('Bank Account', bank_account_name)
-	count = frappe.db.count('Payment Entry', filters={'bank_account': bank_account.name})
-	bank_sufix_no = bank_account.bank_account_no[-4:] if bank_account.bank_account_no else ''
-	date_str = datetime.strptime(reference_date, r"%Y-%m-%d %H:%M:%S").strftime(r"%Y%m%d%H%M%S")
-	count = count + 1
-	length = len(str(count))
-	count_str = '0'*(4 - length) + str(count) if count < 1000 else count
-	return f'ccb-{bank_sufix_no}-{date_str}-{count_str}'
+def clean_file_field(row:dict, mapping_row):
+	item = {}
+	keys = [strip_whitespace(k) for k in row.keys()]
+	for mapping in mapping_row:
+		if mapping.file_field not in keys:
+			frappe.throw(f'导入的文件数据缺失：{mapping.file_field}，请检查交易明细文件数据是否正确')
+			
+		for k, v in row.items():
+			key = strip_whitespace(k)
+			if key == mapping.file_field:
+				if pd.isna(v):
+					v = ''
+				value = strip_whitespace(v)
+				field_type = mapping.field_type
+				if not field_type:
+					field_type = '字符串'
+				try:
+					if field_type == '字符串':
+						value = str(value)
+					elif field_type == '整数':
+						if not value:
+							value = 0
+						else:
+							value = int(value.replace(',', ''))
+					elif field_type == '浮点数':
+						if not value:
+							value = 0
+						else:
+							value = float(value.replace(',', ''))
+					elif field_type == '日期':
+						value = datetime.strptime(value, mapping.file_field_format)
+					elif field_type == '日期时间':
+						value = datetime.strptime(value, mapping.file_field_format)
+					item[mapping.code_field] = value
+					break
+				except:
+					frappe.throw(f'导入的文件中存在错误的数据格式：{value}转化为{field_type}，请检查交易明细文件数据是否正确')
+	return item
+
+def create_mode_of_payment():
+	doc = frappe.new_doc('Mode of Payment')
+	doc.mode_of_payment = '转账'
+	doc.enabled = 1
+	doc.type = 'Bank'
+	doc.insert(ignore_permissions=True)
+	return doc.name
+
+def create_supplier():
+	doc = frappe.new_doc('Supplier')
+	doc.supplier_name = '临时供应商'
+	doc.supplier_type = 'Individual'
+	doc.insert(ignore_permissions=True)
+	return doc.name
+
+def check_default_party(deposit):
+	if deposit > 0:
+		party = '临时客户'
+		name = frappe.db.get_value('Customer', filters={'customer_name': party})
+		if not name:
+			frappe.throw('请先创建 临时客户')
+		party_type = 'Customer'
+		payment_type = 'Receive'
+	else:
+		party = '临时供应商'
+		name = frappe.db.get_value('Supplier', filters={'supplier_name': party})
+		if not name:
+			create_supplier()
+		party_type = 'Supplier'
+		payment_type = 'Pay'
+	return party_type, payment_type, party
+
+def get_payment_entry_data(result, company, bank_account, payment_record_from):
+	amount = result.get('deposit')
+	party_type, payment_type, party = check_default_party(amount)
+	original_code = result.get('reference_number')
+
+	reference_date = result.get('date')
+	reference_date = reference_date.strftime(r"%Y-%m-%d")
+	
+	mode_of_payment = frappe.db.get_value('Mode of Payment', filters={'name': '转账'})
+	if not mode_of_payment:
+		mode_of_payment = create_mode_of_payment()
+	account = frappe.db.get_value('Bank Account', filters={'name': bank_account}, fieldname='account')
+	if not account:
+		bank = get_paid_to(company, bank_account, mode_of_payment)
+		account = bank.account
+
+	data = {
+		'company': company,
+		'mode_of_payment': mode_of_payment,
+		'bank_account': bank_account,
+		'paid_to': account,
+		'paid_to_account_currency': 'CNY',
+		'source_exchange_rate': 1,
+		'target_exchange_rate': 1,
+		'payment_type': payment_type,
+		'custom_original_code': original_code,
+		'custom_payment_note': result.get('custom_payment_note', ''),
+		'custom_payment_record_from': payment_record_from,
+		'paid_amount': amount,
+		'party_type': party_type,
+		'party': party,
+		'received_amount': amount,
+		'reference_date': reference_date,
+		'reference_no': original_code,
+	}
+	if payment_type == 'Pay':
+		data['paid_amount'] = result.get('withdrawal')
+		data['paid_from'] = account
+		data['paid_from_account_currency'] = 'CNY'
+		data['received_amount'] = account
+		data.pop('paid_to')
+		data.pop('paid_to_account_currency')
+	customer = frappe.db.get_value('Customer', filters={'name': result.get('account_name')}, fieldname='name')
+	if customer:
+		data['party'] = customer
+	return data
+
+@frappe.whitelist()
+def create_payment_entry(result: dict, company, bank_account, name):
+	payment_entry_data = get_payment_entry_data(result, company, bank_account, name)
+	payment_entry_data.update({
+		'doctype': 'Payment Entry'
+	})
+	doc = frappe.get_doc(payment_entry_data)
+	doc.insert(ignore_permissions=True)
+	return doc
+
+@frappe.whitelist()
+def create_bank_transaction(result: dict, company, bank_account):
+	# party_type, _, party = check_default_party(result.get('deposit'))
+	bank_transaction_data = {
+		'date': result.get('date'),
+		'company': company,
+		'bank_account': bank_account,
+		'deposit': result.get('deposit'),
+		'withdrawal': result.get('withdrawal'),
+		'reference_number': result.get('reference_number'),
+		'bank_party_name': result.get('account_name'),
+		'bank_party_account_number': result.get('bank_account_no'),
+		'custom_party_bank_name': result.get('bank_name')
+		# 'party_type': party_type,
+		# 'party': party
+	}
+	bank_transaction_data.update({
+		'doctype': 'Bank Transaction'
+	})
+	doc = frappe.get_doc(bank_transaction_data)
+	doc.insert(ignore_permissions=True)
+	doc.submit()
+	return doc
+
+@frappe.whitelist()
+def create_records(results, company, bank_account, from_name):
+	payment_entry_exists_count = 0
+	bank_transaction_exists_count = 0
+	bank_transaction_count = 0
+	payment_entry_count = 0
+	for result in results:
+		original_code = result.get('reference_number')
+		name = frappe.db.exists('Bank Transaction', {'reference_number': original_code, 'bank_account': bank_account})
+		if name:
+			add_import_payment_entry_log(from_name, '', name, original_code, False, '银行交易已经存在')
+			bank_transaction_exists_count += 1
+		else:
+			doc = create_bank_transaction(result, company, bank_account)
+			add_import_payment_entry_log(from_name, '', doc.name, original_code, True, '')
+			bank_transaction_count += 1
+		
+		name = frappe.db.exists('Payment Entry', {'custom_original_code': original_code, 'bank_account': bank_account})
+		if name:
+			add_import_payment_entry_log(from_name, name, '', original_code, False, '收付款凭证已经存在')
+			payment_entry_exists_count += 1
+		else:
+			doc = create_payment_entry(result, company, bank_account, from_name)
+			add_import_payment_entry_log(from_name, doc.name, '', original_code, True, '')
+			payment_entry_count += 1
+	return bank_transaction_count, payment_entry_count, payment_entry_exists_count, bank_transaction_exists_count
 
 class ImportPaymentEntry(Document):
 	
-	def check_or_create_other_bank(self):
-		if not frappe.db.get_value('Bank', filters={'name': '其他'}):
-			doc = frappe.new_doc('Bank')
-			doc.bank_name = '其他'
-			doc.insert(ignore_permissions=True)
-
-	def create_party_bank_account(self, account_name, bank_name, bank_account_no):
-		doctype = 'Bank Account'
-		name = frappe.db.exists(doctype, {'bank_account_no': bank_account_no})
-		if name:
-			return name
-		count = frappe.db.count(doctype, filters={"account_name": ['like', f'{account_name}%']})
-		if count > 0:
-			account_name += f'-{count}'
-
-		self.check_or_create_other_bank()
-
-		doc = frappe.new_doc('Bank Account')
-		doc.account_name = account_name
-		doc.bank = '其他'
-		doc.bank_name = bank_name
-		doc.bank_account_no = bank_account_no
-		doc.insert(ignore_permissions=True)
-		return doc.name
-	
-	def create_payment_entry(self, data: dict):
-		data.update({
-			'doctype': 'Payment Entry'
-		})
-		doc = frappe.get_doc(data)
-		doc.insert(ignore_permissions=True)
-		return doc
-
-	def get_base_data(self):
-		company = self.company
-		bank_account = self.bank_account
-		mode_of_payment = self.mode_of_payment
-		temporary_customer = self.temporary_customer
-		party_type = 'Customer'
-		account = frappe.db.get_value('Bank Account', filters={'name': bank_account}, fieldname='account')
-		if not account:
-			bank = get_paid_to(company, bank_account, mode_of_payment)
-			account = bank.account
-		return {
-			'payment_type': 'Receive',
-			'company': company,
-			'mode_of_payment': mode_of_payment,
-			'party_type': party_type,
-			'bank_account': bank_account,
-			'party': temporary_customer,
-			'paid_to': account,
-			'paid_to_account_currency': 'CNY',
-			'source_exchange_rate': 1,
-			'target_exchange_rate': 1,
-		}
-
-	def format_data(self, path):
-		df = pd.read_excel(io=path, dtype=str)
-		# 删除空行
+	def read_bank_file(self, ignore_rows):
+		path = frappe.utils.get_site_path() + self.bank_file
+		df = pd.read_excel(io=path, dtype=str, skiprows=ignore_rows)
 		df = df.dropna(how='all')
 		rows = df.to_dict(orient='records')
-		result = []
+		return rows
+	
+	def get_clean_file_data(self):
+		bank = frappe.get_doc('Bank', self.bank)
+		rows = self.read_bank_file(bank.custom_ignore_rows)
+		results = []
 		for row in rows:
-			item = {}
-			for k, v in row.items():
-				if pd.isna(v):
-					v = None
-				value = strip_whitespace(v)
-				item[strip_whitespace(k)] = value
-			result.append(item)
-		return result
+			item = clean_file_field(row, bank.custom_bank_fields_mapping)
+			results.append(item)
+		return results
 
-	def validate_amount(self, amount):
-		try:
-			if not amount or float(amount) < 0:
-				raise
-		except:
-			frappe.throw(f'导入的文件中存在错误的数据格式：{amount}')
-	
-	def validate_reference_date(self, reference_date):
-		try:
-			datetime.strptime(reference_date, r'%Y%m%d %H:%M:%S').strftime(r"%Y-%m-%d %H:%M:%S")
-		except:
-			msg = f'不能将{reference_date}转化为 %Y%m%d %H:%M:%S 或 %Y-%m-%d %H:%M:%S 格式'
-			frappe.throw(f'导入的文件中存在错误的数据格式：{msg}')
-	
-	def validate_posting_date(self, posting_date):
-		try:
-			datetime.strptime(str(posting_date), r'%Y%m%d').strftime(r"%Y-%m-%d")
-		except:
-			msg = f'不能将{posting_date}转化为 %Y%m%d 或 %Y-%m-%d 格式'
-			frappe.throw(f'导入的文件中存在错误的数据格式：{msg}')
-	
-	def validate_bank_records(self):
-		bank_file = self.bank_file
-		base_path = frappe.utils.get_site_path()
-		if not bank_file:
-			frappe.msgprint('未添加交易明细文件')
-			self.result = '未添加交易明细文件'
-			return
+	def validate_bank_transaction_data(self, data):
+		deposit = data.get('deposit')
+		withdrawal = data.get('withdrawal')
+		if (deposit > 0 and withdrawal != 0) or (withdrawal > 0 and deposit != 0):
+			frappe.throw(f'银行交易中存款和取款金额其中一方必须为0，请检查交易明细文件数据是否正确')
 
-		if self.has_value_changed('bank_file') and self.bank_file:
-			path = base_path + bank_file
-			if self.bank_type == '中国建设银行':
-				self.validate_ccb(path)
-
+	def validate_payment_entry_data(self, data):
+		pass
+	
+	def check(self):
+		results = self.get_clean_file_data()
+		for result in results:
+			self.validate_bank_transaction_data(result)
+			self.validate_payment_entry_data(result)
+		return results
+		
 	def before_save(self):
-		self.validate_bank_records()
-
-	def validate_ccb(self, path):
-		err_record = {}
-		raw_data = []
-		try:
-			raw_data = self.format_data(path)
-			for record in raw_data:
-				err_record = record
-				amount = record.get('贷方发生额/元(收入)')
-				self.validate_amount(amount)
-
-				reference_date = record.get('交易时间')
-				self.validate_reference_date(reference_date)
-
-				posting_date = record.get('记账日期')
-				self.validate_posting_date(posting_date)
-
-				party_account = record.get('对方户名')
-				if not party_account:
-					frappe.throw('对方户名必须有值')
-
-			self.result = f'共{len(raw_data)}条数据需要验证，验证成功，可以执行导入'
-		except Exception as e:
-			self.result = f'共{len(raw_data)}条数据需要验证，验证失败：' + str(e) + '\n' + str(err_record)
-
-	def ccb(self):
-		bank_file = self.bank_file
-		base_path = frappe.utils.get_site_path()
-		file_path = base_path + bank_file
-		raw_data = self.format_data(file_path)
-		count = 0
-		total = len(raw_data)
-		amount_0_count = 0
-		exist_count = 0
-		for record in raw_data:
-			amount = record.get('贷方发生额/元(收入)')
-			original_code = record.get('账户明细编号-交易流水号')
-			amount = float(amount)
-			if amount == 0:
-				amount_0_count += 1
-				add_import_payment_entry_log(self.name, None, original_code, False, '收款金额为0')
-				continue
-			
-			name = frappe.db.exists('Payment Entry', {'custom_original_code': original_code})
-			if name:
-				exist_count += 1
-				add_import_payment_entry_log(self.name, name, original_code, False, '流水号已经存在')
-				continue
-
-			party_bank_account = self.create_party_bank_account(record.get('对方户名'), record.get('对方开户机构'), record.get('对方账号'))
-			reference_date = record.get('交易时间')
-			reference_date = datetime.strptime(reference_date, r'%Y%m%d %H:%M:%S').strftime(r"%Y-%m-%d %H:%M:%S")
-			posting_date = record.get('记账日期')
-			posting_date = datetime.strptime(str(posting_date), r'%Y%m%d').strftime(r"%Y-%m-%d")
-			data = {
-				'custom_original_code': original_code,
-				'custom_payment_note': record.get('备注'),
-				'custom_payment_record_from': self.name,
-				'posting_date': posting_date,
-				'party_bank_account': party_bank_account,
-				'paid_amount': amount,
-				'received_amount': amount,
-				'reference_date': reference_date,
-				'reference_no': get_reference_no(self.bank_account, reference_date),
-			}
-			data.update(self.get_base_data())
-			customer = frappe.db.get_value('Customer', filters={'name': record.get('对方户名')}, fieldname='name')
-			if customer:
-				data['party'] = customer
-			new_payment_entry_doc = self.create_payment_entry(data)
-			add_import_payment_entry_log(self.name, new_payment_entry_doc.name, original_code, True, '')
-			count += 1
-		return total, count, amount_0_count, exist_count
-
-	@frappe.whitelist()
-	def import_payment_entry(self):
-		if self.bank_type == '中国建设银行':
-			total, count, amount_0_count, exist_count = self.ccb()
+		if self.bank_file and self.has_value_changed('bank_file'):
+			results = self.check()
 			self.result = '\n'.join([
-				f'共{total}条数据',
-				f'本次导入{count}条',
-				f'忽略收款金额为0的{amount_0_count}条',
-				f'忽略流水号已经存在的{exist_count}条',
+				f'{datetime.now().strftime(r"%Y-%m-%d %H:%M:%S")}',
+				f'校验完成，本次共{len(results)}条数据，可以开始导入'
 			])
-			frappe.msgprint(self.result)
-			self.db_update()
-	
-	# @frappe.whitelist()
-	# def get_bank_account(self):
-	# 	name = frappe.db.get_value('Bank Account', filters={'bank': self.bank}, fieldname='name')
-	# 	if name:
-	# 		return {'account': name}
-	
-	@frappe.whitelist()
-	def get_temporary_customer(self):
-		name = frappe.db.get_value('Customer', filters={'customer_name': '临时客户'}, fieldname='name')
-		if name:
-			return {'customer': name}
+
+	def before_submit(self):
+		if not self.bank_file:
+			frappe.throw(f'请先选择交易明细文件')
+		results = self.check()
+		bt_count, pe_count, pe_exists_count, bt_exists_count = create_records(results, self.company, self.bank_account, self.name)
+
+		self.result = '\n'.join([
+			f'{datetime.now().strftime(r"%Y-%m-%d %H:%M:%S")}',
+			f'共{len(results)}条数据',
+			f'本次导入银行交易{bt_count}条',
+			f'本次导入收款凭证{pe_count}条',
+			f'忽略流水号已经存在的银行交易{bt_exists_count}条',
+			f'忽略流水号已经存在的收付款凭证{pe_exists_count}条'
+		])
+		frappe.msgprint(self.result)
+		self.db_update()
