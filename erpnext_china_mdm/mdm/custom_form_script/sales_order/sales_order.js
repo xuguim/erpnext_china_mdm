@@ -1,7 +1,5 @@
 frappe.ui.form.on('Sales Order', {
     refresh(frm){
-		console.log('refresh')
-		
         if(!has_common(frappe.user_roles, ["Administrator", "System Manager","Accounts User","Accounts Manager"])){
 			// 销售税费明细子表对除管理员和财务外的其他角色只读，明细中科目和成本中心也只读
 			frm.set_df_property('taxes','read_only',1)
