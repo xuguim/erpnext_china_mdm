@@ -241,11 +241,16 @@ doctype_js = {
     'Customer': 'mdm/custom_form_script/customer/customer.js',
     'Item': 'mdm/custom_form_script/item/item.js',
 	'Sales Order': 'mdm/custom_form_script/sales_order/sales_order.js',
+	'Delivery Note': 'mdm/custom_form_script/delivery_note/delivery_note.js',
+	'Department': 'mdm/custom_form_script/department/department.js',
 }
 
 doc_events = {
 	"Sales Order": {
 		"validate": "erpnext_china_mdm.mdm.custom_form_script.sales_order.sales_order.validate_sales_team",
+	},
+	"Delivery Note": {
+		"validate": "erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.validate_shipper",
 	}
 }
 
@@ -260,10 +265,6 @@ scheduler_events = {
 	},
 }
 
-fixtures = [
-    {"dt": "Custom Field", "filters": [["module", "=", "ERPNext China MDM"]]},
-    {"dt": "Property Setter", "filters": [["module", "=", "ERPNext China MDM"]]},
-]
 
 permission_query_conditions = {
     'Customer': "erpnext_china_mdm.mdm.custom_permission.customer.permission_customer.has_query_permission",
