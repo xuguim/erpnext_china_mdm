@@ -259,6 +259,9 @@ scheduler_events = {
         "0 1 * * *": [
 			"erpnext_china_mdm.mdm.custom_form_script.scheduler_events.sales_person.auto_generate_sales_person",
 		],   
+        "0 */1 * * *": [
+            "erpnext_china_mdm.mdm.custom_form_script.wecom.send_modified_checkin_to_wecom"
+        ],
 	},
 }
 
