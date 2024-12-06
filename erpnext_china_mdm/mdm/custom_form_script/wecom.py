@@ -5,6 +5,7 @@
 4、判断标签和企微规则中的userid，标签中存在规则中不存则新增，标签中不存在规则中存在则删除
 5、返回json格式的响应值
 """
+import json
 import frappe
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -165,3 +166,46 @@ def get_checkin_group_users(**kwargs):
 		"add": will_add,
 		"del": will_del
 	}
+
+def get_content(users: list):
+	content = ''
+	for info in users:
+		group_name = info['group_name']
+		user_str_list = []
+		for _, user in info['users'].items():
+			department = user['department']
+			name = '【' + user['name'] + '】'
+			user_info = '-'.join([name, department])
+			user_str_list.append(user_info)
+		content += '【' + group_name + '】' + '\n' + '\n'.join(user_str_list) + '\n\n'
+	return content
+
+@frappe.whitelist(allow_guest=True)
+def send_modified_checkin_to_wecom():
+	
+	result = get_checkin_group_users()
+	add_users = result.get('add', [])
+	del_users = result.get('del', [])
+	
+	content = ''
+	if len(del_users) > 0:
+		content += '需移除员工\n' + get_content(del_users)
+	if len(add_users) > 0:
+		content += '需添加员工\n' + get_content(add_users)
+	if content:
+		access_token = get_access_token()
+		url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=' + access_token
+		
+		# lilingyu@zhushigroup.cn|liuchao@zhushigroup.cn|wangmiao@zhushigroup.cn
+		data = {
+			"touser": "lilingyu@zhushigroup.cn|liuchao@zhushigroup.cn|wangmiao@zhushigroup.cn",
+			"msgtype": "text",
+			"agentid": 1000008,
+			"text": {
+				"content": "考勤规则变更通知\n\n" + content
+			},
+			"safe": 0,
+			"enable_id_trans": 0,
+			"enable_duplicate_check": 0
+		}
+		resp = requests.post(url, json=data)
