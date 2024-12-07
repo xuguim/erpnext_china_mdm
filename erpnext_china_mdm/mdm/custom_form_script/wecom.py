@@ -252,5 +252,4 @@ def update_employee_reports_to():
 						if doc.reports_to != direct_leader:
 							doc.reports_to = direct_leader
 							doc.save(ignore_permissions=True)
-							print(doc.first_name, doc.reports_to)
 	frappe.db.commit()
