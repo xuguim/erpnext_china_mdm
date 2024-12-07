@@ -215,7 +215,7 @@ def get_leader_id(access_token, user_id):
 	response = requests.get(url, params=params)
 	result_json = response.json()
 	if result_json['direct_leader']:
-		return result_json['direct_leader'][0]
+		return result_json['direct_leader']
 
 
 # 更新员工的上级主管
@@ -239,7 +239,10 @@ def update_employee_reports_to():
 			else:
 				# 找到当前员工对应的上级员工
 				wecom_uid = user.custom_wecom_uid or user.name
-				leader_id = get_leader_id(access_token, wecom_uid)
+				leader_ids = get_leader_id(access_token, wecom_uid)
+				if not leader_ids or len(leader_ids) == 0:
+					continue
+				leader_id = leader_ids[0]
 				if leader_id and leader_id != wecom_uid:
 					direct_leaders = frappe.db.get_all(
 						'Employee', 
