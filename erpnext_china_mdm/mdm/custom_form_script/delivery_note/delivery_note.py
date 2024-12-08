@@ -1,4 +1,6 @@
 import frappe
+from frappe import _
+from erpnext.stock.doctype.delivery_note.delivery_note import make_sales_invoice
 
 def validate_shipper(doc, method=None):
 	user = doc.owner
@@ -62,3 +64,21 @@ def find_department_shipper(department,department_list,shipper_list):# -> Any | 
 		else:
 			shipper = department_shippers[0]
 		return shipper
+	
+def auto_make_sales_invoice(doc, method=None):
+	if not doc.create_sales_invoice:
+		return
+	current_user = frappe.session.user
+	frappe.set_user("Administrator")
+	sales_invoice = make_sales_invoice(doc.name)
+	sales_invoice.owner = doc.owner
+	sales_invoice.save().submit()
+	sales_invoice.add_comment("Comment", 
+		_("Automatically Create {0}: {1} Base On {2}: {3}").format(
+			_(sales_invoice.doctype),
+			sales_invoice.name,
+			_(doc.doctype),
+			doc.name
+		)
+	)
+	frappe.set_user(current_user)
