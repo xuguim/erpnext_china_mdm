@@ -229,7 +229,8 @@ override_doctype_class = {
     #'Stock Entry':'erpnext_china_mdm.mdm.custom_form_script.stock_entry.CustomStockEntry',
     'Supplier': 'erpnext_china_mdm.mdm.custom_form_script.supplier.CustomSupplier',
     'Contact': 'erpnext_china_mdm.mdm.custom_form_script.contact.CustomContact',
-    'Journal Entry': 'erpnext_china_mdm.mdm.custom_form_script.journal_entry.CustomJournalEntry'
+    'Journal Entry': 'erpnext_china_mdm.mdm.custom_form_script.journal_entry.CustomJournalEntry',
+	'Delivery Note': 'erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.CustomDeliveryNote',
 }
 override_whitelisted_methods = {
     "erpnext_china.utils.oauth2_logins.login_via_wecom": "erpnext_china_mdm.utils.oauth2_logins.login_via_wecom",
