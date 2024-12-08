@@ -75,3 +75,5 @@ Remote File Path,传输至
 Local Script,本地执行命令
 Remote Script,远程执行命令
 Remote Script Control,远程脚本控制
+Automatically Create Sales Invoices, 自动创建销售对账单
+Automatically Create {0}: {1} Base On {2}: {3},根据{2}: {3} 自动创建{0}: {1}
