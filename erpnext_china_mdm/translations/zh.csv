@@ -65,3 +65,5 @@ Code Field,代码字段
 File Field,文件列名
 Ignore Rows,忽略行数
 Party Bank Name,对方开户机构
+Automatically Create Sales Invoices, 自动创建销售对账单
+Automatically Create {0}: {1} Base On {2}: {3},根据{2}: {3} 自动创建{0}: {1}
