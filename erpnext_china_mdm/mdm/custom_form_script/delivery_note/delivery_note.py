@@ -1,6 +1,78 @@
 import frappe
 from frappe import _
-from erpnext.stock.doctype.delivery_note.delivery_note import make_sales_invoice
+from frappe.utils import flt
+from erpnext.stock.doctype.delivery_note.delivery_note import DeliveryNote, make_sales_invoice
+
+
+class CustomDeliveryNote(DeliveryNote):
+	def before_validate(self):
+		self.sales_order = self.validate_multi_so()
+		frappe.log(self.sales_order)
+		self.validate_discount_amount()
+
+	def validate_discount_amount(self):
+		self.validate_last_dn()
+		[so_total,so_discount_amount] = frappe.db.get_value('Sales Order',self.sales_order,['total','discount_amount'])
+		# clear discount amount for zero total sales order
+		if so_total == 0:
+			frappe.log("so_total is zero")
+			self.additional_discount_percentage = 0
+			self.discount_amount = 0
+			return
+		if not self.last_dn:
+			# calculate discount amount base on per_delivered
+			per_delivered = self.total / so_total
+			self.additional_discount_percentage = 0
+			self.discount_amount = flt(so_discount_amount * per_delivered,self.precision('discount_amount'))
+		else:
+			# calculate discount amount base on balance, adjust the precision error to grand total
+			submitted_dn = frappe.get_all('Delivery Note',
+				filters={
+					"name": ["in", self.dn_names],
+					"docstatus": 1
+				},
+				fields=['total','grand_total','discount_amount'],
+			)
+			submitted_dn_grand_total = sum([dn.grand_total for dn in submitted_dn])
+			submitted_dn_total = sum([dn.total for dn in submitted_dn])
+
+			self.additional_discount_percentage = 0
+			self.discount_amount = flt(submitted_dn_grand_total + so_discount_amount - submitted_dn_total,self.precision('discount_amount'))
+		
+
+	def validate_last_dn(self):
+		self.last_dn = True
+		so_items = frappe.get_all("Sales Order Item", 
+			filters={"parent": self.sales_order}, 
+			fields=["name", "stock_qty","rate","amount"]
+		)
+		submitted_dn_items = frappe.get_all("Delivery Note Item", 
+			filters={"against_sales_order": self.sales_order,"docstatus":1}, 
+			fields=["name","parent","so_detail", "stock_qty","rate","amount"]
+		)
+		self.dn_names = [d.parent for d in submitted_dn_items]
+		for so_item in so_items:
+			submitted_dn_qty = sum([dni.stock_qty for dni in submitted_dn_items if dni.so_detail == so_item.name])
+			# stock_qty maybe not correct now, use qty * conversion_factor
+			current_qty = sum([dni.qty * dni.conversion_factor for dni in self.items if dni.so_detail == so_item.name])
+			if so_item.stock_qty > submitted_dn_qty + current_qty:
+				self.last_dn = False
+				return
+
+	def validate_multi_so(self):
+		sales_orders = list(set([d.against_sales_order for d in self.items]))
+		if not sales_orders:
+			# Ignore Delivery Note Without Linked Sales Order
+			return False
+		if len(sales_orders) > 1:
+			msg = f"""<h5>{_("Linking To Multiple Sales Order Is Not Allowed")}<h5>"""
+			for sales_order in sales_orders:
+				msg += f"""
+						<div><a href="/app/sales-order/{sales_order}" target="_blank">{sales_order}</a></div>
+					"""
+			frappe.throw(msg)
+		return sales_orders[0]
+
 
 def validate_shipper(doc, method=None):
 	user = doc.owner
