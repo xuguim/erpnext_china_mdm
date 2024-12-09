@@ -1,12 +1,6 @@
-"""
-1、请求企微打卡规则API获取当前企微中存在的规则ID和规则下的员工userid
-2、根据1中获取的规则ID获取本地对应规则下的标签ID
-3、根据标签ID通过企微标签API获取标签下的所有员工userid
-4、判断标签和企微规则中的userid，标签中存在规则中不存则新增，标签中不存在规则中存在则删除
-5、返回json格式的响应值
-"""
 import json
 import frappe
+import frappe.utils
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -209,3 +203,56 @@ def send_modified_checkin_to_wecom():
 			"enable_duplicate_check": 0
 		}
 		resp = requests.post(url, json=data)
+
+
+# 获取上级领导的userid
+def get_leader_id(access_token, user_id):
+	url = "https://qyapi.weixin.qq.com/cgi-bin/user/get"
+	params = {
+		"access_token": access_token,
+		"userid": user_id,
+	}
+	response = requests.get(url, params=params)
+	result_json = response.json()
+	if result_json['direct_leader']:
+		return result_json['direct_leader']
+
+
+# 更新员工的上级主管
+@frappe.whitelist()
+def update_employee_reports_to():
+	access_token = get_access_token()
+	employees = frappe.db.get_all('Employee', filters={'status': 'Active'}, pluck = 'name')
+	for name in employees:
+		doc = frappe.get_doc('Employee', name)
+		if doc.user_id:
+			user = frappe.get_doc('User', doc.user_id)
+			# 当前员工对应的用户账户关闭则员工状态改为离职或停用
+			if not user.enabled:
+				count = frappe.db.count('Employee', filters={'reports_to': doc.name})
+				if count == 0:
+					doc.status = 'Left'
+				else:
+					doc.status = 'Inactive'
+				doc.relieving_date = frappe.utils.now()
+				doc.save(ignore_permissions=True)
+			else:
+				# 找到当前员工对应的上级员工
+				wecom_uid = user.custom_wecom_uid or user.name
+				leader_ids = get_leader_id(access_token, wecom_uid)
+				if not leader_ids or len(leader_ids) == 0:
+					continue
+				leader_id = leader_ids[0]
+				if leader_id and leader_id != wecom_uid:
+					direct_leaders = frappe.db.get_all(
+						'Employee', 
+						filters={'user_id': leader_id}, 
+						pluck='name', 
+						limit_page_length=1
+					)
+					if direct_leaders:
+						direct_leader = direct_leaders[0]
+						if doc.reports_to != direct_leader:
+							doc.reports_to = direct_leader
+							doc.save(ignore_permissions=True)
+	frappe.db.commit()
