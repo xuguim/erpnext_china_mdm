@@ -15,7 +15,7 @@ def has_query_permission(user):
 		# 如果当前用户是客户关联线索的负责人，也可以看到
 		# 这里要找 已转化的线索
 		leads = frappe.db.get_all("Lead", filters=[["lead_owner", '=', user]], pluck='name')
-		leads_str = str(tuple(leads))
+		leads_str = str(tuple(leads)).replace(',)',')')
 		conditions = f"owner in {users_str} or lead_name in {leads_str}" 
 	return conditions
 
