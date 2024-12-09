@@ -251,6 +251,7 @@ doc_events = {
 	},
 	"Delivery Note": {
 		"validate": "erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.validate_shipper",
+		"on_submit": "erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.auto_make_sales_invoice",
 	}
 }
 
