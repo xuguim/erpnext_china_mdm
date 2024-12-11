@@ -19,5 +19,10 @@ frappe.ui.form.on('Sales Order', {
 			frm.fields_dict["items"].grid.toggle_enable("rate", 1)
 			
 		}
+
+		frm.toggle_display(
+			"final_customer_name",
+			frm.doc.final_customer_name && frm.doc.final_customer_name !== frm.doc.final_customer
+		);
     },
 });
