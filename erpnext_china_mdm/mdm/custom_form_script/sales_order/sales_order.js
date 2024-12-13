@@ -24,5 +24,9 @@ frappe.ui.form.on('Sales Order', {
 			"final_customer_name",
 			frm.doc.final_customer_name && frm.doc.final_customer_name !== frm.doc.final_customer
 		);
+
+		setTimeout(() => {
+            frm.fields_dict.items.grid.toggle_reqd('delivery_date',1)
+        }, timeout * 100);
     },
 });
