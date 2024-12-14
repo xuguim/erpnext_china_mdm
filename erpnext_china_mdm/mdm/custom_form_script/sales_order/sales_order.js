@@ -27,6 +27,6 @@ frappe.ui.form.on('Sales Order', {
 
 		setTimeout(() => {
             frm.fields_dict.items.grid.toggle_reqd('delivery_date',1)
-        }, timeout * 100);
+        }, 100);
     },
 });
