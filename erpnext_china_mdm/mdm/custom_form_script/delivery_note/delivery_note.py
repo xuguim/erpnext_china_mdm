@@ -76,7 +76,7 @@ class CustomDeliveryNote(DeliveryNote):
 
 def validate_shipper(doc, method=None):
 	user = doc.owner
-	employee = frappe.db.get_value("Employee", {"user_id": user},["name","department","reports_to"],as_dict=1)
+	employee = frappe.db.get_value("Employee", {"user_id": user},["name","employee_name","department","reports_to","company"],as_dict=1)
 	if not employee:
 		if user == 'Administrator':
 			if frappe.conf.developer_mode:
@@ -107,6 +107,16 @@ def validate_shipper(doc, method=None):
 			frappe.throw('你的上级主管{}未配置部门，无法找到发货人，请联系管理员'.format(employee.reports_to))
 		else:
 			shipper = find_department_shipper(department,department_list,shipper_list)
+			if not shipper:
+				msg = f"""
+					<div>制单员工为：<b>{employee.employee_name}</b>,归属公司为:<b>{employee.company}</b>，未配置上级主管</div>
+					<div>主管归属的部门为：
+						{frappe.utils.get_link_to_form("Department", department)}
+					</div>
+					<div>该部门未能找到对应发货人，请配置好发货人信息</div>
+					
+				"""
+				frappe.throw(msg)
 
 	if shipper:
 		doc.shipper = shipper
