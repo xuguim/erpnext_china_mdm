@@ -234,6 +234,7 @@ override_doctype_class = {
 }
 override_whitelisted_methods = {
     "erpnext_china.utils.oauth2_logins.login_via_wecom": "erpnext_china_mdm.utils.oauth2_logins.login_via_wecom",
+	"erpnext.selling.doctype.sales_order.sales_order.make_delivery_note": "erpnext_china_mdm.mdm.custom_form_script.sales_order.sales_order.make_delivery_note"
 }
 after_install = "erpnext_china_mdm.setup.after_install.operations.install_fixtures.install"
 
