@@ -20,7 +20,7 @@ frappe.ui.form.on('Sales Order', {
 			
 		}
 
-        if (has_common(frappe.user_roles, ["销售会计"])) {
+        if (has_common(frappe.user_roles, ["销售会计"]) && !has_common(frappe.user_roles, ["Administrator", "System Manager"])) {
             // 地址及联系方式对销售会计隐藏
             frm.set_df_property('col_break46', 'hidden', 1)
         }
