@@ -20,6 +20,11 @@ frappe.ui.form.on('Sales Order', {
 			
 		}
 
+        if (has_common(frappe.user_roles, ["销售会计"])) {
+            // 地址及联系方式对销售会计隐藏
+            frm.set_df_property('col_break46', 'hidden', 1)
+        }
+
 		frm.toggle_display(
 			"final_customer_name",
 			frm.doc.final_customer_name && frm.doc.final_customer_name !== frm.doc.final_customer
