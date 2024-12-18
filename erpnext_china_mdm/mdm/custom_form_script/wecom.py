@@ -205,8 +205,7 @@ def send_modified_checkin_to_wecom():
 		resp = requests.post(url, json=data)
 
 
-# 获取上级领导的userid
-def get_leader_id(access_token, user_id):
+def get_user_info(access_token, user_id):
 	url = "https://qyapi.weixin.qq.com/cgi-bin/user/get"
 	params = {
 		"access_token": access_token,
@@ -214,11 +213,12 @@ def get_leader_id(access_token, user_id):
 	}
 	response = requests.get(url, params=params)
 	result_json = response.json()
-	if result_json['direct_leader']:
-		return result_json['direct_leader']
+	# if result_json['direct_leader']:
+	# 	return result_json['direct_leader']
+	return result_json
 
 
-# 更新员工的上级主管
+# 更新员工的上级主管和部门
 @frappe.whitelist()
 def update_employee_reports_to():
 	access_token = get_access_token()
@@ -237,22 +237,63 @@ def update_employee_reports_to():
 				doc.relieving_date = frappe.utils.now()
 				doc.save(ignore_permissions=True)
 			else:
-				# 找到当前员工对应的上级员工
 				wecom_uid = user.custom_wecom_uid or user.name
-				leader_ids = get_leader_id(access_token, wecom_uid)
+				result_json = get_user_info(access_token, wecom_uid)
+
+				# 更新员工部门
+				main_department_id = result_json.get('main_department')
+				if main_department_id:
+					department_name = frappe.db.get_value('Department', filters={'custom_wecom_id': main_department_id})
+					if department_name and doc.department != department_name:
+						doc.department = department_name
+						doc.save(ignore_permissions=True)
+				
+				# 更新员工上级
+				leader_ids = result_json.get('direct_leader')
 				if not leader_ids or len(leader_ids) == 0:
 					continue
 				leader_id = leader_ids[0]
 				if leader_id and leader_id != wecom_uid:
-					direct_leaders = frappe.db.get_all(
-						'Employee', 
-						filters={'user_id': leader_id}, 
-						pluck='name', 
-						limit_page_length=1
-					)
-					if direct_leaders:
-						direct_leader = direct_leaders[0]
-						if doc.reports_to != direct_leader:
-							doc.reports_to = direct_leader
-							doc.save(ignore_permissions=True)
+					direct_leader = frappe.db.get_value('Employee', filters={'user_id': leader_id})
+					if direct_leader and doc.reports_to != direct_leader:
+						doc.reports_to = direct_leader
+						doc.save(ignore_permissions=True)
+	frappe.db.commit()
+
+# 同步部门及部门下的员工
+@frappe.whitelist()
+def update_department():
+	access_token = get_access_token()
+	departments = get_departments(access_token)
+	doctype = 'Department'
+	# 先创建或修改所有部门
+	for dept in departments:
+		wecom_id = dept.get('id')
+		name = dept.get('name')
+
+		dept_name = frappe.db.get_value(doctype, filters={'department_name': name})
+		if dept_name:
+			doc = frappe.get_doc(doctype, dept_name)
+			if doc.custom_wecom_id != wecom_id:
+				doc.custom_wecom_id = wecom_id
+				doc.save(ignore_permissions=True)
+		else:
+			new_doc = frappe.new_doc(doctype)
+			new_doc.department_name = name
+			new_doc.custom_wecom_id = wecom_id
+			new_doc.is_group = 1
+			new_doc.insert(ignore_permissions=True)
+	
+	# 设置部门关系
+	for dept in departments:
+		wecom_id = dept.get('id')
+		parent_id = dept.get('parentid')
+		name = frappe.db.get_value(doctype, filters={'custom_wecom_id': wecom_id})
+		if name:
+			doc = frappe.get_doc(doctype, name)
+			parent_department_name = frappe.db.get_value(doctype, filters={'custom_wecom_id': parent_id})
+			if parent_department_name and doc.parent_department != parent_department_name:
+				parent = frappe.get_doc(doctype, parent_department_name)
+				doc.parent_department = parent.name
+				doc.save(ignore_permissions=True)
 	frappe.db.commit()

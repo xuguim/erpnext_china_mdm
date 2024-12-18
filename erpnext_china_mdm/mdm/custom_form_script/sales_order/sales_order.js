@@ -20,6 +20,11 @@ frappe.ui.form.on('Sales Order', {
 			
 		}
 
+        if (frm.is_new()) {
+            frm.set_df_property('transaction_date', 'hidden', 1)
+            frm.set_df_property('scan_barcode', 'hidden', 1)
+        }
+
 		frm.toggle_display(
 			"final_customer_name",
 			frm.doc.final_customer_name && frm.doc.final_customer_name !== frm.doc.final_customer
