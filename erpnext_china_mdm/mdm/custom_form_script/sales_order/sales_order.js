@@ -25,6 +25,13 @@ frappe.ui.form.on('Sales Order', {
             frm.set_df_property('scan_barcode', 'hidden', 1)
         }
 
+        frm.call('get_p13').then((r)=>{
+            const name = r.message.name;
+            if (name) {
+                frm.set_value('taxes_and_charges', name)
+            }
+        });
+
 		frm.toggle_display(
 			"final_customer_name",
 			frm.doc.final_customer_name && frm.doc.final_customer_name !== frm.doc.final_customer
