@@ -268,11 +268,14 @@ scheduler_events = {
         "0 */1 * * *": [
             "erpnext_china_mdm.mdm.custom_form_script.wecom.send_modified_checkin_to_wecom"
         ],
-        "0 3 * * *": [
-            "erpnext_china_mdm.mdm.custom_form_script.wecom.update_employee_reports_to"
-        ],
         "0 2 * * *": [
             "erpnext_china_mdm.mdm.custom_form_script.wecom.update_department"
+        ],
+        "0 3 * * *": [
+            "erpnext_china_mdm.mdm.custom_form_script.wecom.update_employee_department"
+        ],
+        "0 4 * * *": [
+            "erpnext_china_mdm.mdm.custom_form_script.wecom.update_employee_reports_to"
         ]
 	},
 }
