@@ -218,15 +218,15 @@ def get_user_info(access_token, user_id):
 	return result_json
 
 
-# 更新员工的上级主管和部门
+# 更新员工的上级主管
 @frappe.whitelist()
 def update_employee_reports_to():
 	access_token = get_access_token()
 	employees = frappe.db.get_all('Employee', filters={'status': 'Active'}, pluck = 'name')
 	for name in employees:
-		doc = frappe.get_doc('Employee', name)
+		doc = frappe.get_cached_doc('Employee', name)
 		if doc.user_id:
-			user = frappe.get_doc('User', doc.user_id)
+			user = frappe.get_cached_doc('User', doc.user_id)
 			# 当前员工对应的用户账户关闭则员工状态改为离职或停用
 			if not user.enabled:
 				count = frappe.db.count('Employee', filters={'reports_to': doc.name})
@@ -240,24 +240,19 @@ def update_employee_reports_to():
 				wecom_uid = user.custom_wecom_uid or user.name
 				result_json = get_user_info(access_token, wecom_uid)
 
-				# 更新员工部门
-				main_department_id = result_json.get('main_department')
-				if main_department_id:
-					department_name = frappe.db.get_value('Department', filters={'custom_wecom_id': main_department_id})
-					if department_name and doc.department != department_name:
-						doc.department = department_name
-						doc.save(ignore_permissions=True)
-				
 				# 更新员工上级
 				leader_ids = result_json.get('direct_leader')
 				if not leader_ids or len(leader_ids) == 0:
 					continue
 				leader_id = leader_ids[0]
-				if leader_id and leader_id != wecom_uid:
-					direct_leader = frappe.db.get_value('Employee', filters={'user_id': leader_id})
-					if direct_leader and doc.reports_to != direct_leader:
-						doc.reports_to = direct_leader
-						doc.save(ignore_permissions=True)
+				if leader_id != wecom_uid:
+					leader_users = frappe.get_all('User', or_filters={'name': leader_id, 'custom_wecom_uid': leader_id}, pluck='name')
+					if leader_users and len(leader_users) > 0:
+						leader_user_id = leader_users[0]
+						direct_leader = frappe.db.get_value('Employee', filters={'user_id': leader_user_id})
+						if direct_leader and doc.reports_to != direct_leader:
+							doc.reports_to = direct_leader
+							doc.save(ignore_permissions=True)
 	frappe.db.commit()
 
 # 同步部门及部门下的员工
@@ -296,4 +291,27 @@ def update_department():
 				parent = frappe.get_doc(doctype, parent_department_name)
 				doc.parent_department = parent.name
 				doc.save(ignore_permissions=True)
+	frappe.db.commit()
+
+
+# 更新员工的部门
+@frappe.whitelist()
+def update_employee_department():
+	access_token = get_access_token()
+	employees = frappe.db.get_all('Employee', filters={'status': 'Active'}, pluck = 'name')
+	for name in employees:
+		doc = frappe.get_cached_doc('Employee', name)
+		if doc.user_id:
+			user = frappe.get_cached_doc('User', doc.user_id)
+			if user.enabled:
+				wecom_uid = user.custom_wecom_uid or user.name
+				result_json = get_user_info(access_token, wecom_uid)
+
+				# 更新员工部门
+				main_department_id = result_json.get('main_department')
+				if main_department_id:
+					department_name = frappe.db.get_value('Department', filters={'custom_wecom_id': main_department_id})
+					if department_name and doc.department != department_name:
+						doc.department = department_name
+						doc.save(ignore_permissions=True)
 	frappe.db.commit()
