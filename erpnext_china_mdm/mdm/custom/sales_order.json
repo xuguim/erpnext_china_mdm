@@ -788,7 +788,7 @@
    "property": "default",
    "property_type": "Text",
    "row_name": null,
-   "value": "\u9500\u552e"
+   "value": "Sales"
   },
   {
    "_assign": null,
@@ -811,7 +811,7 @@
    "property": "options",
    "property_type": "Select",
    "row_name": null,
-   "value": "\u9500\u552e\n\u6837\u54c1"
+   "value": "Sales"
   },
   {
    "_assign": null,
