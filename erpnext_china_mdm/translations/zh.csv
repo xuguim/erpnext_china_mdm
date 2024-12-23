@@ -89,3 +89,4 @@ Total,总金额
 Net Total,最终不含税总货款
 Shipping Address Name,客户收货地址
 Tax Amount After Discount Amount (Company Currency),最终总税额（公司货币）
+Realtime Stock Qty,实时库存数量
