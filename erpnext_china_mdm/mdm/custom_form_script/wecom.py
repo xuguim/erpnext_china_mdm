@@ -217,6 +217,15 @@ def get_user_info(access_token, user_id):
 	# 	return result_json['direct_leader']
 	return result_json
 
+def get_user_from_department(access_token, department_id):
+	url = 'https://qyapi.weixin.qq.com/cgi-bin/user/list'
+	params = {
+		'access_token': access_token,
+		'department_id': department_id
+	}
+	resp = requests.get(url, params=params)
+	result = resp.json()
+	return result.get('userlist')
 
 # 更新员工的上级主管
 @frappe.whitelist()
@@ -294,24 +303,59 @@ def update_department():
 	frappe.db.commit()
 
 
-# 更新员工的部门
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def update_employee_department():
-	access_token = get_access_token()
-	employees = frappe.db.get_all('Employee', filters={'status': 'Active'}, pluck = 'name')
-	for name in employees:
-		doc = frappe.get_cached_doc('Employee', name)
-		if doc.user_id:
-			user = frappe.get_cached_doc('User', doc.user_id)
-			if user.enabled:
-				wecom_uid = user.custom_wecom_uid or user.name
-				result_json = get_user_info(access_token, wecom_uid)
+	try:
+		access_token = get_access_token()
+		departments = frappe.get_all(
+			'Department', 
+			filters={'custom_wecom_id': ['!=', '']},
+			fields=['name', 'custom_wecom_id']
+		)
 
-				# 更新员工部门
-				main_department_id = result_json.get('main_department')
-				if main_department_id:
-					department_name = frappe.db.get_value('Department', filters={'custom_wecom_id': main_department_id})
-					if department_name and doc.department != department_name:
-						doc.department = department_name
-						doc.save(ignore_permissions=True)
-	frappe.db.commit()
+		all_users_info = {}
+		for deparment in departments:
+			department_wecom_id = deparment.get('custom_wecom_id')
+			user_list = get_user_from_department(access_token, department_wecom_id)
+			for info in user_list:
+				user_wecom_id = info.get('userid')
+				main_department_wecom_id = info.get('main_department')
+				all_users_info[user_wecom_id] = main_department_wecom_id
+
+		user_map = frappe.db.get_all(
+			'User',
+			or_filters=[
+				['custom_wecom_uid', 'in', list(all_users_info.keys())],
+				['name', 'in', list(all_users_info.keys())]
+			],
+			filters={'enabled': 1},
+			fields=['name', 'custom_wecom_uid']
+		)
+		user_dict = {user.get('custom_wecom_uid') or user.get('name'): user.get('name') for user in user_map}
+
+		employee_map = frappe.db.get_all(
+			'Employee',
+			filters={'user_id': ['in', list(user_dict.values())],'status': 'Active'},
+			fields=['name', 'user_id', 'department']
+		)
+		employee_dict = {emp.get('user_id'): emp for emp in employee_map}
+
+		main_deparment_dict = {md.get('name'): md.get('custom_wecom_id') for md in departments}
+		reverse_main_deparment_dict = {md.get('custom_wecom_id'): md.get('name') for md in departments}
+		# 更新员工的部门
+		for user_wecom_id, main_department_wecom_id in all_users_info.items():
+			user_name = user_dict.get(user_wecom_id)
+			if user_name:
+				employee = employee_dict.get(user_name)
+				if employee:
+					if main_deparment_dict.get(employee.get('department')) != str(main_department_wecom_id):
+						dept_name = reverse_main_deparment_dict.get(str(main_department_wecom_id))
+						if dept_name:
+							employee_doc = frappe.get_cached_doc('Employee', employee.get('name'))
+							employee_doc.department = dept_name
+							employee_doc.save(ignore_permissions=True)
+
+		frappe.db.commit()
+	except Exception as e:
+		frappe.log_error(title="Error updating employee departments", message=frappe.get_traceback())
+		raise
