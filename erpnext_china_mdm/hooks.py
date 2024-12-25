@@ -291,6 +291,7 @@ permission_query_conditions = {
     "Item Group": "erpnext_china_mdm.mdm.custom_permission.item_group.permission_item_group.has_query_permission",
     "Stock Entry": "erpnext_china_mdm.mdm.custom_permission.stock_entry.permission_stock_entry.has_query_permission",
     "Warehouse": "erpnext_china_mdm.mdm.custom_permission.warehouse.permission_warehouse.has_query_permission",
+    "Address": "erpnext_china_mdm.mdm.custom_permission.address.permission_address.has_query_permission"
 }
 
 has_permission = {
@@ -302,4 +303,5 @@ has_permission = {
     "Item": "erpnext_china_mdm.mdm.custom_permission.item.permission_item.has_permission",
     "Item Group": "erpnext_china_mdm.mdm.custom_permission.item_group.permission_item_group.has_permission",
     "Warehouse": "erpnext_china_mdm.mdm.custom_permission.warehouse.permission_warehouse.has_permission",
+    "Address": "erpnext_china_mdm.mdm.custom_permission.address.permission_address.has_permission"
 }

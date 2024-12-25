@@ -1,4 +1,17 @@
 frappe.ui.form.on('Sales Order', {
+    company: function (frm) {
+        if (frm.doc.company == '临时') {
+            frm.set_value('taxes_and_charges', null)
+            frm.clear_table('taxes')
+        } else {
+            frm.call('get_p13').then((r)=>{
+                const name = r.message.name;
+                if (name) {
+                    frm.set_value('taxes_and_charges', name)
+                }
+            });
+        }
+	},
     refresh(frm){
         if(!has_common(frappe.user_roles, ["Administrator", "System Manager","Accounts User","Accounts Manager"])){
 			// 销售税费明细子表对除管理员和财务外的其他角色只读，明细中科目和成本中心也只读
@@ -24,15 +37,6 @@ frappe.ui.form.on('Sales Order', {
             frm.set_df_property('transaction_date', 'hidden', 1)
             frm.set_df_property('scan_barcode', 'hidden', 1)
         }
-
-		if(frm.doc.docstatus == 0) {
-			frm.call('get_p13').then((r)=>{
-				const name = r.message.name;
-				if (name) {
-					frm.set_value('taxes_and_charges', name)
-				}
-			});
-		}
 
 		frm.toggle_display(
 			"final_customer_name",
