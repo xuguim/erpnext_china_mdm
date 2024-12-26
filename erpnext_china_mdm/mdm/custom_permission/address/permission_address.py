@@ -28,11 +28,11 @@ def has_query_permission(user):
 		users_str = str(tuple(users)).replace(',)',')')
 		conditions = f"tabAddress.`owner` in {users_str}"
 
-		# 有客户权限，则有详细地址权限
-		addresses = get_addresses_from_customers(user)
-		if len(addresses) > 0:
-			addresses_str = str(tuple(addresses)).replace(',)',')')
-			conditions += f" or tabAddress.`name` in {addresses_str}"
+		# # 有客户权限，则有详细地址权限
+		# addresses = get_addresses_from_customers(user)
+		# if len(addresses) > 0:
+		# 	addresses_str = str(tuple(addresses)).replace(',)',')')
+		# 	conditions += f" or tabAddress.`name` in {addresses_str}"
 
 	return conditions
 
@@ -46,9 +46,9 @@ def has_permission(doc, user, permission_type=None):
 		users.append(user)
 
 		# 有客户权限，则有详细地址权限
-		addresses = get_addresses_from_customers(user)
+		# addresses = get_addresses_from_customers(user)
 
-		if doc.owner in users or doc.name in addresses:
+		if doc.owner in users or doc.name:
 			return True
 		else:
 			return False
