@@ -1,6 +1,7 @@
 import json
 import frappe
 import frappe.utils
+from datetime import datetime
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -359,3 +360,81 @@ def update_employee_department():
 	except Exception as e:
 		frappe.log_error(title="Error updating employee departments", message=frappe.get_traceback())
 		raise
+
+
+@frappe.whitelist(allow_guest=True)
+def send_message_to_wecom(**kwargs):
+	users = kwargs.get('users', [])
+	access_token = get_access_token()
+	url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=' + access_token
+	
+	if len(users) == 0:
+		employees = frappe.get_all("Employee", 
+			fields = ["name", "first_name", "user_id", "department", "reports_to", "custom_chinese_id_number", "bank_ac_no"], 
+			filters = {'status': 'Active'}
+		)
+	else:
+		employees = frappe.get_all("Employee", 
+			fields = ["name", "first_name", "user_id", "department", "reports_to", "custom_chinese_id_number", "bank_ac_no"], 
+			filters = {'status': 'Active', 'user_id': ['in', users]}
+		)
+	
+	for emp in employees:
+		user = frappe.get_doc("User", emp.get('user_id'))
+		to_user = user.custom_wecom_uid or user.name
+		leader_name = emp.get('reports_to')
+		leader_first_name = ''
+		if leader_name:
+			leader_first_name = frappe.db.get_value("Employee", filters={'name': leader_name}, fieldname='first_name')
+		data = {
+			"touser" : to_user,
+			"msgtype" : "template_card",
+			"agentid" : 1000008,
+			"template_card" : {
+				"card_type" : "button_interaction",
+				"main_title" : {
+					"title" : "核对您的身份证号及薪资银行卡号",
+					"desc" : "请仔细核对您的身份证号与薪资银行卡号，如有问题请尽快联系总部人力资源部柴春燕同事，进行修改"
+				},
+				"horizontal_content_list" : [
+					{
+						"keyname": "姓名",
+						"value": emp.get('first_name', '')
+					},
+					{
+						"keyname": "部门",
+						"value": emp.get('department', '')
+					},
+					{
+						"keyname": "直属上级",
+						"value": leader_first_name
+					},
+					{
+						"keyname": "身份证号",
+						"value": emp.get('custom_chinese_id_number', '')
+					},
+					{
+						"keyname": "银行卡号",
+						"value": emp.get('bank_ac_no', '')
+					}
+				],
+				"task_id": str(int(datetime.now().timestamp()*1000)),
+				"button_list": [
+					{
+						"text": "正确",
+						"style": 1,
+						"key": emp.get('name') + '_1',
+					},
+					{
+						"text": "错误",
+						"style": 2,
+						"key": emp.get('name') + '_2',
+					}
+				]
+			},
+			"enable_id_trans": 0,
+			"enable_duplicate_check": 0,
+			"duplicate_check_interval": 1800
+		}
+		resp = requests.post(url, json=data)
+
