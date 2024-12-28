@@ -397,7 +397,7 @@ def send_message_to_wecom(**kwargs):
 					"title" : "关于核实公司数据化建设相关信息的通知",
 					"desc" : ""
 				},
-				"sub_title_text": "为推进公司数据化建设并提升各环节流程效率，我们计划通过身份证号等关键信息实现各系统的互联互通。为确保信息准确无误，请核实以下内容。如发现信息存在错误，请及时反馈，并联系人力资源部柴春燕同事进行修改。",
+				"sub_title_text": "为推进公司数据化建设并提升各环节流程效率，我们计划通过身份证号等关键信息实现各系统的互联互通。为确保信息准确无误，请核实以下内容。如发现信息存在错误，请及时反馈，并联系人力资源部柴春燕同事进行修改。\n\n感谢大家的配合与支持！",
 				"horizontal_content_list" : [
 					{
 						"keyname": "姓名",
@@ -444,3 +444,71 @@ def send_message_to_wecom(**kwargs):
 		}
 		resp = requests.post(url, json=data)
 
+@frappe.whitelist(allow_guest=True)
+def get_checkin_data(**kwargs):
+	access_token = get_access_token()
+	url = 'https://qyapi.weixin.qq.com/cgi-bin/checkin/getcheckin_monthdata'
+	params = {
+		'access_token': access_token
+	}
+	data = {
+		"starttime": 1730419200,
+		"endtime": 1732924800,
+		"useridlist": [
+			"liuchao@zhushigroup.cn"
+		]
+	}
+	resp = requests.post(url, params=params, json=data)
+	result = resp.json()
+	datas = result.get('datas')
+	print(result)
+	return result
+
+@frappe.whitelist(allow_guest=True)
+def get_user_checkin_data():
+	access_token = get_access_token()
+	url = 'https://qyapi.weixin.qq.com/cgi-bin/checkin/getcheckindata'
+	params = {
+		'access_token': access_token
+	}
+	data = {
+		"opencheckindatatype": 3,
+		"starttime": 1727740800,
+		"endtime": 1730332800,
+		"useridlist": [
+			"liuchao@zhushigroup.cn"
+		]
+	}
+	resp = requests.post(url, params=params, json=data)
+	result = resp.json()
+	datas = result.get('datas')
+	print(result)
+	return result
+
+@frappe.whitelist(allow_guest=True)
+def get_user_leader_and_department():
+	access_token = get_access_token()
+	url = 'https://qyapi.weixin.qq.com/cgi-bin/user/get'
+	users = frappe.db.get_all('User', filters={'enabled': 1}, fields=['name', 'custom_wecom_uid'])
+	data = []
+	for user in users:
+		user_id = user.get('custom_wecom_uid') or user.get('name')
+		params = {
+			'access_token': access_token,
+			'userid': user_id
+		}
+		resp = requests.post(url, params=params)
+		result = resp.json()
+		direct_leader = result.get('direct_leader', [])
+		info = {}
+		info['name'] = user.get('name')
+		if len(direct_leader) > 0:
+			info['leader'] = direct_leader[0]
+		main_department = result.get('main_department')
+		info['main_department'] = main_department
+		print(info)
+		data.append(info)
+	
+	df = pd.DataFrame(data)
+	df.to_excel('output.xlsx', index=False, engine='openpyxl')
+	return data
