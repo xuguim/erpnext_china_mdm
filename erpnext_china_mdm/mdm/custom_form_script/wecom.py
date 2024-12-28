@@ -1,6 +1,7 @@
 import json
 import frappe
 import frappe.utils
+import pandas as pd, openpyxl
 from datetime import datetime
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -393,8 +394,8 @@ def send_message_to_wecom(**kwargs):
 			"template_card" : {
 				"card_type" : "button_interaction",
 				"main_title" : {
-					"title" : "核对您的身份证号及薪资银行卡号",
-					"desc" : "请仔细核对您的身份证号与薪资银行卡号，如有问题请尽快联系总部人力资源部柴春燕同事，进行修改"
+					"title" : "关于核实公司数据化建设相关信息的通知",
+					"desc" : "为推进公司数据化建设并提升各环节流程效率，我们计划通过身份证号等关键信息实现各系统的互联互通。为确保信息准确无误，请核实以下内容。如发现信息存在错误，请及时反馈，并联系人力资源部柴春燕同事进行修改。"
 				},
 				"horizontal_content_list" : [
 					{
@@ -412,6 +413,10 @@ def send_message_to_wecom(**kwargs):
 					{
 						"keyname": "身份证号",
 						"value": emp.get('custom_chinese_id_number', '')
+					},
+					{
+						"keyname": "银行名称",
+						"value": emp.get('bank_name', '')
 					},
 					{
 						"keyname": "银行卡号",
