@@ -229,9 +229,7 @@ def get_user_from_department(access_token, department_id):
 	result = resp.json()
 	return result.get('userlist')
 
-# 更新员工的上级主管
-@frappe.whitelist()
-def update_employee_reports_to():
+def handle_update_employee_reports_to():
 	access_token = get_access_token()
 	employees = frappe.db.get_all('Employee', filters={'status': 'Active'}, pluck = 'name')
 	for name in employees:
@@ -265,6 +263,13 @@ def update_employee_reports_to():
 							doc.reports_to = direct_leader
 							doc.save(ignore_permissions=True)
 	frappe.db.commit()
+
+
+# 更新员工的上级主管
+@frappe.whitelist(allow_guest=True)
+def update_employee_reports_to():
+	frappe.enqueue(method=handle_update_employee_reports_to, queue="long", timeout=3600, job_name="handle_update_employee_reports_to")
+	
 
 # 同步部门及部门下的员工
 @frappe.whitelist()
