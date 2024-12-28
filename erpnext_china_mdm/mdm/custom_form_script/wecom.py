@@ -304,9 +304,7 @@ def update_department():
 				doc.save(ignore_permissions=True)
 	frappe.db.commit()
 
-
-@frappe.whitelist(allow_guest=True)
-def update_employee_department():
+def handle_update_employee_department():
 	try:
 		access_token = get_access_token()
 		departments = frappe.get_all(
@@ -361,6 +359,11 @@ def update_employee_department():
 	except Exception as e:
 		frappe.log_error(title="Error updating employee departments", message=frappe.get_traceback())
 		raise
+
+
+@frappe.whitelist(allow_guest=True)
+def update_employee_department():
+	frappe.enqueue(method=handle_update_employee_department, queue="long", timeout=3600, job_name="handle_update_employee_department")
 
 
 @frappe.whitelist(allow_guest=True)
