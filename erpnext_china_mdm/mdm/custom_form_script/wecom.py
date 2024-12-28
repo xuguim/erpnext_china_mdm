@@ -229,9 +229,7 @@ def get_user_from_department(access_token, department_id):
 	result = resp.json()
 	return result.get('userlist')
 
-# 更新员工的上级主管
-@frappe.whitelist()
-def update_employee_reports_to():
+def handle_update_employee_reports_to():
 	access_token = get_access_token()
 	employees = frappe.db.get_all('Employee', filters={'status': 'Active'}, pluck = 'name')
 	for name in employees:
@@ -265,6 +263,13 @@ def update_employee_reports_to():
 							doc.reports_to = direct_leader
 							doc.save(ignore_permissions=True)
 	frappe.db.commit()
+
+
+# 更新员工的上级主管
+@frappe.whitelist(allow_guest=True)
+def update_employee_reports_to():
+	frappe.enqueue(method=handle_update_employee_reports_to, queue="long", timeout=3600, job_name="handle_update_employee_reports_to")
+	
 
 # 同步部门及部门下的员工
 @frappe.whitelist()
@@ -304,9 +309,7 @@ def update_department():
 				doc.save(ignore_permissions=True)
 	frappe.db.commit()
 
-
-@frappe.whitelist(allow_guest=True)
-def update_employee_department():
+def handle_update_employee_department():
 	try:
 		access_token = get_access_token()
 		departments = frappe.get_all(
@@ -364,6 +367,11 @@ def update_employee_department():
 
 
 @frappe.whitelist(allow_guest=True)
+def update_employee_department():
+	frappe.enqueue(method=handle_update_employee_department, queue="long", timeout=3600, job_name="handle_update_employee_department")
+
+
+@frappe.whitelist(allow_guest=True)
 def send_message_to_wecom(**kwargs):
 	users = kwargs.get('users', [])
 	access_token = get_access_token()
@@ -415,14 +423,14 @@ def send_message_to_wecom(**kwargs):
 						"keyname": "身份证号",
 						"value": emp.get('custom_chinese_id_number', '')
 					},
-					{
-						"keyname": "银行名称",
-						"value": emp.get('bank_name', '')
-					},
-					{
-						"keyname": "银行卡号",
-						"value": emp.get('bank_ac_no', '')
-					}
+					# {
+					# 	"keyname": "银行名称",
+					# 	"value": emp.get('bank_name', '')
+					# },
+					# {
+					# 	"keyname": "银行卡号",
+					# 	"value": emp.get('bank_ac_no', '')
+					# }
 				],
 				"task_id": str(int(datetime.now().timestamp()*1000)),
 				"button_list": [
