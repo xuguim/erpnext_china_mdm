@@ -418,14 +418,14 @@ def send_message_to_wecom(**kwargs):
 						"keyname": "身份证号",
 						"value": emp.get('custom_chinese_id_number', '')
 					},
-					{
-						"keyname": "银行名称",
-						"value": emp.get('bank_name', '')
-					},
-					{
-						"keyname": "银行卡号",
-						"value": emp.get('bank_ac_no', '')
-					}
+					# {
+					# 	"keyname": "银行名称",
+					# 	"value": emp.get('bank_name', '')
+					# },
+					# {
+					# 	"keyname": "银行卡号",
+					# 	"value": emp.get('bank_ac_no', '')
+					# }
 				],
 				"task_id": str(int(datetime.now().timestamp()*1000)),
 				"button_list": [
