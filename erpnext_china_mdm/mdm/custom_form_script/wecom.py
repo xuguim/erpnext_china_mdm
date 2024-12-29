@@ -390,13 +390,13 @@ def send_message_to_wecom(**kwargs):
 	
 	for emp in employees:
 		user = frappe.get_doc("User", emp.get('user_id'))
-		to_user = user.custom_wecom_uid or user.name
+		to_user = user.custom_wecom_uid
 		leader_name = emp.get('reports_to')
 		leader_first_name = ''
 		if leader_name:
 			leader_first_name = frappe.db.get_value("Employee", filters={'name': leader_name}, fieldname='first_name')
 		data = {
-			"touser" : to_user,
+			"touser" : str(to_user).replace('.00',''),
 			"msgtype" : "template_card",
 			"agentid" : 1000008,
 			"template_card" : {
