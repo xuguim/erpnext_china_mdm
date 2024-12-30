@@ -19,7 +19,7 @@ def get_addresses_from_customers(user):
 
 def get_addresses_from_delivery_notes(user):
 	try:
-		if 'Stock User' in frappe.get_roles(user):
+		if '仓库' in frappe.get_roles(user):
 			dn_customers = get_customer_from_delivery_note(user)
 			addresses = frappe.get_all('Dynamic Link', filters={
 				'link_doctype': 'Customer', 
@@ -43,7 +43,7 @@ def has_query_permission(user):
 		users_str = str(tuple(users)).replace(',)',')')
 		conditions = f"tabAddress.`owner` in {users_str}"
 		addresses_from_delivery_notes = []
-		if 'Stock User' in frappe.get_roles(user):
+		if '仓库' in frappe.get_roles(user):
 			addresses_from_delivery_notes = get_addresses_from_delivery_notes(user)
 			addresses_str = str(tuple(addresses_from_delivery_notes)).replace(',)',')')
 			conditions += f" or tabAddress.`name` in {addresses_str}"
@@ -64,13 +64,13 @@ def has_permission(doc, user, permission_type=None):
 		users = get_employee_tree(parent=user)
 		users.append(user)
 		addresses_from_delivery_notes = []
-		if 'Stock User' in frappe.get_roles(user):
+		if '仓库' in frappe.get_roles(user):
 			addresses_from_delivery_notes = get_addresses_from_delivery_notes(user)
 
 		# 有客户权限，则有详细地址权限
 		# addresses = get_addresses_from_customers(user)
 
-		if doc.owner in users or doc.name or doc.name in addresses_from_delivery_notes:
+		if doc.owner in users or doc.name in addresses_from_delivery_notes:
 			return True
 		else:
 			return False
