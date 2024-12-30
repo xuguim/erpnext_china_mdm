@@ -61,7 +61,7 @@ def has_query_permission(user):
 		if len(customers) > 0:
 			customers_str = str(tuple(customers)).replace(',)',')')
 			conditions += f" or tabCustomer.`name` in {customers_str}" 
-		if 'Stock User' in frappe.get_roles(user):
+		if '仓库' in frappe.get_roles(user):
 			dn_customers = get_customer_from_delivery_note(user)
 			dn_customers_str = str(tuple(dn_customers)).replace(',)',')')
 			conditions += f" or tabCustomer.`name` in {dn_customers_str}" 
