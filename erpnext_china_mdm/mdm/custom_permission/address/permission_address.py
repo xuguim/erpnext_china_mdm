@@ -17,6 +17,13 @@ def get_addresses_from_customers(user):
 	except:
 		return []
 
+def get_is_your_company_addresses():
+	try:
+		is_your_company_addresses = frappe.get_all('Address', filters={'is_your_company_address': 1}, pluck='name')
+		return is_your_company_addresses
+	except:
+		return []
+
 def get_addresses_from_delivery_notes(user):
 	try:
 		if '仓库' in frappe.get_roles(user):
@@ -52,7 +59,12 @@ def has_query_permission(user):
 		# if len(addresses) > 0:
 		# 	addresses_str = str(tuple(addresses)).replace(',)',')')
 		# 	conditions += f" or tabAddress.`name` in {addresses_str}"
-
+		
+		is_your_company_addresses = get_is_your_company_addresses()
+		if len(is_your_company_addresses) > 0:
+			is_your_company_addresses_str = str(tuple(is_your_company_addresses)).replace(',)',')')
+			conditions += f" or tabAddress.`name` in {is_your_company_addresses_str}"
+	
 	return conditions
 
 def has_permission(doc, user, permission_type=None):
@@ -70,7 +82,9 @@ def has_permission(doc, user, permission_type=None):
 		# 有客户权限，则有详细地址权限
 		# addresses = get_addresses_from_customers(user)
 
-		if doc.owner in users or doc.name in addresses_from_delivery_notes:
+		is_your_company_addresses = get_is_your_company_addresses()
+
+		if doc.owner in users or doc.name in addresses_from_delivery_notes or doc.name in is_your_company_addresses:
 			return True
 		else:
 			return False
