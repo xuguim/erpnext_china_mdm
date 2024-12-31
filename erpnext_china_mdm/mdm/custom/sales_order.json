@@ -834,8 +834,31 @@
       "property": "hide_toolbar",
       "property_type": "Check",
       "row_name": null,
-      "value": "1"
+      "value": "0"
      },
+     {
+        "_assign": null,
+        "_comments": null,
+        "_liked_by": null,
+        "_user_tags": null,
+        "creation": "2024-12-11 17:42:34.143606",
+        "default_value": null,
+        "doc_type": "Sales Order",
+        "docstatus": 0,
+        "doctype_or_field": "DocType",
+        "field_name": null,
+        "idx": 0,
+        "is_system_generated": 0,
+        "modified": "2024-12-20 15:41:00.406832",
+        "modified_by": "Administrator",
+        "module": null,
+        "name": "Sales Order-main-allow_events_in_timeline",
+        "owner": "Administrator",
+        "property": "allow_events_in_timeline",
+        "property_type": "Check",
+        "row_name": null,
+        "value": "1"
+       },
      {
       "_assign": null,
       "_comments": null,
