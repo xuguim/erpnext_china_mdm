@@ -87,7 +87,13 @@ def validate_shipper(doc, method=None):
 		if employee_reports_to:
 			shipper = frappe.db.get_value('Delivery Note Settings for Shipping Employee',employee_reports_to,'shipping_employee')
 			employee_reports_to = frappe.db.get_value('Employee',employee_reports_to,'reports_to')
-
+	
+	# 发货单读取仓库，如果仓库的库管中，包含赵陪陪，发货人直接指定成王秋侠
+	warehouses = [item.warehouse for item in doc.items]
+	warehouse_employees = frappe.get_all("Warehouse User", filters={"parent": ["in", warehouses]}, pluck='warehouse_employee')
+	if "HR-EMP-02708" in warehouse_employees:
+		shipper = "HR-EMP-00828"
+	
 	if shipper:
 		doc.shipper = shipper
 		doc.shipping_user = frappe.db.get_value('Employee',shipper,'user_id')
