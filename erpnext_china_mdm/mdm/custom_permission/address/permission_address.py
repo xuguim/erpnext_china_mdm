@@ -111,7 +111,7 @@ def has_permission(doc, user, permission_type=None):
 		# addresses = get_addresses_from_customers(user)
 
 		if 'Delivery User' in frappe.get_roles(user):
-			shippers = frappe.get_all('Delivery Note', filters={"shipping_address_name": doc.name,'workflow_state':['in',['发货员确认出货','Approved']}, pluck='shipper')
+			shippers = frappe.get_all('Delivery Note', filters={"shipping_address_name": doc.name,'workflow_state':['in',['发货员确认出货','Approved']]}, pluck='shipper')
 			emp = frappe.get_all('Employee', filters={"user_id":user}, pluck='name')
 			if 'HR-EMP-00828' in shippers or 'HR-EMP-02111' in shippers:
 				shippers = ['HR-EMP-00828','HR-EMP-02111']+shippers
