@@ -268,7 +268,7 @@
    "collapsible_depends_on": null,
    "columns": 0,
    "creation": "2024-12-07 13:59:34.033222",
-   "default": "1",
+   "default": "0",
    "depends_on": null,
    "description": "Automatically Create Sales Invoices",
    "docstatus": 0,
