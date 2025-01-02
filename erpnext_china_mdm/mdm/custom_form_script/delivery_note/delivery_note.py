@@ -9,6 +9,10 @@ class CustomDeliveryNote(DeliveryNote):
 		self.sales_order = self.validate_multi_so()
 		frappe.log(self.sales_order)
 		self.validate_discount_amount()
+		self.validate_advance_paid_of_so()
+
+	def before_save(self):
+		self.set_employee_and_department()
 
 	def validate_discount_amount(self):
 		self.validate_last_dn()
@@ -73,6 +77,19 @@ class CustomDeliveryNote(DeliveryNote):
 			frappe.throw(msg)
 		return sales_orders[0]
 
+	def validate_advance_paid_of_so(self):
+		sales_order = self.sales_order
+		advance_paid = frappe.db.get_value("Sales Order", filters={"name": sales_order}, fieldname="advance_paid")
+		frappe.log(f"{self.grand_total}, {advance_paid}")
+		if self.grand_total != advance_paid:
+			frappe.throw("收款后才能发货")
+	
+	def set_employee_and_department(self):
+		if self.is_new():
+			employee = frappe.db.get_value('Employee', {'user_id': frappe.session.user}, ["name", "department"], as_dict=1)
+			if employee:
+				self.custom_employee = employee.name
+				self.custom_department = employee.department
 
 def validate_shipper(doc, method=None):
 	user = doc.owner
