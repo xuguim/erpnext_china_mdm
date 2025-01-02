@@ -2,6 +2,25 @@ import frappe
 
 from erpnext_china.hrms_china.custom_form_script.employee.employee import get_employee_tree
 
+def get_descendants(name, nodes):
+    descendants = []
+    for node in nodes:
+        if node['parent_warehouse'] == name:
+            descendants.append(node)
+            descendants.extend(get_descendants(node['name'], nodes))
+    return descendants
+
+def get_user_all_warehouses(users):
+	user_warehouses = frappe.get_all("Warehouse User", filters={"warehouse_user": ["in", users]}, pluck='parent')
+	warehouses = frappe.get_all("Warehouse", filters={
+		"name": ["in", list(set(user_warehouses))]
+	}, fields=["name", "parent_warehouse"])
+	all_warehouses = frappe.get_all("Warehouse", fields=["name", "parent_warehouse"])
+	finall_warehouses = []
+	for w in warehouses:
+		finall_warehouses += get_descendants(w['name'], all_warehouses) + [w]
+	return finall_warehouses
+
 def get_customers_from_sales_orders(user):
 	try:
 		customers = []
@@ -84,7 +103,29 @@ def has_permission(doc, user, permission_type=None):
 		customers = get_customers_from_sales_orders(user)
 		dn_customers = get_customer_from_delivery_note(user)
 
-		if doc.owner in users or lead_owner == user or doc.name in customers or doc.name in dn_customers:
+
+		# 仓库、发货
+		if '仓库' in frappe.get_roles(user):
+			delivery_note_docs = frappe.get_all('Delivery Note', filters={"customer": doc.name,'workflow_state':'仓库审核'}, pluck='name')
+			delivery_note_warehouses = frappe.get_all("Delivery Note Item", filters={
+						"parent": ["in", delivery_note_docs],
+						"parenttype": "Delivery Note",
+					}, pluck="warehouse")
+			user_warehouses = get_user_all_warehouses([user])
+			for delivery_note_warehouse in delivery_note_warehouses:
+				if delivery_note_warehouse in list(set([w['name'] for w in user_warehouses])):
+					customer_perm = True
+
+		if 'Delivery User' in frappe.get_roles(user):
+			shippers = frappe.get_all('Delivery Note', filters={"customer": doc.name,'workflow_state':['in',['发货员确认出货','Approved']}, pluck='shipper')
+			emp = frappe.get_all('Employee', filters={"user_id":user}, pluck='name')
+			if 'HR-EMP-00828' in shippers or 'HR-EMP-02111' in shippers:
+				shippers = ['HR-EMP-00828','HR-EMP-02111']+shippers
+			if emp[0] in shippers:
+				customer_perm = True
+
+
+		if doc.owner in users or lead_owner == user or doc.name in customers or doc.name in dn_customers or customer_perm:
 			return True
 		else:
 			return False
