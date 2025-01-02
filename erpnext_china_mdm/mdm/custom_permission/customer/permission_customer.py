@@ -106,7 +106,7 @@ def has_permission(doc, user, permission_type=None):
 
 		# 仓库、发货
 		if '仓库' in frappe.get_roles(user):
-			delivery_note_docs = frappe.get_all('Delivery Note', filters={"customer": doc.name,'workflow_state':'仓库审核'}, pluck='name')
+			delivery_note_docs = frappe.get_all('Delivery Note', filters={"customer": doc.name,'workflow_state':'仓库审核','Approved'}, pluck='name')
 			delivery_note_warehouses = frappe.get_all("Delivery Note Item", filters={
 						"parent": ["in", delivery_note_docs],
 						"parenttype": "Delivery Note",
