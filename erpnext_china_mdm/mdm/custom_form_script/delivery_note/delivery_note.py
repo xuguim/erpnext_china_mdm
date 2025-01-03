@@ -98,7 +98,8 @@ class CustomDeliveryNote(DeliveryNote):
 	def set_final_customer(self):
 		if self.sales_order:
 			final_customer = frappe.db.get_value("Sales Order", filters={"name": self.sales_order}, fieldname="final_customer")
-			self.custom_final_customer = final_customer
+			if final_customer:
+				self.custom_final_customer = final_customer
 
 def validate_shipper(doc, method=None):
 	user = doc.owner
