@@ -7,14 +7,13 @@ from erpnext.stock.doctype.delivery_note.delivery_note import DeliveryNote, make
 class CustomDeliveryNote(DeliveryNote):
 	def before_validate(self):
 		self.sales_order = self.validate_multi_so()
-		frappe.log(self.sales_order)
-		self.validate_discount_amount()
 		self.validate_advance_paid_of_so()
 
 	def before_save(self):
 		if self.is_new():
 			self.set_employee_and_department()
 			self.set_final_customer()
+		self.validate_discount_amount()
 
 	def validate_discount_amount(self):
 		self.validate_last_dn()
@@ -140,7 +139,11 @@ def auto_make_sales_invoice(doc, method=None):
 	current_user = frappe.session.user
 	frappe.set_user("Administrator")
 	sales_invoice = make_sales_invoice(doc.name)
-	sales_invoice.owner = doc.owner
+	sales_invoice.update({
+		'owner': doc.owner,
+		'posting_date': doc.modified,
+		'posting_time': doc.modified.time()
+	})
 	sales_invoice.save().submit()
 	sales_invoice.add_comment("Comment", 
 		_("Automatically Create {0}: {1} Base On {2}: {3}").format(
