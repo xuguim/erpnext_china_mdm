@@ -13,6 +13,7 @@ class CustomDeliveryNote(DeliveryNote):
 		if self.is_new():
 			self.set_employee_and_department()
 			self.set_final_customer()
+			self.set_freight()
 		self.validate_discount_amount()
 
 	def validate_discount_amount(self):
@@ -99,6 +100,13 @@ class CustomDeliveryNote(DeliveryNote):
 			final_customer = frappe.db.get_value("Sales Order", filters={"name": self.sales_order}, fieldname="final_customer")
 			if final_customer:
 				self.custom_final_customer = final_customer
+
+	def set_freight(self):
+		if self.sales_order:
+			original_sales_order = frappe.db.get_value("Sales Order", self.sales_order, "custom_original_sales_order")
+			if original_sales_order:
+				freight = frappe.db.get_value("Sales Order", original_sales_order, "custom_freight")
+				self.custom_freight = freight
 
 def validate_shipper(doc, method=None):
 	user = doc.owner
