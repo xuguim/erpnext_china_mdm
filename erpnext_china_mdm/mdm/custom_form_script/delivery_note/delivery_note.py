@@ -103,9 +103,8 @@ class CustomDeliveryNote(DeliveryNote):
 
 	def set_freight(self):
 		if self.sales_order:
-			original_sales_order = frappe.db.get_value("Sales Order", self.sales_order, "custom_original_sales_order")
-			if original_sales_order:
-				freight = frappe.db.get_value("Sales Order", original_sales_order, "custom_freight")
+			freight = frappe.db.get_value("Sales Order", self.sales_order, "custom_freight")
+			if freight:
 				self.custom_freight = freight
 
 def validate_shipper(doc, method=None):
