@@ -45,7 +45,7 @@
         "name": "Sales Order-custom_freight",
         "no_copy": 0,
         "non_negative": 0,
-        "options": "\n包邮\n到付\n自提",
+        "options": "包邮\n到付\n自提",
         "owner": "Administrator",
         "permlevel": 0,
         "placeholder": null,
