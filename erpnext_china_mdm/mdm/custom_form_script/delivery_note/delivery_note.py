@@ -117,7 +117,73 @@ class CustomDeliveryNote(DeliveryNote):
 			else:
 				self.custom_original_sales_order = self.sales_order
 
+	def validate_qty_limit(self):
+		so_details = [d.so_detail for d in self.items]
+		so_details_str = str(tuple(so_details)).replace(',)',')')
+		query = f"""
+			select
+				soi.item_code,
+				soi.name as so_detail,
+				soi.parent as so,
+				soi.stock_qty as so_qty,
+				dni.stock_qty as dn_qty,
+				dni.dn_names
+			from
+				(
+					select
+						name,
+						parent,
+						item_code,
+						stock_qty
+					from
+						`tabSales Order Item`
+					where
+						docstatus = 1
+						and name in {so_details_str}
+
+				) soi
+			left join
+				(
+					select
+						item_code,
+						so_detail,
+						sum(stock_qty) as stock_qty,
+						group_concat(distinct parent) as dn_names
+					from
+						`tabDelivery Note Item`
+					where
+						docstatus < 2
+						and so_detail in {so_details_str}
+					group by
+						item_code,so_detail
+
+				) dni on soi.item_code = dni.item_code and soi.name = dni.so_detail
+			where
+				dni.stock_qty > soi.stock_qty
+		"""
+		items = frappe.db.sql(query, as_dict=1,debug=1)
+		frappe.log(items)
+		if items:
+			frappe.throw(
+				_(
+					"The sales order qty of item {0} in {1} {2} is {3}, but total delivery qty is {4} in {5} {6}, please check again."
+				).format(
+					frappe.bold(items[0].item_code),
+					frappe.bold(_('Sales Order')),
+					frappe.bold(items[0].so),
+					frappe.bold(items[0].so_qty),
+					frappe.bold(items[0].dn_qty),
+					frappe.bold(_('Delivery Note')),
+					frappe.bold(items[0].dn_names)
+				),
+				title=_("Limit Crossed"),
+			)
+
 def validate_shipper(doc, method=None):
+	if frappe.session.user == 'Administrator':
+		doc.shipper = frappe.get_list('Employee')[0].name
+		doc.shipping_user = 'Administrator'
+		return
 	user = doc.owner
 	employee = frappe.db.get_value("Employee", {"user_id": user},["name","employee_name","department","reports_to","company"],as_dict=1)
 
@@ -171,3 +237,6 @@ def auto_make_sales_invoice(doc, method=None):
 		)
 	)
 	frappe.set_user(current_user)
+
+def validate_qty_limit(doc,method=None):
+	doc.validate_qty_limit()
