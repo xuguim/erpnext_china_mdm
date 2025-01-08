@@ -14,6 +14,7 @@ class CustomDeliveryNote(DeliveryNote):
 			self.set_employee_and_department()
 			self.set_final_customer()
 			self.set_freight()
+			self.set_original_sales_order()
 		self.validate_discount_amount()
 
 	def validate_discount_amount(self):
@@ -81,9 +82,10 @@ class CustomDeliveryNote(DeliveryNote):
 
 	def validate_advance_paid_of_so(self):
 		sales_order = self.sales_order
-		# 找到原始销售订单
-		original_sales_order = frappe.db.get_value("Sales Order", filters={"name": sales_order}, fieldname="custom_original_sales_order")
-		if original_sales_order:
+		if sales_order:
+			original_sales_order = frappe.db.get_value("Sales Order", filters={"name": sales_order}, fieldname="custom_original_sales_order")
+			if not original_sales_order:
+				original_sales_order = sales_order
 			advance_paid = frappe.db.get_value("Sales Order", filters={"name": original_sales_order}, fieldname="advance_paid")
 			frappe.log(f"{self.grand_total}, {advance_paid}")
 			if self.grand_total != advance_paid:
@@ -106,6 +108,14 @@ class CustomDeliveryNote(DeliveryNote):
 			freight = frappe.db.get_value("Sales Order", self.sales_order, "custom_freight")
 			if freight:
 				self.custom_freight = freight
+	
+	def set_original_sales_order(self):
+		if self.sales_order:
+			custom_original_sales_order = frappe.db.get_value("Sales Order", self.sales_order, "custom_original_sales_order")
+			if custom_original_sales_order:
+				self.custom_original_sales_order = custom_original_sales_order
+			else:
+				self.custom_original_sales_order = self.sales_order
 
 def validate_shipper(doc, method=None):
 	user = doc.owner
