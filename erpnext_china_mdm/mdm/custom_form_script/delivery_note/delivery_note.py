@@ -82,9 +82,10 @@ class CustomDeliveryNote(DeliveryNote):
 
 	def validate_advance_paid_of_so(self):
 		sales_order = self.sales_order
-		# 找到原始销售订单
-		original_sales_order = frappe.db.get_value("Sales Order", filters={"name": sales_order}, fieldname="custom_original_sales_order")
-		if original_sales_order:
+		if sales_order:
+			original_sales_order = frappe.db.get_value("Sales Order", filters={"name": sales_order}, fieldname="custom_original_sales_order")
+			if not original_sales_order:
+				original_sales_order = sales_order
 			advance_paid = frappe.db.get_value("Sales Order", filters={"name": original_sales_order}, fieldname="advance_paid")
 			frappe.log(f"{self.grand_total}, {advance_paid}")
 			if self.grand_total != advance_paid:
