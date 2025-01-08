@@ -11,7 +11,7 @@ required_apps = ['saoxia/erpnext_china']
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/erpnext_china/css/erpnext_china.css"
-# app_include_js = "/assets/erpnext_china/js/erpnext_china.js"
+app_include_js = "erpnext_china_mdm.bundle.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/erpnext_china/css/erpnext_china.css"
