@@ -240,3 +240,37 @@ def auto_make_sales_invoice(doc, method=None):
 
 def validate_qty_limit(doc,method=None):
 	doc.validate_qty_limit()
+
+def update_internal_po_status(doc,method=None):
+	if doc.is_internal_customer:
+		internal_pos = list(set([d.purchase_order for d in doc.items]))
+		if len(internal_pos) > 1:
+			frappe.throw(_('More than one selection for {0} not allowed').format( _('Purchase Order')))
+		if internal_pos:
+			po_name = internal_pos[0]
+			# check if all items are delivered
+			internal_so_qurey = f"""
+				select
+					soi.item_code,
+					sum(soi.qty) as qty,
+					sum(soi.delivered_qty) as delivered_qty
+				from
+					`tabSales Order` so, `tabSales Order Item` soi
+				where
+					so.name = soi.parent
+					and so.docstatus = 1
+					and soi.purchase_order = '{po_name}'
+				group by
+					soi.item_code having sum(soi.qty) > sum(soi.delivered_qty)
+			"""
+			undelivery_items = frappe.db.sql(internal_so_qurey, as_dict=1)
+			if doc.docstatus == 1 and len(undelivery_items) == 0:
+				# update purchase order status to delivered if all items are delivered
+				po_doc = frappe.get_doc("Purchase Order", po_name)
+				po_doc.update_status('Delivered')
+				po_doc.update_delivered_qty_in_sales_order()
+			elif doc.docstatus == 2:
+				# reset purchase order status
+				po_doc = frappe.get_doc("Purchase Order", po_name)
+				po_doc.update_status('Submitted')
+				po_doc.update_delivered_qty_in_sales_order()
