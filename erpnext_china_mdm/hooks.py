@@ -260,7 +260,13 @@ doc_events = {
 		"on_update": [
 			"erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.validate_qty_limit",
         ],
-		"on_submit": "erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.auto_make_sales_invoice",
+		"on_submit": [
+			"erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.auto_make_sales_invoice",
+			"erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.update_internal_po_status",
+        ],
+		"on_cancel": [
+			"erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.update_internal_po_status",
+        ]
 	}
 }
 
