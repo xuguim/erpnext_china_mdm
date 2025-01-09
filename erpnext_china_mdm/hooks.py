@@ -234,6 +234,7 @@ override_doctype_class = {
     'Contact': 'erpnext_china_mdm.mdm.custom_form_script.contact.CustomContact',
     'Journal Entry': 'erpnext_china_mdm.mdm.custom_form_script.journal_entry.CustomJournalEntry',
 	'Delivery Note': 'erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.CustomDeliveryNote',
+	'Sales Order': 'erpnext_china_mdm.mdm.custom_form_script.sales_order.sales_order.CustomSalesOrder',
 }
 override_whitelisted_methods = {
     "erpnext_china.utils.oauth2_logins.login_via_wecom": "erpnext_china_mdm.utils.oauth2_logins.login_via_wecom",

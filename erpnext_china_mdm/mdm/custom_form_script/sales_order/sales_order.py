@@ -1,4 +1,5 @@
 import frappe
+from frappe import _
 from frappe.contacts.doctype.address.address import get_company_address
 from frappe.model.utils import get_fetch_values
 from frappe.model.mapper import get_mapped_doc
@@ -7,6 +8,8 @@ from erpnext.stock.doctype.item.item import get_item_defaults
 from erpnext.setup.doctype.item_group.item_group import get_item_group_defaults
 from frappe.share import add_docshare
 from frappe.permissions import get_role_permissions
+from erpnext.selling.doctype.sales_order.sales_order import SalesOrder
+from frappe.utils import cint, cstr, flt
 
 def validate_sales_team(doc,method=None):
 	user = frappe.session.user
@@ -201,3 +204,89 @@ def make_delivery_note(source_name, target_doc=None, kwargs=None):
 			)
 	
 	return target_doc
+
+class CustomSalesOrder(SalesOrder):
+	def validate_warehouse(self):
+		super().validate_warehouse()
+
+		for d in self.get("items"):
+			if (
+				(
+					frappe.get_cached_value("Item", d.item_code, "is_stock_item") == 1
+					or (
+						self.has_product_bundle(d.item_code)
+						and self.product_bundle_has_stock_item(d.item_code)
+					)
+				)
+				and not d.warehouse
+				and not cint(d.delivered_by_supplier)
+			):
+				frappe.throw(
+					_("Delivery warehouse required for stock item {0}").format(d.item_code), WarehouseRequired
+				)
+
+			if d.stock_qty < 30:
+				if '箱' in d.uom and d.qty >= 1:
+					return
+				else:
+					uom_avilable = frappe.db.exists('UOM Conversion Detail',
+						{
+							'parent': d.item_code,
+							'parenttype': 'Item',
+							'parentfield': 'uoms',
+							'uom':['like',"%箱%"]
+						})
+					if uom_avilable:
+						conversion_factor = frappe.db.get_value('UOM Conversion Detail',uom_avilable,'conversion_factor')
+						if d.stock_qty >= conversion_factor:
+							return
+						else:
+							sample_warehouse = frappe.db.exists('Warehouse',
+								{
+									'company': self.company,
+									'for_sample': 1,
+									'is_group': 0,
+									'disabled': 0
+								})
+							if sample_warehouse:
+								d.warehouse = sample_warehouse
+								msg ="""<p>第{}行的物料{}被<b>更新到样品仓库{}</b></p>""".format(
+									frappe.bold(d.idx),
+									frappe.bold(d.item_code),
+									frappe.bold(sample_warehouse),
+								)
+								frappe.msgprint(msg,alert=True)
+							else:
+								msg = """
+									<p>第{}行的物料{}低于销售要求，且<b style="color:red">未找到样品仓库</b></p>
+									<p>单位:{}</p>
+									<p>销售数量:{}</p>
+									<p>库存单位数量:{}{}</p>
+									<p>请联系管理员检查配置</p>
+								""".format(
+									frappe.bold(d.idx),
+									frappe.bold(d.item_code),
+									frappe.bold(d.uom),
+									frappe.bold(d.qty),
+									frappe.bold(d.stock_qty),
+									frappe.bold(d.stock_uom),
+								)
+								frappe.throw(msg)
+					else:
+						msg = """
+							<p>第{}行的物料{}低于销售要求，且<b style="color:red">没有设置箱的转换系数</b></p>
+							<p>单位:{}</p>
+							<p>销售数量:{}</p>
+							<p>库存单位数量:{}</p>
+							<p>请联系管理员检查配置</p>
+						""".format(
+							frappe.bold(d.idx),
+							frappe.bold(d.item_code),
+							frappe.bold(d.uom),
+							frappe.bold(d.qty),
+							frappe.bold(d.stock_qty),
+						)
+						frappe.throw(msg,title=_('Error'))
+				
+
+
