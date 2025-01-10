@@ -123,7 +123,8 @@ def has_permission(doc, user, permission_type=None):
 				shippers = ['HR-EMP-00828','HR-EMP-02111']+shippers
 			if emp[0] in shippers:
 				customer_perm = True
-
+		else:
+			customer_perm = False
 
 		if doc.owner in users or lead_owner == user or doc.name in customers or doc.name in dn_customers or customer_perm:
 			return True
