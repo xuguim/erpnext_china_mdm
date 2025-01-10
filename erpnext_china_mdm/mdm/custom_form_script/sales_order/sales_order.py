@@ -8,7 +8,8 @@ from erpnext.stock.doctype.item.item import get_item_defaults
 from erpnext.setup.doctype.item_group.item_group import get_item_group_defaults
 from frappe.share import add_docshare
 from frappe.permissions import get_role_permissions
-from erpnext.selling.doctype.sales_order.sales_order import SalesOrder
+from erpnext.selling.doctype.sales_order.sales_order import WarehouseRequired
+from erpnext_china.erpnext_china.custom_form_script.sales_order.sales_order import CustomSalesOrder
 from frappe.utils import cint, cstr, flt
 
 def validate_sales_team(doc,method=None):
@@ -205,7 +206,7 @@ def make_delivery_note(source_name, target_doc=None, kwargs=None):
 	
 	return target_doc
 
-class CustomSalesOrder(SalesOrder):
+class MdmSalesOrder(CustomSalesOrder):
 	def validate_warehouse(self):
 		super().validate_warehouse()
 
