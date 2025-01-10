@@ -15,7 +15,7 @@ def get_delivery_notes_by_warehouse_user(user):
 
 def has_query_permission(user):
 
-	if frappe.db.get_value('Has Role',{'parent':user,'role':['in',['System Manager']]}):
+	if frappe.db.get_value('Has Role',{'parent':user,'role':['in',['System Manager','出货管理']]}):
 		# 如果角色包含管理员，则看到全量
 		conditions = ''
 	else:
