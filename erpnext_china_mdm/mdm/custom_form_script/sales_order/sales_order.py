@@ -288,6 +288,20 @@ class MdmSalesOrder(CustomSalesOrder):
 							frappe.bold(d.stock_qty),
 						)
 						frappe.throw(msg,title=_('Error'))
-				
 
-
+@frappe.whitelist()
+def allow_delivery(docname):
+	doc = frappe.get_doc('Sales Order', docname)
+	advances = doc.calculate_total_advance_from_ledger()
+	advance_paid = advances[0].get('amount')
+	user = frappe.session.user
+	roles = frappe.get_roles(user)
+	if '销售会计' in roles and advance_paid == doc.grand_total and doc.docstatus == 1 and doc.per_delivered < 100:
+		doc.flags.ignore_validate_update_after_submit = True
+		doc.allow_delivery = 1
+		doc.add_comment("Comment", _("User: {0} set allow delivery as ture").format(user))
+		doc.save()
+		frappe.msgprint(_('Allow Delivery')+_('Complete'),alert=True)
+		return True
+	else:
+		frappe.throw(_('Failed to complete setup'))

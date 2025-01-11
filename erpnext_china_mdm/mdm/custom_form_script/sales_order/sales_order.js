@@ -46,5 +46,33 @@ frappe.ui.form.on('Sales Order', {
 		setTimeout(() => {
             frm.fields_dict.items.grid.toggle_reqd('delivery_date',1)
         }, 100);
+
+        if (
+            frm.doc.docstatus == 1 
+            && frappe.user.has_role('销售会计') 
+            && frm.doc.per_delivered < 100
+            && !frm.doc.skip_delivery_note
+            && frm.doc.allow_delivery == 0
+            && frm.doc.is_internal_customer == 0
+            && frm.doc.grand_total == frm.doc.advance_paid
+        ){
+            frm.add_custom_button(__('Allow Delivery'),function(){
+                frm.trigger('mark_allow_delivery')
+            },__('Action'))
+        }
     },
+
+    mark_allow_delivery(frm) {
+        frappe.call({
+            method:"erpnext_china_mdm.mdm.custom_form_script.sales_order.sales_order.allow_delivery",
+            args:{
+                docname:frm.doc.name
+            },
+            callback:(res)=>{
+                if(res.message) {
+                    frm.reload_doc()
+                }
+            }
+        })
+    }
 });

@@ -97,3 +97,6 @@ Freight,运费
 Item Developer List,物料开发部门负责人列表
 "The sales order qty of item {0} in {1} {2} is {3}, but total delivery qty is {4} in {5} {6}, please check again.", {1} {2}中的物料{0}数量为{3}，{5}:{6}中的合计数量为{4}，请检查是否重复提交
 This warehouse will be selected if stock_qty less than limit, 勾选后销售数量小于限定值时将会自动勾选这个仓库
+Limit Crossed, 超出最大数量
+Allow Delivery, 允许出货
+User: {0} set allow delivery as ture, 用户：{0}将单据设置为允许出货
