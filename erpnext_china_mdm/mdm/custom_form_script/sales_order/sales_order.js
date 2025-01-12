@@ -54,11 +54,35 @@ frappe.ui.form.on('Sales Order', {
             && !frm.doc.skip_delivery_note
             && frm.doc.allow_delivery == 0
             && frm.doc.is_internal_customer == 0
-            && frm.doc.grand_total == frm.doc.advance_paid
         ){
             frm.add_custom_button(__('Allow Delivery'),function(){
                 frm.trigger('mark_allow_delivery')
             },__('Action'))
+        }
+
+        if (
+            (frm.doc.allow_delivery == 1 || frm.doc.grand_total == frm.doc.advance_paid) 
+            && frm.doc.per_delivered < 100
+        ) {
+            let has_internal_so =
+                frm.doc.items.some(
+                    (item) => item.delivered_by_supplier === 1
+                ) && !frm.doc.skip_delivery_note;
+            if (has_internal_so) {
+                frm.add_custom_button(
+                    __("Inter Company Delivery Note"),
+                    () => {
+                        frm.trigger("make_delivery_note_based_on_delivery_date")
+                    },
+                    __("Create")
+                );
+            } else {
+                // show origin button
+            }
+        } else {
+            setTimeout(() => {
+                frm.remove_custom_button(__('Delivery Note'),__('Create'))
+            }, 100);
         }
     },
 
