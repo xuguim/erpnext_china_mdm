@@ -20,9 +20,13 @@ def run():
 
     #匹配上工号
     oa_employee_number = frappe.db.get_list('Employee',
-            fields=['employee_number','name']
+            fields=['employee_number','name'],
+            as_list=True
         )
-    df_ = pd.DataFrame(oa_employee_number)
+    df_ = pd.DataFrame(oa_employee_number,columns=['employee_number','name'])
+    df_.drop_duplicates('employee_number',inplace=True)
+    df_ = df_[~df_.employee_number.isna()]
+    df.usernameid = df.usernameid.astype(str)
     df.merge(df_, how='inner',left_on='usernameid',right_on='employee_number')
     data = dict(zip(df.name, df.amount))
 
