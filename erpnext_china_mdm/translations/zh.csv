@@ -101,4 +101,4 @@ Limit Crossed, 超出最大数量
 Allow Delivery, 允许出货
 User: {0} set allow delivery as ture, 用户：{0}将单据设置为允许出货
 Cannot deliver both by supplier and company in same sales order, 一个销售订单内不允许同时从公司仓库和其他公司仓库出货
-Inter Company Delivery Note, 关联公司销售出库
+Inter Company Delivery Note, 销售出货
