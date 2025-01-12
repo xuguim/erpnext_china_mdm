@@ -289,7 +289,10 @@ scheduler_events = {
         ],
 		"0 5 * * *": [
             "erpnext_china_mdm.mdm.custom_form_script.scheduler_events.lead.auto_validate_lead_status"
-        ]
+        ],
+        "*/5 * * * *":[
+            "erpnext_china_mdm.mdm.scheduled_tasks.hrms_薪资构成项_计件工资.run"
+        ],
 	},
 }
 

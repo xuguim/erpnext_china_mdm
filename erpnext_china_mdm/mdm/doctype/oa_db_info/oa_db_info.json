@@ -1,0 +1,40 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-01-12 17:15:28.827047",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "oa_db_sqlalchemy"
+ ],
+ "fields": [
+  {
+   "fieldname": "oa_db_sqlalchemy",
+   "fieldtype": "Data",
+   "label": "oa_db_sqlalchemy"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-01-12 17:17:21.047321",
+ "modified_by": "Administrator",
+ "module": "mdm",
+ "name": "oa_db_info",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
