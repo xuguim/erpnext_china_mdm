@@ -50,6 +50,8 @@ def make_delivery_note(source_name, target_doc=None, kwargs=None):
 		get_ssb_bundle_for_voucher,
 	)
 
+	source_name = validate_inter_company_sales_order(source_name)
+
 	if not kwargs:
 		kwargs = {
 			"for_reserved_stock": frappe.flags.args and frappe.flags.args.for_reserved_stock,
@@ -209,8 +211,13 @@ def make_delivery_note(source_name, target_doc=None, kwargs=None):
 class MdmSalesOrder(CustomSalesOrder):
 	def validate_warehouse(self):
 		super().validate_warehouse()
-
+		delivered_by_supplier = False
+		delivered_by_company = False
 		for d in self.get("items"):
+			if d.delivered_by_supplier:
+				delivered_by_supplier = True
+			else:
+				delivered_by_company = True
 			if (
 				(
 					frappe.get_cached_value("Item", d.item_code, "is_stock_item") == 1
@@ -288,20 +295,50 @@ class MdmSalesOrder(CustomSalesOrder):
 							frappe.bold(d.stock_qty),
 						)
 						frappe.throw(msg,title=_('Error'))
+		if delivered_by_supplier and delivered_by_company:
+			frappe.throw(_("Cannot deliver both by supplier and company in same sales order"))
 
 @frappe.whitelist()
 def allow_delivery(docname):
 	doc = frappe.get_doc('Sales Order', docname)
-	advances = doc.calculate_total_advance_from_ledger()
-	advance_paid = advances[0].get('amount')
 	user = frappe.session.user
 	roles = frappe.get_roles(user)
-	if '销售会计' in roles and advance_paid == doc.grand_total and doc.docstatus == 1 and doc.per_delivered < 100:
+	if '销售会计' in roles and doc.docstatus == 1 and doc.per_delivered < 100:
 		doc.flags.ignore_validate_update_after_submit = True
 		doc.allow_delivery = 1
 		doc.add_comment("Comment", _("User: {0} set allow delivery as ture").format(user))
 		doc.save()
 		frappe.msgprint(_('Allow Delivery')+_('Complete'),alert=True)
 		return True
+
+def validate_inter_company_sales_order(docname):
+	so = frappe.get_doc('Sales Order', docname)
+	has_internal_so = len([d for d in so.items if d.delivered_by_supplier]) > 0
+	if has_internal_so:
+		po_query = f"""
+			select
+				distinct po.name
+			from
+				`tabPurchase Order` po, `tabPurchase Order Item` poi
+			where
+				po.docstatus = 1
+				and po.name = poi.parent
+				and poi.sales_order = '{so.name}'
+		"""
+		po_list = frappe.db.sql_list(po_query,as_dict=1)
+		if len(po_list) > 0:
+			po_name = po_list[0]
+			so_query = f"""
+				select
+					distinct so.name
+				from
+					`tabSales Order` so, `tabSales Order Item` soi
+				where
+					so.docstatus = 1
+					and so.name = soi.parent
+					and soi.purchase_order = '{po_name}'
+			"""
+			so_list = frappe.db.sql_list(so_query,as_dict=1)
+			return so_list[0]
 	else:
-		frappe.throw(_('Failed to complete setup'))
+		return docname

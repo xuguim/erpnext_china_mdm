@@ -86,6 +86,8 @@ class CustomDeliveryNote(DeliveryNote):
 			original_sales_order = frappe.db.get_value("Sales Order", filters={"name": sales_order}, fieldname="custom_original_sales_order")
 			if not original_sales_order:
 				original_sales_order = sales_order
+			if frappe.db.get_value("Sales Order",original_sales_order,"allow_delivery"):
+				return
 			advance_paid = frappe.db.get_value("Sales Order", filters={"name": original_sales_order}, fieldname="advance_paid")
 			frappe.log(f"{self.grand_total}, {advance_paid}")
 			if self.grand_total != advance_paid:
@@ -161,7 +163,7 @@ class CustomDeliveryNote(DeliveryNote):
 			where
 				dni.stock_qty > soi.stock_qty
 		"""
-		items = frappe.db.sql(query, as_dict=1,debug=1)
+		items = frappe.db.sql(query, as_dict=1)
 		frappe.log(items)
 		if items:
 			frappe.throw(
