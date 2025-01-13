@@ -27,7 +27,7 @@ def run():
     df_.drop_duplicates('employee_number',inplace=True)
     df_ = df_[~df_.employee_number.isna()]
     df.usernameid = df.usernameid.astype(str)
-    df.merge(df_, how='inner',left_on='usernameid',right_on='employee_number')
+    df = df.merge(df_, how='inner',left_on='usernameid',right_on='employee_number')
     data = dict(zip(df.name, df.amount))
 
     cache.set('hrms_薪资构成项_计件工资数据缓存', json.dumps(data))
