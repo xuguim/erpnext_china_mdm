@@ -249,6 +249,7 @@ doctype_js = {
 	'Sales Order': 'mdm/custom_form_script/sales_order/sales_order.js',
 	'Delivery Note': 'mdm/custom_form_script/delivery_note/delivery_note.js',
 	'Department': 'mdm/custom_form_script/department/department.js',
+    'Payment Entry': 'mdm/custom_form_script/payment_entry/payment_entry.js',
 }
 
 doc_events = {
