@@ -2,6 +2,9 @@ frappe.ui.form.on("Payment Entry", {
     
     mode_of_payment(frm) {
         frm.toggle_reqd('bank_account', ["微信","电汇","支付宝"].includes(frm.doc.mode_of_payment));
+        if(frm.doc.bank_account) {
+            frm.events.bank_account(frm)
+        }
     },
 
     bank_account: function (frm) {
