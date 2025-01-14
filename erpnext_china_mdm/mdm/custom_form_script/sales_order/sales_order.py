@@ -349,22 +349,23 @@ def validate_inter_company_sales_order(docname):
 @frappe.whitelist()
 def get_discount_by_accumulated_qty_of_multiple_so(**kwargs):
 	customer = kwargs.get('customer')
+	customer_name = kwargs.get('customer_name')
 	item = kwargs.get("item")
-	coupon_code_title = f"{customer}-{item}-优惠券-{frappe.utils.random_string(1)}"
+	coupon_code_title = f"{customer_name or customer}-{str(item).split('-')[-1]}-优惠券"
 	today = frappe.utils.today()
 	valid_from = today
 	before = frappe.utils.add_to_date(today, days=-30, as_string=True)
 	valid_upto = frappe.utils.add_to_date(today, days=30, as_string=True)
 	
 	coupon_code = frappe.db.exists("Coupon Code", {
-		"name": coupon_code_title, 
+		"name": ["like", f"%{coupon_code_title}%"],
 		"used": 0, 
-		"valid_from": [">", valid_from], 
-		"valid_upto": ["<", valid_upto]
+		"valid_from": ["<=", valid_from], 
+		"valid_upto": [">=", valid_upto]
 	})
 	if coupon_code:
 		return {"coupon_code": coupon_code}
-
+	
 	# 定价规则关联的销售订单的物料行 name
 	pricing_rule_so_item = frappe.db.get_all("Pricing Rule Detail", filters={
 		"parenttype": "Sales Order",
@@ -399,6 +400,7 @@ def get_discount_by_accumulated_qty_of_multiple_so(**kwargs):
 	if total < 10:
 		return
 	
+	coupon_code_title += f"-{frappe.utils.random_string(1)}"
 	new_price_rule_data = {
 		"doctype": "Pricing Rule",
 		"title": coupon_code_title,

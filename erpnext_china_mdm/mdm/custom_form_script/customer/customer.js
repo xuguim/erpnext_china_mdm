@@ -19,7 +19,7 @@ frappe.ui.form.on('Customer', {
     get_discount_by_accumulated_qty_of_multiple_so(frm, item) {
         
         frappe.call("erpnext_china_mdm.mdm.custom_form_script.sales_order.sales_order.get_discount_by_accumulated_qty_of_multiple_so", 
-            {"customer": frm.doc.name, "item": item}
+            {"customer": frm.doc.name, "customer_name": frm.doc.customer_name, "item": item}
         ).then(r=>{
             if (r.message && r.message.coupon_code) {
                 frappe.msgprint(`已领优惠券: ${r.message.coupon_code}`);
