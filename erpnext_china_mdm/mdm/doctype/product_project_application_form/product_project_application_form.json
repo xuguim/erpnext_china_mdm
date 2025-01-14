@@ -1,0 +1,629 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-01-11 16:28:44.692651",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "\u4ea7\u54c1\u7acb\u9879\u4fe1\u606f_section",
+  "\u7acb\u9879\u90e8\u95e8",
+  "\u4ea7\u54c1\u540d\u79f0",
+  "\u751f\u4ea7\u5355\u4f4d",
+  "column_break_mmsn",
+  "\u7acb\u9879\u4eba",
+  "\u516c\u53f8\u6587\u53f7",
+  "\u4ea7\u54c1\u5242\u578b",
+  "column_break_zppt",
+  "\u7acb\u9879\u4eba\u7535\u8bdd",
+  "\u5546\u6807",
+  "\u9500\u552e\u6e20\u9053",
+  "column_break_ltyj",
+  "\u7acb\u9879\u65f6\u95f4",
+  "\u8ba2\u5355\u7c7b\u578b",
+  "\u4ea7\u54c1\u5305\u88c5\u53ca\u8f85\u6599\u8bbe\u8ba1\u6240\u9700\u586b\u5199\u4fe1\u606f\u52fe\u9009",
+  "\u5185\u5bb91",
+  "column_break_qrvw",
+  "\u5185\u5bb92",
+  "column_break_gwgu",
+  "\u5185\u5bb93",
+  "column_break_muzz",
+  "\u5185\u5bb94",
+  "column_break_hrck",
+  "\u5185\u5bb95",
+  "column_break_xksk",
+  "\u5185\u5bb96",
+  "column_break_jlcd",
+  "\u5185\u5bb97",
+  "column_break_qbhl",
+  "\u5185\u5bb98",
+  "column_break_lkxq",
+  "\u5185\u5bb99",
+  "\u4ea7\u54c1\u5305\u88c5\u53ca\u8f85\u6599\u8bbe\u8ba1\u8981\u6c42_section",
+  "\u5185\u5bb9_1",
+  "\u5185\u5bb9_2",
+  "\u5185\u5bb9_3",
+  "column_break_zqrz",
+  "\u5c3a\u5bf8\u89c4\u683c_1",
+  "\u5c3a\u5bf8\u89c4\u683c_2",
+  "column_break_lpti",
+  "\u6750\u8d28_1",
+  "\u6750\u8d28_2",
+  "column_break_yozd",
+  "\u5de5\u827a_1",
+  "\u5de5\u827a_2",
+  "column_break_furm",
+  "\u6570\u91cf_1",
+  "\u6570\u91cf_2",
+  "column_break_nqbk",
+  "\u7279\u6b8a\u8981\u6c42_1",
+  "\u7279\u6b8a\u8981\u6c42_2",
+  "\u4ea7\u54c1\u6280\u672f\u652f\u6301\u53ca\u5de5\u827a\u53c2\u6570\u57fa\u672c\u8981\u6c42",
+  "\u914d\u65b9\u63d0\u4f9b\u65b9\u5f0f",
+  "\u539f\u6599\u63d0\u4f9b\u65b9\u5f0f",
+  "\u662f\u5426\u9700\u8981\u505a\u5c0f\u6837",
+  "column_break_gnmc",
+  "\u836f\u82af\u5c3a\u5bf8",
+  "\u836f\u7247\u6d82\u5e03\u8981\u6c42",
+  "\u5c0f\u6837\u5b9e\u9a8c\u5ba4\u786e\u8ba4\u4eba",
+  "column_break_hfqq",
+  "\u529f\u6548",
+  "\u52a0\u80f6\u5c3a\u5bf8",
+  "\u5c0f\u6837\u914d\u65b9\u786e\u8ba4\u65f6\u95f4",
+  "column_break_kaut",
+  "\u4ea7\u54c1\u6027\u72b6\u989c\u8272",
+  "\u523a\u6fc0\u5ea6",
+  "\u9632\u4f2a\u7801\u8981\u6c42",
+  "column_break_vqpu",
+  "\u539a\u5ea6\u514b\u91cd",
+  "\u94a2\u73e0\u78c1\u7247\u8981\u6c42",
+  "\u4ea7\u54c1\u89c4\u683c",
+  "\u5de5\u827a\u9879\u76ee\u7279\u6b8a\u8bf4\u660e",
+  "\u7279\u6b8a\u8bf4\u660e",
+  "\u4ea4\u4ed8\u4fe1\u606f",
+  "\u62bc\u91d1\u7f34\u7eb3\u91d1\u989d",
+  "\u4ea4\u8d27\u65f6\u95f4",
+  "column_break_yker",
+  "\u6c47\u6b3e\u65f6\u95f4",
+  "\u4ea4\u8d27\u5730\u70b9",
+  "column_break_mted",
+  "\u8ba2\u5355\u6570\u91cf",
+  "column_break_cwod",
+  "\u9996\u6279\u53d1\u8d27\u91cf",
+  "\u7ecf\u529e",
+  "\u9500\u552e\u7ecf\u7406",
+  "\u8bbe\u8ba1\u7ecf\u7406",
+  "column_break_frhp",
+  "\u8425\u9500\u4f1a\u8ba1",
+  "\u91c7\u8d2d",
+  "column_break_vbav",
+  "\u8425\u9500\u4e2d\u5fc3",
+  "\u751f\u4ea7\u7ecf\u7406",
+  "column_break_vndz",
+  "\u8bbe\u8ba1\u4e13\u5458",
+  "\u5b9e\u9a8c\u5ba4",
+  "\u5907\u6ce8\u8bf4\u660e_section",
+  "\u5907\u6ce8"
+ ],
+ "fields": [
+  {
+   "fieldname": "\u4ea7\u54c1\u7acb\u9879\u4fe1\u606f_section",
+   "fieldtype": "Section Break",
+   "label": "\u4ea7\u54c1\u7acb\u9879\u4fe1\u606f"
+  },
+  {
+   "fieldname": "\u7acb\u9879\u90e8\u95e8",
+   "fieldtype": "Data",
+   "label": "\u7acb\u9879\u90e8\u95e8"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u540d\u79f0",
+   "fieldtype": "Data",
+   "label": "\u4ea7\u54c1\u540d\u79f0"
+  },
+  {
+   "fieldname": "column_break_mmsn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u7acb\u9879\u4eba",
+   "fieldtype": "Data",
+   "label": "\u7acb\u9879\u4eba"
+  },
+  {
+   "fieldname": "\u516c\u53f8\u6587\u53f7",
+   "fieldtype": "Link",
+   "label": "\u516c\u53f8\u6587\u53f7",
+   "options": "Administrative Permits of Companies"
+  },
+  {
+   "fieldname": "\u751f\u4ea7\u5355\u4f4d",
+   "fieldtype": "Data",
+   "label": "\u751f\u4ea7\u5355\u4f4d"
+  },
+  {
+   "fieldname": "column_break_zppt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u7acb\u9879\u4eba\u7535\u8bdd",
+   "fieldtype": "Data",
+   "label": "\u7acb\u9879\u4eba\u7535\u8bdd"
+  },
+  {
+   "fieldname": "\u5546\u6807",
+   "fieldtype": "Data",
+   "label": "\u5546\u6807"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u5242\u578b",
+   "fieldtype": "Data",
+   "label": "\u4ea7\u54c1\u5242\u578b"
+  },
+  {
+   "fieldname": "column_break_ltyj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u7acb\u9879\u65f6\u95f4",
+   "fieldtype": "Date",
+   "label": "\u7acb\u9879\u65f6\u95f4"
+  },
+  {
+   "fieldname": "\u8ba2\u5355\u7c7b\u578b",
+   "fieldtype": "Select",
+   "label": "\u8ba2\u5355\u7c7b\u578b",
+   "options": "\n\u81ea\u8425\n\u65b0\u589e\n\u5b9a\u5236\n\u7eed\u589e"
+  },
+  {
+   "fieldname": "\u9500\u552e\u6e20\u9053",
+   "fieldtype": "Data",
+   "label": "\u9500\u552e\u6e20\u9053"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u6280\u672f\u652f\u6301\u53ca\u5de5\u827a\u53c2\u6570\u57fa\u672c\u8981\u6c42",
+   "fieldtype": "Section Break",
+   "label": "\u4ea7\u54c1\u6280\u672f\u652f\u6301\u53ca\u5de5\u827a\u53c2\u6570\u57fa\u672c\u8981\u6c42"
+  },
+  {
+   "fieldname": "\u914d\u65b9\u63d0\u4f9b\u65b9\u5f0f",
+   "fieldtype": "Select",
+   "label": "\u914d\u65b9\u63d0\u4f9b\u65b9\u5f0f",
+   "options": "\n\u516c\u53f8\u63d0\u4f9b\n\u5ba2\u6237\u63d0\u4f9b"
+  },
+  {
+   "fieldname": "\u539f\u6599\u63d0\u4f9b\u65b9\u5f0f",
+   "fieldtype": "Select",
+   "label": "\u539f\u6599\u63d0\u4f9b\u65b9\u5f0f",
+   "options": "\n\u516c\u53f8\u63d0\u4f9b\n\u5ba2\u6237\u63d0\u4f9b"
+  },
+  {
+   "fieldname": "\u52a0\u80f6\u5c3a\u5bf8",
+   "fieldtype": "Data",
+   "label": "\u52a0\u80f6\u5c3a\u5bf8"
+  },
+  {
+   "fieldname": "\u662f\u5426\u9700\u8981\u505a\u5c0f\u6837",
+   "fieldtype": "Select",
+   "label": "\u662f\u5426\u9700\u8981\u505a\u5c0f\u6837",
+   "options": "\n\u662f\n\u5426"
+  },
+  {
+   "fieldname": "column_break_gnmc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u529f\u6548",
+   "fieldtype": "Data",
+   "label": "\u529f\u6548"
+  },
+  {
+   "fieldname": "\u836f\u82af\u5c3a\u5bf8",
+   "fieldtype": "Data",
+   "label": "\u836f\u82af\u5c3a\u5bf8"
+  },
+  {
+   "fieldname": "\u836f\u7247\u6d82\u5e03\u8981\u6c42",
+   "fieldtype": "Data",
+   "label": "\u836f\u7247\u6d82\u5e03\u8981\u6c42"
+  },
+  {
+   "fieldname": "\u5c0f\u6837\u5b9e\u9a8c\u5ba4\u786e\u8ba4\u4eba",
+   "fieldtype": "Data",
+   "label": "\u5c0f\u6837/\u5b9e\u9a8c\u5ba4\u786e\u8ba4\u4eba"
+  },
+  {
+   "fieldname": "column_break_hfqq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u6027\u72b6\u989c\u8272",
+   "fieldtype": "Data",
+   "label": "\u4ea7\u54c1\u6027\u72b6\u989c\u8272"
+  },
+  {
+   "fieldname": "\u523a\u6fc0\u5ea6",
+   "fieldtype": "Data",
+   "label": "\u523a\u6fc0\u5ea6"
+  },
+  {
+   "fieldname": "\u9632\u4f2a\u7801\u8981\u6c42",
+   "fieldtype": "Data",
+   "label": "\u9632\u4f2a\u7801\u8981\u6c42"
+  },
+  {
+   "fieldname": "\u5c0f\u6837\u914d\u65b9\u786e\u8ba4\u65f6\u95f4",
+   "fieldtype": "Date",
+   "label": "\u5c0f\u6837/\u914d\u65b9/\u786e\u8ba4\u65f6\u95f4"
+  },
+  {
+   "fieldname": "column_break_kaut",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u539a\u5ea6\u514b\u91cd",
+   "fieldtype": "Data",
+   "label": "\u539a\u5ea6/\u514b\u91cd"
+  },
+  {
+   "fieldname": "\u94a2\u73e0\u78c1\u7247\u8981\u6c42",
+   "fieldtype": "Data",
+   "label": "\u94a2\u73e0/\u78c1\u7247\u8981\u6c42"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u89c4\u683c",
+   "fieldtype": "Data",
+   "label": "\u4ea7\u54c1\u89c4\u683c"
+  },
+  {
+   "fieldname": "\u5de5\u827a\u9879\u76ee\u7279\u6b8a\u8bf4\u660e",
+   "fieldtype": "Section Break",
+   "label": "\u5de5\u827a\u9879\u76ee\u7279\u6b8a\u8bf4\u660e"
+  },
+  {
+   "fieldname": "\u7279\u6b8a\u8bf4\u660e",
+   "fieldtype": "Data",
+   "label": "\u7279\u6b8a\u8bf4\u660e"
+  },
+  {
+   "fieldname": "\u4ea4\u4ed8\u4fe1\u606f",
+   "fieldtype": "Section Break",
+   "label": "\u4ea4\u4ed8\u4fe1\u606f"
+  },
+  {
+   "fieldname": "\u62bc\u91d1\u7f34\u7eb3\u91d1\u989d",
+   "fieldtype": "Data",
+   "label": "\u62bc\u91d1\u7f34\u7eb3\u91d1\u989d"
+  },
+  {
+   "fieldname": "\u4ea4\u8d27\u65f6\u95f4",
+   "fieldtype": "Date",
+   "label": "\u4ea4\u8d27\u65f6\u95f4"
+  },
+  {
+   "fieldname": "column_break_yker",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u6c47\u6b3e\u65f6\u95f4",
+   "fieldtype": "Date",
+   "label": "\u6c47\u6b3e\u65f6\u95f4"
+  },
+  {
+   "fieldname": "\u4ea4\u8d27\u5730\u70b9",
+   "fieldtype": "Data",
+   "label": "\u4ea4\u8d27\u5730\u70b9"
+  },
+  {
+   "fieldname": "column_break_mted",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u8ba2\u5355\u6570\u91cf",
+   "fieldtype": "Data",
+   "label": "\u8ba2\u5355\u6570\u91cf"
+  },
+  {
+   "fieldname": "column_break_cwod",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u9996\u6279\u53d1\u8d27\u91cf",
+   "fieldtype": "Data",
+   "label": "\u9996\u6279\u53d1\u8d27\u91cf"
+  },
+  {
+   "fieldname": "\u7ecf\u529e",
+   "fieldtype": "Section Break",
+   "label": "\u7ecf\u529e"
+  },
+  {
+   "fieldname": "\u9500\u552e\u7ecf\u7406",
+   "fieldtype": "Data",
+   "label": "\u9500\u552e\u7ecf\u7406"
+  },
+  {
+   "fieldname": "\u8bbe\u8ba1\u7ecf\u7406",
+   "fieldtype": "Data",
+   "label": "\u8bbe\u8ba1\u7ecf\u7406"
+  },
+  {
+   "fieldname": "column_break_frhp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u8425\u9500\u4f1a\u8ba1",
+   "fieldtype": "Data",
+   "label": "\u8425\u9500\u4f1a\u8ba1"
+  },
+  {
+   "fieldname": "\u91c7\u8d2d",
+   "fieldtype": "Data",
+   "label": "\u91c7\u8d2d"
+  },
+  {
+   "fieldname": "column_break_vbav",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u8425\u9500\u4e2d\u5fc3",
+   "fieldtype": "Data",
+   "label": "\u8425\u9500\u4e2d\u5fc3"
+  },
+  {
+   "fieldname": "\u751f\u4ea7\u7ecf\u7406",
+   "fieldtype": "Data",
+   "label": "\u751f\u4ea7\u7ecf\u7406"
+  },
+  {
+   "fieldname": "column_break_vndz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u8bbe\u8ba1\u4e13\u5458",
+   "fieldtype": "Data",
+   "label": "\u8bbe\u8ba1\u4e13\u5458"
+  },
+  {
+   "fieldname": "\u5b9e\u9a8c\u5ba4",
+   "fieldtype": "Data",
+   "label": "\u5b9e\u9a8c\u5ba4"
+  },
+  {
+   "fieldname": "\u5907\u6ce8\u8bf4\u660e_section",
+   "fieldtype": "Section Break",
+   "label": "\u5907\u6ce8\u8bf4\u660e"
+  },
+  {
+   "fieldname": "\u5907\u6ce8",
+   "fieldtype": "Data",
+   "label": "\u5907\u6ce8"
+  },
+  {
+   "fieldname": "column_break_vqpu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u5305\u88c5\u53ca\u8f85\u6599\u8bbe\u8ba1\u6240\u9700\u586b\u5199\u4fe1\u606f\u52fe\u9009",
+   "fieldtype": "Section Break",
+   "label": "\u4ea7\u54c1\u5305\u88c5\u53ca\u8f85\u6599\u8bbe\u8ba1\u6240\u9700\u586b\u5199\u4fe1\u606f\u52fe\u9009"
+  },
+  {
+   "fieldname": "column_break_qrvw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_gwgu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_muzz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_hrck",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_xksk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_jlcd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_qbhl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_lkxq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb91",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb91"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb92",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb92"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb93",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb93"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb94",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb94"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb95",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb95"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb96",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb96"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb97",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb97"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb98",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb98"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb99",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb99"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u5305\u88c5\u53ca\u8f85\u6599\u8bbe\u8ba1\u8981\u6c42_section",
+   "fieldtype": "Section Break",
+   "label": "\u4ea7\u54c1\u5305\u88c5\u53ca\u8f85\u6599\u8bbe\u8ba1\u8981\u6c42"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb91 == 1",
+   "fieldname": "\u5185\u5bb9_1",
+   "fieldtype": "Data",
+   "label": "\u5185\u5bb9_1",
+   "length": 3
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb92 == 1",
+   "fieldname": "\u5185\u5bb9_2",
+   "fieldtype": "Text",
+   "label": "\u5185\u5bb9_2"
+  },
+  {
+   "fieldname": "\u5185\u5bb9_3",
+   "fieldtype": "Text",
+   "label": "\u5185\u5bb9_3"
+  },
+  {
+   "fieldname": "column_break_zqrz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb91 == 1",
+   "fieldname": "\u5c3a\u5bf8\u89c4\u683c_1",
+   "fieldtype": "Data",
+   "label": "\u5c3a\u5bf8/\u89c4\u683c_1",
+   "length": 3
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb92 == 1",
+   "fieldname": "\u5c3a\u5bf8\u89c4\u683c_2",
+   "fieldtype": "Text",
+   "label": "\u5c3a\u5bf8/\u89c4\u683c_2"
+  },
+  {
+   "fieldname": "column_break_lpti",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb91 == 1",
+   "fieldname": "\u6750\u8d28_1",
+   "fieldtype": "Data",
+   "label": "\u6750\u8d28_1",
+   "length": 3
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb92 == 1",
+   "fieldname": "\u6750\u8d28_2",
+   "fieldtype": "Text",
+   "label": "\u6750\u8d28_2"
+  },
+  {
+   "fieldname": "column_break_yozd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb91 == 1",
+   "fieldname": "\u5de5\u827a_1",
+   "fieldtype": "Data",
+   "label": "\u5de5\u827a_1",
+   "length": 3
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb92 == 1",
+   "fieldname": "\u5de5\u827a_2",
+   "fieldtype": "Text",
+   "label": "\u5de5\u827a_2"
+  },
+  {
+   "fieldname": "column_break_furm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb91 == 1",
+   "fieldname": "\u6570\u91cf_1",
+   "fieldtype": "Data",
+   "label": "\u6570\u91cf_1",
+   "length": 3
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb92 == 1",
+   "fieldname": "\u6570\u91cf_2",
+   "fieldtype": "Text",
+   "label": "\u6570\u91cf_2"
+  },
+  {
+   "fieldname": "column_break_nqbk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb91 == 1",
+   "fieldname": "\u7279\u6b8a\u8981\u6c42_1",
+   "fieldtype": "Data",
+   "label": "\u7279\u6b8a\u8981\u6c42_1",
+   "length": 8
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb92 == 1",
+   "fieldname": "\u7279\u6b8a\u8981\u6c42_2",
+   "fieldtype": "Text",
+   "label": "\u7279\u6b8a\u8981\u6c42_2"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-14 11:45:50.168683",
+ "modified_by": "Administrator",
+ "module": "mdm",
+ "name": "Product Project Application Form",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

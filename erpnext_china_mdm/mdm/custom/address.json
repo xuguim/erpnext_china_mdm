@@ -215,7 +215,7 @@
     "property": "link_filters",
     "property_type": "Text",
     "row_name": null,
-    "value": "[[\"Territory\",\"parent_territory\",\"=\",\"非偏远地区\"]]"
+    "value": "[[\"Territory\",\"parent_territory\",\"in\",[\"非偏远地区\",\"偏远地区\"]]]"
     }, 
     {
     "_assign": null,
