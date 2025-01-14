@@ -89,8 +89,9 @@ class CustomDeliveryNote(DeliveryNote):
 			if frappe.db.get_value("Sales Order",original_sales_order,"allow_delivery"):
 				return
 			advance_paid = frappe.db.get_value("Sales Order", filters={"name": original_sales_order}, fieldname="advance_paid")
-			frappe.log(f"{self.grand_total}, {advance_paid}")
-			if self.grand_total != advance_paid:
+			grand_total = frappe.db.get_value("Sales Order", filters={"name": original_sales_order}, fieldname="grand_total")
+			frappe.log(f"{grand_total}, {advance_paid}")
+			if grand_total != advance_paid:
 				frappe.throw("收款后才能发货")
 	
 	def set_employee_and_department(self):
