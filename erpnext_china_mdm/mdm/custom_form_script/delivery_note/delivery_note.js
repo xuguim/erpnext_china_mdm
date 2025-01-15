@@ -22,5 +22,19 @@ frappe.ui.form.on('Delivery Note', {
 				frm.set_df_property(field, 'hidden', 0);
 			});
 		}
+
+		
+		frappe.call({
+			doc:frm.doc,
+			method:"get_important_reminders",
+			args:{},
+			callback: function(res){
+				if(res.message) {
+					frm.dashboard.clear_comment()
+					frm.set_intro(res.message)
+				}
+			}
+		})
+
 	},
 });
