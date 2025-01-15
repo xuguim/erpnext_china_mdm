@@ -181,6 +181,22 @@ class CustomDeliveryNote(DeliveryNote):
 				),
 				title=_("Limit Crossed"),
 			)
+	@frappe.whitelist()
+	def get_important_reminders(self):
+		if self.custom_original_sales_order:
+			soname = [self.custom_original_sales_order]
+		else:
+			soname = list(set([d.against_sales_order for d in self.items if d.against_sales_order]))
+
+		msg = ''
+		if not frappe.has_permission('Sales Order', ptype='read'):
+			return msg
+		res = frappe.get_all('Sales Order',filters={'name':['in',soname],'custom_important_reminders':['!=','']},pluck='custom_important_reminders')
+
+		for d in res:
+			msg += f'<p class="text-danger bold h3">{d}</p>'
+
+		return msg
 
 def validate_shipper(doc, method=None):
 	if frappe.session.user == 'Administrator':
