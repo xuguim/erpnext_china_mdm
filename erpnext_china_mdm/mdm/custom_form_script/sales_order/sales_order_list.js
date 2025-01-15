@@ -21,7 +21,7 @@ frappe.listview_settings["Sales Order"] = {
 			Primary: "blue",
 			Inverse: "black",
 			Info: "light-blue",
-		}[locals["Workflow State"][doc.workflow_state].style] || "grey";
+		}[locals["Workflow State"][doc.workflow_state]?.style] || "grey";
 		
 		if (doc.docstatus == 0) {
 			return [__(doc.workflow_state), color, "workflow_state,=," + doc.workflow_state]
