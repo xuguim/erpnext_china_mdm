@@ -42,7 +42,7 @@ class CustomCustomer(Customer):
 				frappe.throw(result, title="企查查查询失败")
 			else:
 				if self.customer_name not in result.data:
-					frappe.throw(result.data, title="请选择以下结果中的一个", as_list=True)
+					frappe.throw(result.data, title="客户名称验证失败，复制下列公司名称中的一个作为客户名称，再保存", as_list=True)
 
 	def check_customer_type_changed(self):
 		old = self.get_doc_before_save()
