@@ -27,7 +27,130 @@
   "column_break_yzba",
   "\u5185\u5bb93",
   "column_break_jolx",
-  "\u5185\u5bb94"
+  "\u5185\u5bb94",
+  "column_break_qzat",
+  "\u5185\u5bb95",
+  "column_break_fjat",
+  "\u5185\u5bb96",
+  "column_break_adet",
+  "\u5185\u5bb97",
+  "column_break_nipl",
+  "\u5185\u5bb98",
+  "column_break_fepp",
+  "\u5185\u5bb99",
+  "column_break_mxgf",
+  "\u5185\u5bb910",
+  "\u4ea7\u54c1\u5305\u88c5\u53ca\u8f85\u6599\u8bbe\u8ba1\u8981\u6c42",
+  "\u5185\u5bb9_1",
+  "\u5185\u5bb9_2",
+  "\u5185\u5bb9_3",
+  "\u5185\u5bb9_4",
+  "\u5185\u5bb9_5",
+  "\u5185\u5bb9_6",
+  "\u5185\u5bb9_7",
+  "\u5185\u5bb9_8",
+  "\u5185\u5bb9_9",
+  "\u5185\u5bb9_10",
+  "column_break_zjli",
+  "\u5c3a\u5bf8\u89c4\u683c_1",
+  "\u5c3a\u5bf8\u89c4\u683c_2",
+  "\u5c3a\u5bf8\u89c4\u683c_3",
+  "\u5c3a\u5bf8\u89c4\u683c_4",
+  "\u5c3a\u5bf8\u89c4\u683c_5",
+  "\u5c3a\u5bf8\u89c4\u683c_6",
+  "\u5c3a\u5bf8\u89c4\u683c_7",
+  "\u5c3a\u5bf8\u89c4\u683c_8",
+  "\u5c3a\u5bf8\u89c4\u683c_9",
+  "\u5c3a\u5bf8\u89c4\u683c_10",
+  "column_break_yzco",
+  "\u6750\u8d28_1",
+  "\u6750\u8d28_2",
+  "\u6750\u8d28_3",
+  "\u6750\u8d28_4",
+  "\u6750\u8d28_5",
+  "\u6750\u8d28_6",
+  "\u6750\u8d28_7",
+  "\u6750\u8d28_8",
+  "\u6750\u8d28_9",
+  "\u6750\u8d28_10",
+  "column_break_clvn",
+  "\u5de5\u827a_1",
+  "\u5de5\u827a_2",
+  "\u5de5\u827a_3",
+  "\u5de5\u827a_4",
+  "\u5de5\u827a_5",
+  "\u5de5\u827a_6",
+  "\u5de5\u827a_7",
+  "\u5de5\u827a_8",
+  "\u5de5\u827a_9",
+  "\u5de5\u827a_10",
+  "column_break_kzdu",
+  "\u6570\u91cf_1",
+  "\u6570\u91cf_2",
+  "\u6570\u91cf_3",
+  "\u6570\u91cf_4",
+  "\u6570\u91cf_5",
+  "\u6570\u91cf_6",
+  "\u6570\u91cf_7",
+  "\u6570\u91cf_8",
+  "\u6570\u91cf_9",
+  "\u6570\u91cf_10",
+  "column_break_rqdk",
+  "\u7279\u6b8a\u8981\u6c42_1",
+  "\u7279\u6b8a\u8981\u6c42_2",
+  "\u7279\u6b8a\u8981\u6c42_3",
+  "\u7279\u6b8a\u8981\u6c42_4",
+  "\u7279\u6b8a\u8981\u6c42_5",
+  "\u7279\u6b8a\u8981\u6c42_6",
+  "\u7279\u6b8a\u8981\u6c42_7",
+  "\u7279\u6b8a\u8981\u6c42_8",
+  "\u7279\u6b8a\u8981\u6c42_9",
+  "\u7279\u6b8a\u8981\u6c42_10",
+  "\u4ea7\u54c1\u6280\u672f\u652f\u6301\u53ca\u5de5\u827a\u53c2\u6570\u57fa\u672c\u8981\u6c42",
+  "\u914d\u65b9\u63d0\u4f9b\u65b9\u5f0f",
+  "\u539f\u6599\u63d0\u4f9b\u65b9\u5f0f",
+  "\u662f\u5426\u9700\u8981\u505a\u5c0f\u6837",
+  "column_break_xeyh",
+  "\u836f\u82af\u5c3a\u5bf8",
+  "\u836f\u7247\u6d82\u5e03\u8981\u6c42",
+  "\u5c0f\u6837\u5b9e\u9a8c\u5ba4\u786e\u8ba4\u4eba",
+  "column_break_pxys",
+  "\u529f\u6548",
+  "\u52a0\u80f6\u5c3a\u5bf8",
+  "\u5c0f\u6837\u914d\u65b9\u786e\u8ba4\u65f6\u95f4",
+  "column_break_abbf",
+  "\u4ea7\u54c1\u6027\u72b6\u989c\u8272",
+  "\u523a\u6fc0\u5ea6",
+  "\u9632\u4f2a\u7801\u8981\u6c42",
+  "column_break_pwgh",
+  "\u539a\u5ea6\u514b\u91cd",
+  "\u94a2\u73e0\u78c1\u7247\u8981\u6c42",
+  "\u4ea7\u54c1\u89c4\u683c",
+  "\u5de5\u827a\u9879\u76ee\u7279\u6b8a\u8bf4\u660e",
+  "\u7279\u6b8a\u8bf4\u660e",
+  "\u4ea4\u4ed8\u4fe1\u606f",
+  "\u62bc\u91d1\u7f34\u7eb3\u91d1\u989d",
+  "\u6c47\u6b3e\u65f6\u95f4",
+  "column_break_xrst",
+  "\u8ba2\u5355\u6570\u91cf",
+  "\u4ea4\u8d27\u65f6\u95f4",
+  "column_break_xfuw",
+  "\u9996\u6279\u53d1\u8d27\u91cf",
+  "\u4ea4\u8d27\u5730\u70b9",
+  "\u7ecf\u529e",
+  "\u9500\u552e\u7ecf\u7406",
+  "\u8bbe\u8ba1\u7ecf\u7406",
+  "column_break_zjgr",
+  "\u8425\u9500\u4f1a\u8ba1",
+  "\u91c7\u8d2d",
+  "column_break_cyyj",
+  "\u8425\u9500\u4e2d\u5fc3",
+  "\u751f\u4ea7\u7ecf\u7406",
+  "column_break_jelt",
+  "\u8bbe\u8ba1\u4e13\u5458",
+  "\u5b9e\u9a8c\u5ba4",
+  "\u5907\u6ce8\u8bf4\u660e",
+  "\u5907\u6ce8"
  ],
  "fields": [
   {
@@ -100,8 +223,9 @@
   },
   {
    "fieldname": "\u8ba2\u5355\u7c7b\u578b",
-   "fieldtype": "Data",
-   "label": "\u8ba2\u5355\u7c7b\u578b"
+   "fieldtype": "Select",
+   "label": "\u8ba2\u5355\u7c7b\u578b",
+   "options": "\n\u81ea\u8425\n\u65b0\u589e\n\u5b9a\u5236\n\u7eed\u589e"
   },
   {
    "fieldname": "\u4ea7\u54c1\u5305\u88c5\u53ca\u8f85\u6599\u8bbe\u8ba1\u6240\u9700\u586b\u5199\u4fe1\u606f\u52fe\u9009",
@@ -143,11 +267,675 @@
    "fieldname": "\u5185\u5bb94",
    "fieldtype": "Check",
    "label": "\u5185\u5bb94"
+  },
+  {
+   "fieldname": "column_break_qzat",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb95",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb95"
+  },
+  {
+   "fieldname": "column_break_fjat",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb96",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb96"
+  },
+  {
+   "fieldname": "column_break_adet",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb97",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb97"
+  },
+  {
+   "fieldname": "column_break_nipl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb98",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb98"
+  },
+  {
+   "fieldname": "column_break_fepp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb99",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb99"
+  },
+  {
+   "fieldname": "column_break_mxgf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb910",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb910"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u5305\u88c5\u53ca\u8f85\u6599\u8bbe\u8ba1\u8981\u6c42",
+   "fieldtype": "Section Break",
+   "label": "\u4ea7\u54c1\u5305\u88c5\u53ca\u8f85\u6599\u8bbe\u8ba1\u8981\u6c42"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb91 == 1",
+   "fieldname": "\u5185\u5bb9_1",
+   "fieldtype": "Data",
+   "label": "\u5185\u5bb9_1"
+  },
+  {
+   "fieldname": "column_break_zjli",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb91 == 1",
+   "fieldname": "\u5c3a\u5bf8\u89c4\u683c_1",
+   "fieldtype": "Data",
+   "label": "\u5c3a\u5bf8/\u89c4\u683c_1"
+  },
+  {
+   "fieldname": "column_break_yzco",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb91 == 1",
+   "fieldname": "\u6750\u8d28_1",
+   "fieldtype": "Data",
+   "label": "\u6750\u8d28_1"
+  },
+  {
+   "fieldname": "column_break_clvn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb91 == 1",
+   "fieldname": "\u5de5\u827a_1",
+   "fieldtype": "Data",
+   "label": "\u5de5\u827a_1"
+  },
+  {
+   "fieldname": "column_break_kzdu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb91 == 1",
+   "fieldname": "\u6570\u91cf_1",
+   "fieldtype": "Data",
+   "label": "\u6570\u91cf_1"
+  },
+  {
+   "fieldname": "column_break_rqdk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb91 == 1",
+   "fieldname": "\u7279\u6b8a\u8981\u6c42_1",
+   "fieldtype": "Data",
+   "label": "\u7279\u6b8a\u8981\u6c42_1"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb92 == 1",
+   "fieldname": "\u5185\u5bb9_2",
+   "fieldtype": "Data",
+   "label": "\u5185\u5bb9_2"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb93 == 1",
+   "fieldname": "\u5185\u5bb9_3",
+   "fieldtype": "Data",
+   "label": "\u5185\u5bb9_3"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb94 == 1",
+   "fieldname": "\u5185\u5bb9_4",
+   "fieldtype": "Data",
+   "label": "\u5185\u5bb9_4"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb95 == 1",
+   "fieldname": "\u5185\u5bb9_5",
+   "fieldtype": "Data",
+   "label": "\u5185\u5bb9_5"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb96 == 1",
+   "fieldname": "\u5185\u5bb9_6",
+   "fieldtype": "Data",
+   "label": "\u5185\u5bb9_6"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb97 == 1",
+   "fieldname": "\u5185\u5bb9_7",
+   "fieldtype": "Data",
+   "label": "\u5185\u5bb9_7"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb98 == 1",
+   "fieldname": "\u5185\u5bb9_8",
+   "fieldtype": "Data",
+   "label": "\u5185\u5bb9_8"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb99 == 1",
+   "fieldname": "\u5185\u5bb9_9",
+   "fieldtype": "Data",
+   "label": "\u5185\u5bb9_9"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb910 == 1",
+   "fieldname": "\u5185\u5bb9_10",
+   "fieldtype": "Data",
+   "label": "\u5185\u5bb9_10"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb92 == 1",
+   "fieldname": "\u5c3a\u5bf8\u89c4\u683c_2",
+   "fieldtype": "Data",
+   "label": "\u5c3a\u5bf8/\u89c4\u683c_2"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb93 == 1",
+   "fieldname": "\u5c3a\u5bf8\u89c4\u683c_3",
+   "fieldtype": "Data",
+   "label": "\u5c3a\u5bf8/\u89c4\u683c_3"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb94 == 1",
+   "fieldname": "\u5c3a\u5bf8\u89c4\u683c_4",
+   "fieldtype": "Data",
+   "label": "\u5c3a\u5bf8/\u89c4\u683c_4"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb95 == 1",
+   "fieldname": "\u5c3a\u5bf8\u89c4\u683c_5",
+   "fieldtype": "Data",
+   "label": "\u5c3a\u5bf8/\u89c4\u683c_5"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb96 == 1",
+   "fieldname": "\u5c3a\u5bf8\u89c4\u683c_6",
+   "fieldtype": "Data",
+   "label": "\u5c3a\u5bf8/\u89c4\u683c_6"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb97 == 1",
+   "fieldname": "\u5c3a\u5bf8\u89c4\u683c_7",
+   "fieldtype": "Data",
+   "label": "\u5c3a\u5bf8/\u89c4\u683c_7"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb98 == 1",
+   "fieldname": "\u5c3a\u5bf8\u89c4\u683c_8",
+   "fieldtype": "Data",
+   "label": "\u5c3a\u5bf8/\u89c4\u683c_8"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb99 == 1",
+   "fieldname": "\u5c3a\u5bf8\u89c4\u683c_9",
+   "fieldtype": "Data",
+   "label": "\u5c3a\u5bf8/\u89c4\u683c_9"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb910 == 1",
+   "fieldname": "\u5c3a\u5bf8\u89c4\u683c_10",
+   "fieldtype": "Data",
+   "label": "\u5c3a\u5bf8/\u89c4\u683c_10"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb92 == 1",
+   "fieldname": "\u6750\u8d28_2",
+   "fieldtype": "Data",
+   "label": "\u6750\u8d28_2"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb93 == 1",
+   "fieldname": "\u6750\u8d28_3",
+   "fieldtype": "Data",
+   "label": "\u6750\u8d28_3"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb94 == 1",
+   "fieldname": "\u6750\u8d28_4",
+   "fieldtype": "Data",
+   "label": "\u6750\u8d28_4"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb95 == 1",
+   "fieldname": "\u6750\u8d28_5",
+   "fieldtype": "Data",
+   "label": "\u6750\u8d28_5"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb96 == 1",
+   "fieldname": "\u6750\u8d28_6",
+   "fieldtype": "Data",
+   "label": "\u6750\u8d28_6"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb97 == 1",
+   "fieldname": "\u6750\u8d28_7",
+   "fieldtype": "Data",
+   "label": "\u6750\u8d28_7"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb98 == 1",
+   "fieldname": "\u6750\u8d28_8",
+   "fieldtype": "Data",
+   "label": "\u6750\u8d28_8"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb99 == 1",
+   "fieldname": "\u6750\u8d28_9",
+   "fieldtype": "Data",
+   "label": "\u6750\u8d28_9"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb910 == 1",
+   "fieldname": "\u6750\u8d28_10",
+   "fieldtype": "Data",
+   "label": "\u6750\u8d28_10"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb92 == 1",
+   "fieldname": "\u5de5\u827a_2",
+   "fieldtype": "Data",
+   "label": "\u5de5\u827a_2"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb93 == 1",
+   "fieldname": "\u5de5\u827a_3",
+   "fieldtype": "Data",
+   "label": "\u5de5\u827a_3"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb94 == 1",
+   "fieldname": "\u5de5\u827a_4",
+   "fieldtype": "Data",
+   "label": "\u5de5\u827a_4"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb95 == 1",
+   "fieldname": "\u5de5\u827a_5",
+   "fieldtype": "Data",
+   "label": "\u5de5\u827a_5"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb96 == 1",
+   "fieldname": "\u5de5\u827a_6",
+   "fieldtype": "Data",
+   "label": "\u5de5\u827a_6"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb97 == 1",
+   "fieldname": "\u5de5\u827a_7",
+   "fieldtype": "Data",
+   "label": "\u5de5\u827a_7"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb98 == 1",
+   "fieldname": "\u5de5\u827a_8",
+   "fieldtype": "Data",
+   "label": "\u5de5\u827a_8"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb99 == 1",
+   "fieldname": "\u5de5\u827a_9",
+   "fieldtype": "Data",
+   "label": "\u5de5\u827a_9"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb910 == 1",
+   "fieldname": "\u5de5\u827a_10",
+   "fieldtype": "Data",
+   "label": "\u5de5\u827a_10"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb92 == 1",
+   "fieldname": "\u6570\u91cf_2",
+   "fieldtype": "Data",
+   "label": "\u6570\u91cf_2"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb93 == 1",
+   "fieldname": "\u6570\u91cf_3",
+   "fieldtype": "Data",
+   "label": "\u6570\u91cf_3"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb94 == 1",
+   "fieldname": "\u6570\u91cf_4",
+   "fieldtype": "Data",
+   "label": "\u6570\u91cf_4"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb95 == 1",
+   "fieldname": "\u6570\u91cf_5",
+   "fieldtype": "Data",
+   "label": "\u6570\u91cf_5"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb96 == 1",
+   "fieldname": "\u6570\u91cf_6",
+   "fieldtype": "Data",
+   "label": "\u6570\u91cf_6"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb97 == 1",
+   "fieldname": "\u6570\u91cf_7",
+   "fieldtype": "Data",
+   "label": "\u6570\u91cf_7"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb98 == 1",
+   "fieldname": "\u6570\u91cf_8",
+   "fieldtype": "Data",
+   "label": "\u6570\u91cf_8"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb99 == 1",
+   "fieldname": "\u6570\u91cf_9",
+   "fieldtype": "Data",
+   "label": "\u6570\u91cf_9"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb910 == 1",
+   "fieldname": "\u6570\u91cf_10",
+   "fieldtype": "Data",
+   "label": "\u6570\u91cf_10"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb92 == 1",
+   "fieldname": "\u7279\u6b8a\u8981\u6c42_2",
+   "fieldtype": "Data",
+   "label": "\u7279\u6b8a\u8981\u6c42_2"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb93 == 1",
+   "fieldname": "\u7279\u6b8a\u8981\u6c42_3",
+   "fieldtype": "Data",
+   "label": "\u7279\u6b8a\u8981\u6c42_3"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb94 == 1",
+   "fieldname": "\u7279\u6b8a\u8981\u6c42_4",
+   "fieldtype": "Data",
+   "label": "\u7279\u6b8a\u8981\u6c42_4"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb95 == 1",
+   "fieldname": "\u7279\u6b8a\u8981\u6c42_5",
+   "fieldtype": "Data",
+   "label": "\u7279\u6b8a\u8981\u6c42_5"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb96 == 1",
+   "fieldname": "\u7279\u6b8a\u8981\u6c42_6",
+   "fieldtype": "Data",
+   "label": "\u7279\u6b8a\u8981\u6c42_6"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb97 == 1",
+   "fieldname": "\u7279\u6b8a\u8981\u6c42_7",
+   "fieldtype": "Data",
+   "label": "\u7279\u6b8a\u8981\u6c42_7"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb98 == 1",
+   "fieldname": "\u7279\u6b8a\u8981\u6c42_8",
+   "fieldtype": "Data",
+   "label": "\u7279\u6b8a\u8981\u6c42_8"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb99 == 1",
+   "fieldname": "\u7279\u6b8a\u8981\u6c42_9",
+   "fieldtype": "Data",
+   "label": "\u7279\u6b8a\u8981\u6c42_9"
+  },
+  {
+   "depends_on": "eval:doc.\u5185\u5bb910 == 1",
+   "fieldname": "\u7279\u6b8a\u8981\u6c42_10",
+   "fieldtype": "Data",
+   "label": "\u7279\u6b8a\u8981\u6c42_10"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u6280\u672f\u652f\u6301\u53ca\u5de5\u827a\u53c2\u6570\u57fa\u672c\u8981\u6c42",
+   "fieldtype": "Section Break",
+   "label": "\u4ea7\u54c1\u6280\u672f\u652f\u6301\u53ca\u5de5\u827a\u53c2\u6570\u57fa\u672c\u8981\u6c42"
+  },
+  {
+   "fieldname": "\u914d\u65b9\u63d0\u4f9b\u65b9\u5f0f",
+   "fieldtype": "Select",
+   "label": "\u914d\u65b9\u63d0\u4f9b\u65b9\u5f0f",
+   "options": "\n\u516c\u53f8\u63d0\u4f9b\n\u5ba2\u6237\u63d0\u4f9b"
+  },
+  {
+   "fieldname": "\u539f\u6599\u63d0\u4f9b\u65b9\u5f0f",
+   "fieldtype": "Select",
+   "label": "\u539f\u6599\u63d0\u4f9b\u65b9\u5f0f",
+   "options": "\n\u516c\u53f8\u63d0\u4f9b\n\u5ba2\u6237\u63d0\u4f9b"
+  },
+  {
+   "fieldname": "\u662f\u5426\u9700\u8981\u505a\u5c0f\u6837",
+   "fieldtype": "Select",
+   "label": "\u662f\u5426\u9700\u8981\u505a\u5c0f\u6837",
+   "options": "\n\u662f\n\u5426"
+  },
+  {
+   "fieldname": "column_break_xeyh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u836f\u82af\u5c3a\u5bf8",
+   "fieldtype": "Data",
+   "label": "\u836f\u82af\u5c3a\u5bf8"
+  },
+  {
+   "fieldname": "column_break_pxys",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u529f\u6548",
+   "fieldtype": "Data",
+   "label": "\u529f\u6548"
+  },
+  {
+   "fieldname": "column_break_abbf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u6027\u72b6\u989c\u8272",
+   "fieldtype": "Data",
+   "label": "\u4ea7\u54c1\u6027\u72b6\u989c\u8272"
+  },
+  {
+   "fieldname": "\u836f\u7247\u6d82\u5e03\u8981\u6c42",
+   "fieldtype": "Data",
+   "label": "\u836f\u7247\u6d82\u5e03\u8981\u6c42"
+  },
+  {
+   "fieldname": "\u5c0f\u6837\u5b9e\u9a8c\u5ba4\u786e\u8ba4\u4eba",
+   "fieldtype": "Data",
+   "label": "\u5c0f\u6837/\u5b9e\u9a8c\u5ba4\u786e\u8ba4\u4eba"
+  },
+  {
+   "fieldname": "\u52a0\u80f6\u5c3a\u5bf8",
+   "fieldtype": "Data",
+   "label": "\u52a0\u80f6\u5c3a\u5bf8"
+  },
+  {
+   "fieldname": "\u5c0f\u6837\u914d\u65b9\u786e\u8ba4\u65f6\u95f4",
+   "fieldtype": "Date",
+   "label": "\u5c0f\u6837/\u914d\u65b9/\u786e\u8ba4\u65f6\u95f4"
+  },
+  {
+   "fieldname": "\u523a\u6fc0\u5ea6",
+   "fieldtype": "Data",
+   "label": "\u523a\u6fc0\u5ea6"
+  },
+  {
+   "fieldname": "\u9632\u4f2a\u7801\u8981\u6c42",
+   "fieldtype": "Data",
+   "label": "\u9632\u4f2a\u7801\u8981\u6c42"
+  },
+  {
+   "fieldname": "column_break_pwgh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u539a\u5ea6\u514b\u91cd",
+   "fieldtype": "Data",
+   "label": "\u539a\u5ea6/\u514b\u91cd"
+  },
+  {
+   "fieldname": "\u94a2\u73e0\u78c1\u7247\u8981\u6c42",
+   "fieldtype": "Data",
+   "label": "\u94a2\u73e0/\u78c1\u7247\u8981\u6c42"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u89c4\u683c",
+   "fieldtype": "Data",
+   "label": "\u4ea7\u54c1\u89c4\u683c"
+  },
+  {
+   "fieldname": "\u5de5\u827a\u9879\u76ee\u7279\u6b8a\u8bf4\u660e",
+   "fieldtype": "Section Break",
+   "label": "\u5de5\u827a\u9879\u76ee\u7279\u6b8a\u8bf4\u660e"
+  },
+  {
+   "fieldname": "\u7279\u6b8a\u8bf4\u660e",
+   "fieldtype": "Data",
+   "label": "\u7279\u6b8a\u8bf4\u660e"
+  },
+  {
+   "fieldname": "\u4ea4\u4ed8\u4fe1\u606f",
+   "fieldtype": "Section Break",
+   "label": "\u4ea4\u4ed8\u4fe1\u606f"
+  },
+  {
+   "fieldname": "\u62bc\u91d1\u7f34\u7eb3\u91d1\u989d",
+   "fieldtype": "Data",
+   "label": "\u62bc\u91d1\u7f34\u7eb3\u91d1\u989d"
+  },
+  {
+   "fieldname": "\u6c47\u6b3e\u65f6\u95f4",
+   "fieldtype": "Date",
+   "label": "\u6c47\u6b3e\u65f6\u95f4"
+  },
+  {
+   "fieldname": "column_break_xrst",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u8ba2\u5355\u6570\u91cf",
+   "fieldtype": "Data",
+   "label": "\u8ba2\u5355\u6570\u91cf"
+  },
+  {
+   "fieldname": "\u4ea4\u8d27\u65f6\u95f4",
+   "fieldtype": "Date",
+   "label": "\u4ea4\u8d27\u65f6\u95f4"
+  },
+  {
+   "fieldname": "column_break_xfuw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u9996\u6279\u53d1\u8d27\u91cf",
+   "fieldtype": "Data",
+   "label": "\u9996\u6279\u53d1\u8d27\u91cf"
+  },
+  {
+   "fieldname": "\u4ea4\u8d27\u5730\u70b9",
+   "fieldtype": "Data",
+   "label": "\u4ea4\u8d27\u5730\u70b9"
+  },
+  {
+   "fieldname": "\u7ecf\u529e",
+   "fieldtype": "Section Break",
+   "label": "\u7ecf\u529e"
+  },
+  {
+   "fieldname": "\u9500\u552e\u7ecf\u7406",
+   "fieldtype": "Data",
+   "label": "\u9500\u552e\u7ecf\u7406"
+  },
+  {
+   "fieldname": "\u8bbe\u8ba1\u7ecf\u7406",
+   "fieldtype": "Data",
+   "label": "\u8bbe\u8ba1\u7ecf\u7406"
+  },
+  {
+   "fieldname": "column_break_zjgr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u8425\u9500\u4f1a\u8ba1",
+   "fieldtype": "Data",
+   "label": "\u8425\u9500\u4f1a\u8ba1"
+  },
+  {
+   "fieldname": "\u91c7\u8d2d",
+   "fieldtype": "Data",
+   "label": "\u91c7\u8d2d"
+  },
+  {
+   "fieldname": "column_break_cyyj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u8425\u9500\u4e2d\u5fc3",
+   "fieldtype": "Data",
+   "label": "\u8425\u9500\u4e2d\u5fc3"
+  },
+  {
+   "fieldname": "\u751f\u4ea7\u7ecf\u7406",
+   "fieldtype": "Data",
+   "label": "\u751f\u4ea7\u7ecf\u7406"
+  },
+  {
+   "fieldname": "column_break_jelt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u8bbe\u8ba1\u4e13\u5458",
+   "fieldtype": "Data",
+   "label": "\u8bbe\u8ba1\u4e13\u5458"
+  },
+  {
+   "fieldname": "\u5b9e\u9a8c\u5ba4",
+   "fieldtype": "Data",
+   "label": "\u5b9e\u9a8c\u5ba4"
+  },
+  {
+   "fieldname": "\u5907\u6ce8\u8bf4\u660e",
+   "fieldtype": "Section Break",
+   "label": "\u5907\u6ce8\u8bf4\u660e"
+  },
+  {
+   "fieldname": "\u5907\u6ce8",
+   "fieldtype": "Data",
+   "label": "\u5907\u6ce8"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-14 12:00:51.545544",
+ "modified": "2025-01-15 11:51:48.541466",
  "modified_by": "Administrator",
  "module": "mdm",
  "name": "PPAF",
