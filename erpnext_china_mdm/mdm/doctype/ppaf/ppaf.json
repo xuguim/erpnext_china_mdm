@@ -1,0 +1,172 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-01-14 11:49:55.168577",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "\u4ea7\u54c1\u7acb\u9879\u4fe1\u606f",
+  "\u7acb\u9879\u90e8\u95e8",
+  "\u4ea7\u54c1\u540d\u79f0",
+  "\u751f\u4ea7\u5355\u4f4d",
+  "column_break_xqse",
+  "\u7acb\u9879\u4eba",
+  "\u516c\u53f8\u6587\u53f7",
+  "\u4ea7\u54c1\u5242\u578b",
+  "column_break_dyrj",
+  "\u7acb\u9879\u4eba\u7535\u8bdd",
+  "\u5546\u6807",
+  "\u9500\u552e\u6e20\u9053",
+  "column_break_rugf",
+  "\u7acb\u9879\u65f6\u95f4",
+  "\u8ba2\u5355\u7c7b\u578b",
+  "\u4ea7\u54c1\u5305\u88c5\u53ca\u8f85\u6599\u8bbe\u8ba1\u6240\u9700\u586b\u5199\u4fe1\u606f\u52fe\u9009",
+  "\u5185\u5bb91",
+  "column_break_tfwr",
+  "\u5185\u5bb92",
+  "column_break_yzba",
+  "\u5185\u5bb93",
+  "column_break_jolx",
+  "\u5185\u5bb94"
+ ],
+ "fields": [
+  {
+   "fieldname": "\u4ea7\u54c1\u7acb\u9879\u4fe1\u606f",
+   "fieldtype": "Section Break",
+   "label": "\u4ea7\u54c1\u7acb\u9879\u4fe1\u606f"
+  },
+  {
+   "fieldname": "\u7acb\u9879\u90e8\u95e8",
+   "fieldtype": "Data",
+   "label": "\u7acb\u9879\u90e8\u95e8"
+  },
+  {
+   "fieldname": "column_break_xqse",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u7acb\u9879\u4eba",
+   "fieldtype": "Data",
+   "label": "\u7acb\u9879\u4eba"
+  },
+  {
+   "fieldname": "column_break_dyrj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u7acb\u9879\u4eba\u7535\u8bdd",
+   "fieldtype": "Data",
+   "label": "\u7acb\u9879\u4eba\u7535\u8bdd"
+  },
+  {
+   "fieldname": "column_break_rugf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u7acb\u9879\u65f6\u95f4",
+   "fieldtype": "Date",
+   "label": "\u7acb\u9879\u65f6\u95f4"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u540d\u79f0",
+   "fieldtype": "Data",
+   "label": "\u4ea7\u54c1\u540d\u79f0"
+  },
+  {
+   "fieldname": "\u751f\u4ea7\u5355\u4f4d",
+   "fieldtype": "Data",
+   "label": "\u751f\u4ea7\u5355\u4f4d"
+  },
+  {
+   "fieldname": "\u516c\u53f8\u6587\u53f7",
+   "fieldtype": "Link",
+   "label": "\u516c\u53f8\u6587\u53f7",
+   "options": "Administrative Permits of Companies"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u5242\u578b",
+   "fieldtype": "Data",
+   "label": "\u4ea7\u54c1\u5242\u578b"
+  },
+  {
+   "fieldname": "\u5546\u6807",
+   "fieldtype": "Data",
+   "label": "\u5546\u6807"
+  },
+  {
+   "fieldname": "\u9500\u552e\u6e20\u9053",
+   "fieldtype": "Data",
+   "label": "\u9500\u552e\u6e20\u9053"
+  },
+  {
+   "fieldname": "\u8ba2\u5355\u7c7b\u578b",
+   "fieldtype": "Data",
+   "label": "\u8ba2\u5355\u7c7b\u578b"
+  },
+  {
+   "fieldname": "\u4ea7\u54c1\u5305\u88c5\u53ca\u8f85\u6599\u8bbe\u8ba1\u6240\u9700\u586b\u5199\u4fe1\u606f\u52fe\u9009",
+   "fieldtype": "Section Break",
+   "label": "\u4ea7\u54c1\u5305\u88c5\u53ca\u8f85\u6599\u8bbe\u8ba1\u6240\u9700\u586b\u5199\u4fe1\u606f\u52fe\u9009"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb91",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb91"
+  },
+  {
+   "fieldname": "column_break_tfwr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb92",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb92"
+  },
+  {
+   "fieldname": "column_break_yzba",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb93",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb93"
+  },
+  {
+   "fieldname": "column_break_jolx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "\u5185\u5bb94",
+   "fieldtype": "Check",
+   "label": "\u5185\u5bb94"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-14 12:00:51.545544",
+ "modified_by": "Administrator",
+ "module": "mdm",
+ "name": "PPAF",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

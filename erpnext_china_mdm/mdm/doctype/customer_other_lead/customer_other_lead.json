@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2024-11-18 09:38:31.349359",
+ "creation": "2025-01-13 08:33:00.409034",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -11,19 +11,18 @@
  "fields": [
   {
    "fieldname": "lead",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Lead",
-   "options": "Lead"
+   "label": "Lead"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-11-18 11:46:49.522994",
+ "modified": "2025-01-13 08:45:25.587607",
  "modified_by": "Administrator",
  "module": "mdm",
- "name": "Lead Sublist",
+ "name": "Customer Other Lead",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",

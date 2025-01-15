@@ -1,3 +1,5 @@
+import copy
+import json
 import frappe
 from frappe import _
 from frappe.contacts.doctype.address.address import get_company_address
@@ -11,6 +13,7 @@ from frappe.permissions import get_role_permissions
 from erpnext.selling.doctype.sales_order.sales_order import WarehouseRequired
 from erpnext_china.erpnext_china.custom_form_script.sales_order.sales_order import CustomSalesOrder
 from frappe.utils import cint, cstr, flt
+import frappe.utils
 
 def validate_sales_team(doc,method=None):
 	user = frappe.session.user
@@ -342,3 +345,121 @@ def validate_inter_company_sales_order(docname):
 			return so_list[0]
 	else:
 		return docname
+				
+@frappe.whitelist()
+def get_discount_by_accumulated_qty_of_multiple_so(**kwargs):
+	customer = kwargs.get('customer')
+	customer_name = kwargs.get('customer_name')
+	item = kwargs.get("item")
+	coupon_code_title = f"{customer_name or customer}-{str(item).split('-')[-1]}-优惠券"
+	today = frappe.utils.today()
+	valid_from = today
+	before = frappe.utils.add_to_date(today, days=-30, as_string=True)
+	valid_upto = frappe.utils.add_to_date(today, days=30, as_string=True)
+	
+	coupon_code = frappe.db.exists("Coupon Code", {
+		"name": ["like", f"%{coupon_code_title}%"],
+		"used": 0, 
+		"valid_from": ["<=", valid_from], 
+		"valid_upto": [">=", valid_upto]
+	})
+	if coupon_code:
+		return {"coupon_code": coupon_code}
+	
+	# 定价规则关联的销售订单的物料行 name
+	pricing_rule_so_item = frappe.db.get_all("Pricing Rule Detail", filters={
+		"parenttype": "Sales Order",
+		"item_code": item,
+	}, pluck="child_docname")
+	
+	# 已经使用过累计满赠的销售订单物料行 name
+	used_discount_so_item = frappe.db.get_all("Discount Reference Sales Order Items", filters={
+		"item_code": item
+	}, pluck="child_docname")
+
+	# 找到当前客户、不是内部订单、没有使用优惠券、日期在最近30天内的销售订单 name
+	so_names = frappe.db.get_all("Sales Order", filters={
+		"customer": customer, 
+		"is_internal_customer": 0,
+		"coupon_code": "",
+		"transaction_date": ["between", [before, today]]
+	}, pluck="name")
+
+	# 找出可参与累计优惠的销售订单物料行：非优惠物料、uom箱
+	can_compute_so_items = frappe.db.get_all("Sales Order Item", filters={
+		"parenttype": "Sales Order",
+		"parent": ["in", so_names],
+		"rate": [">", 0],
+		"uom": "箱",
+		"item_code": item,
+		"name": ["not in", list(set(used_discount_so_item+pricing_rule_so_item))]
+	}, fields=["name", "parent", "item_code", "qty", "transaction_date"])
+	
+	# 计算物料的累计数量
+	total = sum([item.get('qty') for item in can_compute_so_items])
+	if total < 10:
+		return
+	
+	coupon_code_title += f"-{frappe.utils.random_string(1)}"
+	new_price_rule_data = {
+		"doctype": "Pricing Rule",
+		"title": coupon_code_title,
+		"apply_on": "Item Code",
+		"price_or_product_discount": "Product",
+		"selling": 1,
+		"coupon_code_based": 1,
+		"min_qty": 1,
+		"same_item": 1,
+		"free_qty": 1,
+		"free_item_uom": "箱",
+		"company": None,
+		"apply_multiple_pricing_rules": 1,
+		"has_priority": 1,
+		"priority": 1,
+		"currency": "CNY",
+		"valid_from": today,
+		"valid_upto": valid_upto,
+		"applicable_for": "Customer",
+		"customer": customer
+	}
+	new_price_rule = frappe.get_doc(new_price_rule_data)
+	new_price_rule.append("items", {
+		"item_code": item,
+		"uom": "箱"
+	})
+	new_price_rule.company = None
+	new_price_rule.insert(ignore_permissions=True)
+	
+	new_coupon_code_data = {
+		"doctype": "Coupon Code",
+		"coupon_name": coupon_code_title,
+		"coupon_code": coupon_code_title,
+		"coupon_type": "Promotional",
+		"pricing_rule": new_price_rule.name,
+		"maximum_use": 1,
+		"valid_from": today,
+		"valid_upto": valid_upto
+	}
+	new_coupon_code = frappe.get_doc(new_coupon_code_data)
+
+	for item in can_compute_so_items:
+		new_coupon_code.append("custom_sales_order_item", {
+			'child_docname': item.get('name'),
+			'sales_order': item.get('parent'),
+			'item_code': item.get('item_code'),
+			'qty': item.get('qty'),
+			'transaction_date': item.get('transaction_date')
+		})
+	new_coupon_code.insert(ignore_permissions=True)
+	
+	return {"coupon_code": new_coupon_code.name}
+
+@frappe.whitelist()
+def query_coupon_code(doctype, txt, searchfield, start, page_len, filters):
+	today = frappe.utils.today()
+	sql = f"""
+		SELECT cc.`name` FROM `tabCoupon Code` AS cc 
+		WHERE cc.maximum_use > cc.used AND cc.valid_from <= "{today}" AND cc.valid_upto >= "{today}"
+	"""
+	coupon_codes = frappe.db.sql(sql, as_list=1)
+	return coupon_codes
