@@ -19,14 +19,16 @@ def get_data(filters):
 			it.item_code,
 			it.item_name,
 			it.brand,
-			pri.uom,
+			it.stock_uom as uom,
 			pr.min_qty,
 			pr.rate,
 			pr.valid_from,
 			pr.valid_upto,
 			pr.company,
 			pr.name as pricing_rule,
-			sle.stock_available
+			sle.stock_available,
+			pr.title,
+			case when pr.min_qty = 1 then rate else '' end as standard_selling_rate
 		from
 			`tabItem` it
 		left join
@@ -55,6 +57,7 @@ def get_data(filters):
 			and pr.selling = 1
 			and pr.rate_or_discount = 'Rate'
 			and pr.apply_on = 'Item Code'
+			and ( pr.title like '%分销价%' or pr.title like '%经销价%')
 			{conditions}
 		order by
 			it.item_code, pr.min_qty
@@ -67,10 +70,15 @@ def get_data(filters):
 	for item_code in item_codes:
 		idx = len(data)
 		stock_available = 0
+		standard_selling_rate = None
 		data.append({'item_code': item_code})
+		stock_uom = None
 		for d in res:
 			if d.item_code == item_code:
 				stock_available += d.stock_available or 0
+				if d.standard_selling_rate:
+					standard_selling_rate = d.standard_selling_rate
+				stock_uom = d.uom
 				data.append({
 					"item_code": d.item_code,
 					"item_name": d.item_name,
@@ -83,9 +91,13 @@ def get_data(filters):
 					"company": d.company,
 					"pricing_rule": d.pricing_rule,
 					"valid_from": d.valid_from,
-					"valid_upto": d.valid_upto
+					"valid_upto": d.valid_upto,
+					"title": d.title,
+					"standard_selling_rate": standard_selling_rate
 				})
 		data[idx]['stock_available'] = stock_available
+		# data[idx]['standard_selling_rate'] = standard_selling_rate
+		# data[idx]['uom'] = stock_uom
 	return data
 
 def get_columns(filters):
@@ -119,11 +131,11 @@ def get_columns(filters):
 		{
 			"label": _("Min Qty"),
 			"fieldname": "min_qty",
-			"fieldtype": "Float",
+			"fieldtype": "Int",
 			"width": 120
 		},
 		{
-			"label": _("UOM"),
+			"label": _("Stock UOM"),
 			"fieldname": "uom",
 			"fieldtype": "Link",
 			"options": "UOM",
@@ -133,7 +145,13 @@ def get_columns(filters):
 			"label": _("Rate"),
 			"fieldname": "rate",
 			"fieldtype": "Currency",
-			"width": 120
+			"width": 80
+		},
+		{
+			"label": _("Standard Selling Rate"),
+			"fieldname": "standard_selling_rate",
+			"fieldtype": "Float",
+			"width": 80
 		},
 		{
 			"label": _("Company"),
@@ -148,6 +166,12 @@ def get_columns(filters):
 			"fieldtype": "Link",
 			"options": "Pricing Rule",
 			"width": 120
+		},
+		{
+			"label": _("Title"),
+			"fieldname": "title",
+			"fieldtype": "Data",
+			"width": 240
 		},
 		{
 			"label": _("Valid From"),
