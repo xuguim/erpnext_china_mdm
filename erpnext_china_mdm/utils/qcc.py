@@ -78,6 +78,8 @@ class QccApiNameSearch(QccApi):
 		params = { "key": self.app_key, "searchName": name }
 		result = self.http_get(url, params)
 		data = result.data.get('Result').get('Data')
+		if not data or len(data) == 0:
+			return None
 		return QccResult(200, data=[i.get("Name") for i in data])
 
 
