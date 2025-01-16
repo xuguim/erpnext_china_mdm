@@ -29,7 +29,7 @@ class CustomCustomer(Customer):
 	
 	def check_customer_exists(self):
 		# 同一条线索只能创建一个客户
-		if (self.has_value_changed("customer_type") or self.has_value_changed("customer_name")) and self.customer_type == "Company" and frappe.db.exists("Customer", {"customer_name": self.customer_name}):
+		if (self.has_value_changed("customer_type") or self.has_value_changed("customer_name")) and self.customer_type == "Company" and frappe.db.exists("Customer", {"customer_type": "Company", "customer_name": self.customer_name}):
 			frappe.throw("公司客户不可重复")
 		if self.has_value_changed("lead_name") and frappe.db.exists("Customer", {"lead_name": self.lead_name}):
 			frappe.throw("当前线索已经创建过客户，不可重复创建！")
