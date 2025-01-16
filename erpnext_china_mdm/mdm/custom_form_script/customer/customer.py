@@ -40,6 +40,8 @@ class CustomCustomer(Customer):
 			config = frappe.get_single("QCC Settings")
 			q = qcc.QccApiNameSearch(app_key=config.app_key, secret_key=config.secret_key)
 			result = q.name_search(self.customer_name)
+			if not result:
+				frappe.throw("企查查未找到相似企业名称，请检查客户名称后重试")
 			if result.code != 200:
 				frappe.throw(result, title="企查查查询失败")
 			else:
