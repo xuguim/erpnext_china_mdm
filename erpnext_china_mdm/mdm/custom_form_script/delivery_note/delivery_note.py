@@ -199,10 +199,6 @@ class CustomDeliveryNote(DeliveryNote):
 		return msg
 
 def validate_shipper(doc, method=None):
-	if frappe.session.user == 'Administrator':
-		doc.shipper = frappe.get_list('Employee')[0].name
-		doc.shipping_user = 'Administrator'
-		return
 	user = doc.owner
 	employee = frappe.db.get_value("Employee", {"user_id": user},["name","employee_name","department","reports_to","company"],as_dict=1)
 
