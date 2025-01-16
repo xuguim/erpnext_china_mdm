@@ -58,9 +58,25 @@ def get_data(filters):
 			and pr.rate_or_discount = 'Rate'
 			and pr.apply_on = 'Item Code'
 			and ( pr.title like '%分销价%' or pr.title like '%经销价%')
-			{conditions}
-		order by
-			it.item_code, pr.min_qty
+		{conditions}
+		union 
+		select
+			ip.item_code,
+			ip.item_name,
+			ip.brand,
+			ip.uom,
+			1 as min_qty,
+			ip.price_list_rate,
+			null as valid_from,
+			null as valid_upto,
+			null as company,
+			null as pricing_rule,
+			null as stock_available,
+			null as title,
+			null as standard_selling_rate
+		from `tabItem Price` ip
+		{conditions}
+		order by item_code, min_qty
 	"""
 	res = frappe.db.sql(query, as_dict=1)
 	if not filters.get('consolidate_items'):
@@ -190,13 +206,13 @@ def get_columns(filters):
 
 def get_conditions(filters):
 	today = frappe.utils.nowdate()
-	conditions = " and (it.end_of_life is null or it.end_of_life > '{0}')".format(today)
-	if filters.get('item_group'):
-		item_group_str = str(tuple(filters.get('item_group'))).replace(',)',')')
-		conditions += " and it.item_group in {0}".format(item_group_str)
+	#conditions = " having (valid_from is null or valid_from > '{0}')".format(today)
+	conditions = " having (valid_upto is null or valid_upto > '{0}')".format(today)
+	#if filters.get('item_group'):
+	#	item_group_str = str(tuple(filters.get('item_group'))).replace(',)',')')
+	#	conditions += " and it.item_group in {0}".format(item_group_str)
 	if filters.get('item_code'):
-		conditions += " and it.item_code = '{0}'".format(filters.get('item_code'))
-
+		conditions += " and item_code = '{0}'".format(filters.get('item_code'))
 	return conditions
 @frappe.whitelist()
 def get_finished_good_item_group_with_children():
