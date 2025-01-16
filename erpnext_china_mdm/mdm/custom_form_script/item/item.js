@@ -18,5 +18,8 @@ frappe.ui.form.on("Item", {
                 filters: filters
             };
         });
+
+        frm.add_custom_button(__('Pricing Rule'), () => frappe.set_route('List', 'Pricing Rule', {'item_code': frm.doc.name}),__('View'))
+        frm.add_custom_button(__('Item Price Summary'), () => frappe.set_route('query-report', 'Item Price Summary', {'item_code': frm.doc.name}),__('View'))
     }
 })
