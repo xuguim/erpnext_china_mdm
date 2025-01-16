@@ -9,36 +9,19 @@ frappe.query_reports["Item Price Summary"] = {
 			fieldtype: "MultiSelectList",
 			options: "Item Group",
 			get_data: function (txt) {
-				// frappe.call({
-				// 	method:"erpnext_china_mdm.mdm.report.item_price_summary.item_price_summary.get_finished_good_item_group_with_children",
-				// 	args: {
-				// 	},
-				// 	callback: function(r) {
-				// 		return frappe.db.get_link_options("Item Group", txt,{
-				// 			name:['in',r.message]
-				// 		});
-				// 	}
-				// })
 				return new Promise((resolve) => {
 					frappe.call({
 						method: "erpnext_china_mdm.mdm.report.item_price_summary.item_price_summary.get_finished_good_item_group_with_children",
 						args: {},
 						callback: function(r) {
-							// 假设r.message是一个包含有效项组名称的数组
 							const validItemGroups = r.message;
-		
-							// 使用frappe.db.get_link_options获取链接选项，但先过滤结果
 							frappe.db.get_link_options("Item Group", txt, {
 								is_group:0
 							}).then(filteredOptions => {
-								console.log("Filtered options:", filteredOptions);
 								const filteredAndValidOptions = filteredOptions.filter(option => validItemGroups.includes(option.value));
-								// 当链接选项被过滤并获取后，解决Promise
 								resolve(filteredAndValidOptions);
 							}).catch(error => {
-								// 如果在获取链接选项时发生错误，可以拒绝（reject）Promise
-								console.error("Error fetching link options:", error);
-								resolve([]); // 或者您可以根据需要返回其他值或再次抛出错误
+								resolve([]);
 							});
 						}
 					});
@@ -65,7 +48,7 @@ frappe.query_reports["Item Price Summary"] = {
 		if(!consolidate_items) {
 			return value
 		} else {
-			if (in_list(['min_qty','rate'],column.id) && data && !data['item_name']) {
+			if (in_list(['min_qty','rate','standard_selling_rate','uom'],column.id) && data && !data['item_name']) {
 				value = `<span class="hidden">` + value +`</span>`;
 			} 
 			else if(column.id =='stock_available' && data && !data['item_name']) {
@@ -84,7 +67,6 @@ frappe.query_reports["Item Price Summary"] = {
 				}
 				
 			}
-
 			return value
 		}
 	}
