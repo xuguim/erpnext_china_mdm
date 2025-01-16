@@ -217,7 +217,8 @@ def validate_shipper(doc, method=None):
 	warehouse_employees = frappe.get_all("Warehouse User", filters={"parent": ["in", warehouses]}, pluck='warehouse_employee')
 	if "HR-EMP-02708" in warehouse_employees:
 		shipper = "HR-EMP-00828"
-	
+	if "HR-EMP-02157" in warehouse_employees:
+		shipper = "HR-EMP-02157"
 	if shipper:
 		doc.shipper = shipper
 		doc.shipping_user = frappe.db.get_value('Employee',shipper,'user_id')
