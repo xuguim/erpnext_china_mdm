@@ -18,5 +18,7 @@ frappe.ui.form.on("Item", {
                 filters: filters
             };
         });
+
+        frm.add_custom_button(__('Pricing Rule'), () => frappe.set_route('List', 'Pricing Rule', {'item_code': frm.doc.name}),__('View'))
     }
 })
