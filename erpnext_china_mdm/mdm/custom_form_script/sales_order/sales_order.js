@@ -100,3 +100,21 @@ frappe.ui.form.on('Sales Order', {
         })
     }
 });
+
+frappe.ui.form.on("Sales Order Item", {
+    item_code:function (frm,cdt,cdn) {
+        sync_item_amount_request(frm,cdt,cdn)
+    },
+
+    qty:function (frm,cdt,cdn) {
+        sync_item_amount_request(frm,cdt,cdn)
+    }
+});
+
+function sync_item_amount_request(frm,cdt,cdn) {
+    var row = locals[cdt][cdn];
+    console.log(row.rate,row.qty,)
+    if (row.rate * row.qty != row.custom_after_distinct__amount_request) {
+        frappe.model.set_value(cdt, cdn, "custom_after_distinct__amount_request", row.rate * row.qty);
+    }
+}
