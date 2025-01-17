@@ -48,7 +48,7 @@ def has_permission(doc, user, permission_type=None):
 		delivery_notes = []
 		if '仓库' in frappe.get_roles(user):
 			delivery_notes = get_delivery_notes_by_warehouse_user(user)
-		
+
 		if '出货管理' in frappe.get_roles(user):
 			return True
 		if doc.owner in users or doc.shipping_user == user or doc.name in delivery_notes:
