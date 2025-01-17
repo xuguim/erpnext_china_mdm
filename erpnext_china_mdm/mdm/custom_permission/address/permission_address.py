@@ -59,7 +59,7 @@ def get_addresses_from_delivery_notes(user):
 		return []
 
 def has_query_permission(user):
-	if frappe.db.get_value('Has Role',{'parent':user,'role': ['in',['System Manager','销售会计','销售支持']]}):
+	if frappe.db.get_value('Has Role',{'parent':user,'role': ['in',['System Manager','销售会计']]}):
 		# 如果角色包含管理员，则看到全量
 		conditions = ''
 	else:
