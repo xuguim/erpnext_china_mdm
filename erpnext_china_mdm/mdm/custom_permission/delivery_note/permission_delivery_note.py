@@ -37,7 +37,7 @@ def has_query_permission(user):
 	return conditions
 
 def has_permission(doc, user, permission_type=None):
-	if frappe.db.get_value('Has Role',{'parent':user,'role':['in',['System Manager']]}):
+	if frappe.db.get_value('Has Role',{'parent':user,'role':['in',['System Manager','出货管理']]}):
 		# 如果角色包含管理员，则看到全量
 		return True
 	else:
@@ -48,7 +48,9 @@ def has_permission(doc, user, permission_type=None):
 		delivery_notes = []
 		if '仓库' in frappe.get_roles(user):
 			delivery_notes = get_delivery_notes_by_warehouse_user(user)
-			
+		
+		if '出货管理' in frappe.get_roles(user):
+			return True
 		if doc.owner in users or doc.shipping_user == user or doc.name in delivery_notes:
 			return True
 		else:
