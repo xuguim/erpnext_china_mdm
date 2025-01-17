@@ -87,6 +87,14 @@ frappe.ui.form.on('Sales Order', {
 
         // recalc discount in case of remove items
         calc_discount(frm)
+
+        $.each(frm.doc.items, function (j, item) {
+            if(item.amount != item.custom_after_distinct__amount_request) {
+                console.log(item.amount,item.custom_after_distinct__amount_request)
+                let $els = $("div[data-fieldname='custom_after_distinct__amount_request']").find('.static-area')
+                $els.eq(item.idx).addClass('text-danger bold');
+            }
+        });
     },
 
     mark_allow_delivery(frm) {
