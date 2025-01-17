@@ -141,7 +141,7 @@ function calc_discount(frm) {
         frm.doc.items.forEach(item=>{
             discount_amount += item.amount - item.custom_after_distinct__amount_request
         })
-        if(frm.doc.discount_amount != discount_amount) {
+        if(flt(frm.doc.discount_amount,2) != flt(discount_amount,2)) {
             frm.set_value('discount_amount', discount_amount)
         }
     }
