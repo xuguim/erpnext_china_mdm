@@ -87,6 +87,14 @@ frappe.ui.form.on('Sales Order', {
 
         // recalc discount in case of remove items
         calc_discount(frm)
+
+        $.each(frm.doc.items, function (j, item) {
+            if(item.amount != item.custom_after_distinct__amount_request) {
+                console.log(item.amount,item.custom_after_distinct__amount_request)
+                let $els = $("div[data-fieldname='custom_after_distinct__amount_request']").find('.static-area')
+                $els.eq(item.idx).addClass('text-danger bold');
+            }
+        });
     },
 
     mark_allow_delivery(frm) {
@@ -106,17 +114,22 @@ frappe.ui.form.on('Sales Order', {
 
 frappe.ui.form.on("Sales Order Item", {
     item_code:function (frm,cdt,cdn) {
-        sync_item_amount_request(frm,cdt,cdn)
+        setTimeout(() => {
+            sync_item_amount_request(frm,cdt,cdn)
+        }, 500);
+        
     },
 
     qty:function (frm,cdt,cdn) {
-        sync_item_amount_request(frm,cdt,cdn)
+        setTimeout(() => {
+            sync_item_amount_request(frm,cdt,cdn)
+        }, 500);
     },
 
     custom_after_distinct__amount_request:function (frm,cdt,cdn) {
         setTimeout(() => {
             calc_discount(frm)
-        }, 100);
+        }, 500);
     }
 });
 
@@ -131,9 +144,9 @@ function calc_discount(frm) {
     if(frm.doc.docstatus == 0 && frm.doc.items.length > 0) {
         discount_amount = 0
         frm.doc.items.forEach(item=>{
-            discount_amount += item.amount - item.custom_after_distinct__amount_request
+            discount_amount += flt(item.amount - item.custom_after_distinct__amount_request,2)
         })
-        if(frm.doc.discount_amount != discount_amount) {
+        if(flt(frm.doc.discount_amount,2) != flt(discount_amount,2)) {
             frm.set_value('discount_amount', discount_amount)
         }
     }
