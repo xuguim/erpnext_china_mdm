@@ -215,10 +215,26 @@ def validate_shipper(doc, method=None):
 	# 发货单读取仓库，如果仓库的库管中，包含赵陪陪，发货人直接指定成王秋侠
 	warehouses = [item.warehouse for item in doc.items]
 	warehouse_employees = frappe.get_all("Warehouse User", filters={"parent": ["in", warehouses]}, pluck='warehouse_employee')
+
 	if "HR-EMP-02708" in warehouse_employees:
-		shipper = "HR-EMP-00828"
+		# 判断是否高分子
+		level = 0
+		employee_reports_to = frappe.db.get_value('Employee',employee.name,'reports_to')
+		while level < 5 and employee_reports_to != 'HR-EMP-00457':
+			level = level+1
+			if employee_reports_to:
+				employee_reports_to = frappe.db.get_value('Employee',employee_reports_to,'reports_to')
+		if employee_reports_to == 'HR-EMP-00457':
+			# 判断是东贝，东贝走朱坤芹
+			shipper = "HR-EMP-00828"
+		else: 
+			# 判断是不是东贝，走王秋侠
+			shipper = "HR-EMP-02111"
+
 	if "HR-EMP-02157" in warehouse_employees:
+		# 样品走王兆丰
 		shipper = "HR-EMP-02157"
+
 	if shipper:
 		doc.shipper = shipper
 		doc.shipping_user = frappe.db.get_value('Employee',shipper,'user_id')
