@@ -84,6 +84,9 @@ frappe.ui.form.on('Sales Order', {
                 frm.remove_custom_button(__('Delivery Note'),__('Create'))
             }, 100);
         }
+
+        // recalc discount in case of remove items
+        calc_discount(frm)
     },
 
     mark_allow_delivery(frm) {
@@ -108,13 +111,30 @@ frappe.ui.form.on("Sales Order Item", {
 
     qty:function (frm,cdt,cdn) {
         sync_item_amount_request(frm,cdt,cdn)
+    },
+
+    custom_after_distinct__amount_request:function (frm,cdt,cdn) {
+        setTimeout(() => {
+            calc_discount(frm)
+        }, 100);
     }
 });
 
 function sync_item_amount_request(frm,cdt,cdn) {
     var row = locals[cdt][cdn];
-    console.log(row.rate,row.qty,)
     if (row.rate * row.qty != row.custom_after_distinct__amount_request) {
         frappe.model.set_value(cdt, cdn, "custom_after_distinct__amount_request", row.rate * row.qty);
+    } 
+}
+
+function calc_discount(frm) {
+    if(frm.doc.docstatus == 0 && frm.doc.items.length > 0) {
+        discount_amount = 0
+        frm.doc.items.forEach(item=>{
+            discount_amount += item.amount - item.custom_after_distinct__amount_request
+        })
+        if(frm.doc.discount_amount != discount_amount) {
+            frm.set_value('discount_amount', discount_amount)
+        }
     }
 }
