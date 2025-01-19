@@ -20,7 +20,7 @@ def get_data(filters):
 		'posting_date': ["between", [from_date, to_date]]
 	}
 	# use get_list to apply permission for payment entry
-	pe_list = frappe.get_list("Payment Entry", filters=pe_filters,fields=['name','party','posting_date','paid_amount'],debug=1)
+	pe_list = frappe.get_list("Payment Entry", filters=pe_filters,fields=['name','party','posting_date','paid_amount'])
 	if not pe_list:
 		return []
 	pe_names = list(set([d.name for d in pe_list]))
@@ -116,7 +116,7 @@ def get_chart_data(data,filters):
 				if d.order_type == order_type:
 					amount += d.allocated_amount
 			datapoints.append(amount)
-
+		labels, datapoints = sort_chart_data(labels,datapoints)
 		return {
 			"data": {
 				"labels": [_(d) for d in labels],
@@ -162,7 +162,8 @@ def get_chart_data(data,filters):
 				if d.product_line == product_line:
 					amount += d.real_amount
 			datapoints.append(amount)
-
+		
+		labels, datapoints = sort_chart_data(labels,datapoints)
 		return {
 			"data": {
 				"labels": [_(d) for d in labels],
@@ -171,6 +172,14 @@ def get_chart_data(data,filters):
 			"type": "bar",
 			"fieldtype": "Currency",
 		}
+
+def sort_chart_data(labels,datapoints):
+	combined = list(zip(labels, datapoints))
+	sorted_combined = sorted(combined, key=lambda x: x[1], reverse=True)
+	sorted_labels, sorted_datapoints = zip(*sorted_combined)
+	sorted_labels = list(sorted_labels)
+	sorted_datapoints = list(sorted_datapoints)
+	return sorted_labels, sorted_datapoints
 
 
 def get_columns(filters):
