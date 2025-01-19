@@ -4,7 +4,6 @@
 import frappe
 from frappe import _
 from frappe.utils.data import get_timespan_date_range
-from frappe.utils.dateutils import get_from_date_from_timespan, get_period_ending
 
 def execute(filters=None):
 	columns, data = [], []
@@ -22,8 +21,8 @@ def get_data(filters):
 	}
 	# use get_list to apply permission for payment entry
 	pe_list = frappe.get_list("Payment Entry", filters=pe_filters,fields=['name','party','posting_date','paid_amount'],debug=1)
-	# if not pe_list:
-	# 	return []
+	if not pe_list:
+		return []
 	pe_names = list(set([d.name for d in pe_list]))
 	pe_name_string = str(tuple(pe_names)).replace(',)',')')
 
@@ -124,7 +123,6 @@ def get_chart_data(data,filters):
 				"datasets": [{"name": _('Order Type'), "values": datapoints}],
 			},
 			"type": "bar",
-			# "lineOptions": {"regionFill": 1},
 			"fieldtype": "Currency",
 		}
 	elif filters.get('charts_based_on') == 'Item Group':
@@ -171,7 +169,6 @@ def get_chart_data(data,filters):
 				"datasets": [{"name": _('Order Type'), "values": datapoints}],
 			},
 			"type": "bar",
-			# "lineOptions": {"regionFill": 1},
 			"fieldtype": "Currency",
 		}
 
