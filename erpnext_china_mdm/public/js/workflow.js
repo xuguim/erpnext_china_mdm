@@ -9,7 +9,6 @@ frappe.ui.form.States = class FormStates extends frappe.ui.form.States {
 					name: workflow_name
 				},
 				callback: function (res) {
-					console.log(res.message);
 					me.frm.page.add_action_item(
 						__("Help"),
 						function () {
