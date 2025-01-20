@@ -36,5 +36,12 @@ frappe.ui.form.on('Delivery Note', {
 			}
 		})
 
+		$('.grid-static-col').css({ "height": "auto", "display": "flex", "align-items": "center" })
+		$('.row-check').css({ "height": "auto", "display": "flex", "align-items": "center", "justify-content": "center" })
+		$('.row-index').css({ "height": "auto", "display": "flex", "align-items": "center", "justify-content": "center" })
+		$('.btn-open-row').css({ "height": "auto", "display": "flex", "align-items": "center", "justify-content": "center" })
+		$('.grid-static-col[data-fieldtype="Text Editor"]').css({ "align-items": "flex-start" })
+		$('.grid-static-col[data-fieldtype="Check"]').css({ "justify-content": "center" })
+		$('.grid-body .grid-static-col .static-area').css({	"white-space": "normal","word-break": "break-all","align-items": "center" });
 	},
 });
