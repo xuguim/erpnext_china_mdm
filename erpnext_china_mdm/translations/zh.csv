@@ -116,3 +116,4 @@ Lead Expenses(This Month), 本月线索花费
 Lead Expenses(Yestoday), 昨日线索花费
 Lead Qty, 线索数量
 Lead Expenses, 线索花费
+"Due to insufficient stock balance, the warehouse of {0} has been updated to {1}", 由于物料{0}的库存不足，仓库已更新为{1}

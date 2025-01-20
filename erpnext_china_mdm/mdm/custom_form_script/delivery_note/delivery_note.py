@@ -16,13 +16,13 @@ class CustomDeliveryNote(DeliveryNote):
 			self.set_freight()
 			self.set_original_sales_order()
 		self.validate_discount_amount()
+		self.validate_warehouse()
 
 	def validate_discount_amount(self):
 		self.validate_last_dn()
 		[so_total,so_discount_amount] = frappe.db.get_value('Sales Order',self.sales_order,['total','discount_amount'])
 		# clear discount amount for zero total sales order
 		if so_total == 0:
-			frappe.log("so_total is zero")
 			self.additional_discount_percentage = 0
 			self.discount_amount = 0
 			return
@@ -90,7 +90,6 @@ class CustomDeliveryNote(DeliveryNote):
 				return
 			advance_paid = frappe.db.get_value("Sales Order", filters={"name": original_sales_order}, fieldname="advance_paid")
 			grand_total = frappe.db.get_value("Sales Order", filters={"name": original_sales_order}, fieldname="grand_total")
-			frappe.log(f"{grand_total}, {advance_paid}")
 			if grand_total != advance_paid:
 				frappe.throw("收款后才能发货")
 	
@@ -165,7 +164,6 @@ class CustomDeliveryNote(DeliveryNote):
 				dni.stock_qty > soi.stock_qty
 		"""
 		items = frappe.db.sql(query, as_dict=1)
-		frappe.log(items)
 		if items:
 			frappe.throw(
 				_(
@@ -197,6 +195,30 @@ class CustomDeliveryNote(DeliveryNote):
 			msg += f'<p class="text-danger bold h3">{d}</p>'
 
 		return msg
+
+	def validate_warehouse(self):
+		from erpnext.stock.dashboard.item_dashboard import get_data
+		for item in self.items:
+			if frappe.db.get_value('Warehouse',item.warehouse,'for_sample') == 1:
+				return
+			stock_info = get_data(item.item_code,item.warehouse)
+			if len(stock_info) > 0 and item.qty > stock_info[0].actual_qty:
+				try:
+					warehouse_found = False
+					stock_avilable = get_data(item.item_code)
+					for d in stock_avilable:
+						if d.actual_qty >= item.stock_qty:
+							item.warehouse = d.warehouse
+							warehouse_found = True
+							frappe.msgprint(_('Due to insufficient stock balance, the warehouse of {0} has been updated to {1}').format(item.item_code,item.warehouse))
+							break
+				except Exception as e:
+					frappe.throw(_('Insufficient Stock'))
+
+				if not warehouse_found:
+					frappe.throw(_('{0} units of {1} needed in {2} on {3} {4} for {5} to complete this transaction.').format(
+						item.stock_qty,item.item_code,item.warehouse,None,None,item.parent
+					))
 
 def validate_shipper(doc, method=None):
 	user = doc.owner
