@@ -95,7 +95,8 @@ def has_permission(doc, user, permission_type=None):
 		# 其他情况则只能看到自己,上级可以看到下级
 		users = get_employee_tree(parent=user)
 		users.append(user)
-		addresses_from_delivery_notes,is_your_company_addresses = []
+		addresses_from_delivery_notes = []
+		is_your_company_addresses = []
 		delivery_note_address_perm = False
 		if '仓库' in frappe.get_roles(user):
 			delivery_note_docs = frappe.get_all('Delivery Note', filters={"shipping_address_name": doc.name,'workflow_state':'仓库审核'}, pluck='name')
