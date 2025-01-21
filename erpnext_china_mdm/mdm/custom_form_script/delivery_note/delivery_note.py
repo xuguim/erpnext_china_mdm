@@ -356,7 +356,7 @@ def split_delivery_note(doc,method=None):
 			row = frappe._dict(row)
 			diff_status = None
 			for item in doc.items:
-				if item.name == row.name:
+				if item.so_detail == row.so_detail:
 					diff_status = True
 					qty_diff = row.qty - item.qty
 					if qty_diff > 0:
@@ -374,7 +374,7 @@ def split_delivery_note(doc,method=None):
 						item.qty = row.qty
 			new_dn.raw_data = json.dumps({
 				'items': diff_items,
-				'workflow_state': doc.workflow_state
+				'workflow_state': raw_data.get('workflow_state')
 			})
 			frappe.log(new_dn.as_dict())
 			new_dn.insert()
