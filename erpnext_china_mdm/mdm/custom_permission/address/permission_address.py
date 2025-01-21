@@ -21,8 +21,9 @@ def get_user_all_warehouses(users):
 		finall_warehouses += get_descendants(w['name'], all_warehouses) + [w]
 	return finall_warehouses
 	
-def get_addresses_from_customers(users_str):
+def get_addresses_from_customers(users):
 	try:
+		users_str = str(tuple(users)).replace(',)',')')
 		sql = f"""
 			select `name` from tabCustomer where 
 			(`tabCustomer`.`owner` in {users_str} and ISNULL(`tabCustomer`.`custom_customer_owner_user`)) or 
@@ -30,6 +31,10 @@ def get_addresses_from_customers(users_str):
 
 		"""
 		customers = frappe.db.sql(sql, pluck=True)
+
+		share_customers = get_share_customers(users)
+		customers = list(set(list(customers) + share_customers))
+
 		addresses = frappe.get_all('Dynamic Link', filters={
 			'link_doctype': 'Customer', 
 			'parenttype': 'Address',
@@ -38,6 +43,17 @@ def get_addresses_from_customers(users_str):
 		return addresses
 	except:
 		return []
+
+def get_share_customers(users):
+	# 分享给当前用户
+	share_customer = frappe.db.get_all("DocShare", 
+		filters={
+			"share_doctype": "Customer", 
+			"user": ["in", users], 
+		},
+		pluck="share_name"
+	)
+	return share_customer
 
 def get_is_your_company_addresses():
 	try:
@@ -78,7 +94,7 @@ def has_query_permission(user):
 			conditions += f" or tabAddress.`name` in {addresses_str}"
 		
 		if '销售' in frappe.get_roles(user):
-			addresses = get_addresses_from_customers(users_str)
+			addresses = get_addresses_from_customers(users)
 			if len(addresses) > 0:
 				addresses_str = str(tuple(addresses)).replace(',)',')')
 				conditions += f" or tabAddress.`name` in {addresses_str}"
@@ -115,8 +131,7 @@ def has_permission(doc, user, permission_type=None):
 		
 		addresses_from_customer = []
 		if '销售' in frappe.get_roles(user):
-			users_str = str(tuple(users)).replace(',)',')')
-			addresses_from_customer = get_addresses_from_customers(users_str)
+			addresses_from_customer = get_addresses_from_customers(users)
 
 		if 'Delivery User' in frappe.get_roles(user):
 			shippers = frappe.get_all('Delivery Note', filters={"shipping_address_name": doc.name,'workflow_state':['in',['发货员确认出货','Approved']]}, pluck='shipper')

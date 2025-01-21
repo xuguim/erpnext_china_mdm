@@ -3,12 +3,12 @@ import frappe
 from erpnext_china.hrms_china.custom_form_script.employee.employee import get_employee_tree
 
 def get_descendants(name, nodes):
-    descendants = []
-    for node in nodes:
-        if node['parent_warehouse'] == name:
-            descendants.append(node)
-            descendants.extend(get_descendants(node['name'], nodes))
-    return descendants
+	descendants = []
+	for node in nodes:
+		if node['parent_warehouse'] == name:
+			descendants.append(node)
+			descendants.extend(get_descendants(node['name'], nodes))
+	return descendants
 
 def get_user_all_warehouses(users):
 	user_warehouses = frappe.get_all("Warehouse User", filters={"warehouse_user": ["in", users]}, pluck='parent')
@@ -138,23 +138,15 @@ def has_permission(doc, user, permission_type=None):
 		else:
 			customer_perm = False
 
-		# 是否是分享给所有人
+		# 分享给当前用户
 		share_customer = frappe.db.get_value("DocShare", 
 			filters={
 				"share_doctype": "Customer", 
-				"share_name": doc.name, 
-				"everyone": 1
-			}, fieldname=["read", "write", "share"], as_dict=True)
-		if not share_customer:
-			# 分享给当前用户
-			share_customer = frappe.db.get_value("DocShare", 
-				filters={
-					"share_doctype": "Customer", 
-					"user": ["in", users], 
-					"share_name": doc.name
-				},
-				fieldname=["read", "write", "share"], as_dict=True
-			)
+				"user": ["in", users], 
+				"share_name": doc.name
+			},
+			fieldname=["read", "write", "share"], as_dict=True
+		)
 		share_customer_perm = share_customer and ((share_customer.read and permission_type == 'read') or (share_customer.write and permission_type == 'write') or (share_customer.share and permission_type == 'share'))
 		
 		if (doc.custom_customer_owner_user or doc.owner) in users or lead_owner == user or doc.name in customers or doc.name in dn_customers or customer_perm or share_customer_perm:

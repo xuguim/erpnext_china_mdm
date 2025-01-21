@@ -13,11 +13,13 @@ frappe.ui.form.on('Customer', {
                 __("领取累计满赠优惠券"),
                 () => frm.events.make_coupon_code(frm),
             );
-            frm.add_custom_button(
-                __("客户转移"),
-                () => frm.events.transfer_to_user(frm),
-                __("Actions")
-            );
+            if([frm.doc.owner, frm.doc.custom_customer_owner_user, 'Administrator'].includes(frappe.session.user)) {
+                frm.add_custom_button(
+                    __("客户转移"),
+                    () => frm.events.transfer_to_user(frm),
+                    __("Actions")
+                );
+            }
         }
     },
 
