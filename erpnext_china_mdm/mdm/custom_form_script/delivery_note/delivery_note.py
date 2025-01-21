@@ -216,9 +216,11 @@ class CustomDeliveryNote(DeliveryNote):
 					frappe.throw(_('Insufficient Stock'))
 
 				if not warehouse_found:
-					frappe.throw(_('{0} units of {1} needed in {2} on {3} {4} for {5} to complete this transaction.').format(
-						item.stock_qty,item.item_code,item.warehouse,None,None,item.parent
-					))
+					msg = _("#:{0} item {1} {2} is out of stock").format(item.idx,item.item_code,item.item_name)
+					if self.docstatus == 0:
+						frappe.msgprint(msg,alert=True)
+					elif self.docstatus == 1:
+						frappe.throw(_(msg),title=_('Error'))
 
 def validate_shipper(doc, method=None):
 	user = doc.owner
