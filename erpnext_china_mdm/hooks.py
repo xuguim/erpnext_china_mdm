@@ -256,7 +256,10 @@ doc_events = {
 		"validate": "erpnext_china_mdm.mdm.custom_form_script.sales_order.sales_order.validate_sales_team",
 	},
 	"Delivery Note": {
-		"validate": "erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.validate_shipper",
+		"validate": [
+			"erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.validate_shipper",
+			"erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.split_delivery_note",
+        ],
 		"on_update": [
 			"erpnext_china_mdm.mdm.custom_form_script.delivery_note.delivery_note.validate_qty_limit",
         ],

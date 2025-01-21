@@ -43,5 +43,78 @@ frappe.ui.form.on('Delivery Note', {
 		$('.grid-static-col[data-fieldtype="Text Editor"]').css({ "align-items": "flex-start" })
 		$('.grid-static-col[data-fieldtype="Check"]').css({ "justify-content": "center" })
 		$('.grid-body .grid-static-col .static-area').css({	"white-space": "normal","word-break": "break-all","align-items": "center" });
+
+		if(frm.doc.docstatus == 0 && in_list(['仓库审核','发货员确认出货'],frm.doc.workflow_state)) {
+			frm.trigger('check_qty');
+		}
 	},
+
+	check_qty(frm) {
+		let raw_data = JSON.parse(frm.doc.raw_data);
+		let diff_items = [];
+		let delete_items = []
+		raw_data.items.forEach(item => {
+			diff_status = ''
+			frm.doc.items.forEach(row => {
+				if (item.so_detail == row.so_detail) {
+					if(item.qty == row.qty) {
+						diff_status = 'Matched';
+					} else {
+						diff_status = 'Unmatched';
+						diff_item = row;
+						diff_item.qty = item.qty - row.qty;
+						diff_item.amount = diff_item.qty * item.rate;
+						diff_items.push(diff_item);
+					}
+				}
+			});
+			if(!diff_status) {
+				delete_items.push(item);
+			}
+		});
+		if(delete_items?.length > 0 || diff_items?.length > 0) {
+			let item_html = `<table class="text-center border w-100">
+					<thead>
+						<tr class="bg-light">
+							<th class="p-2">${__('Item Code')}</th>
+							<th class="p-2">${__('Item Name')}</th>
+							<th class="p-2">${__('Qty')}</th>
+							<th class="p-2">${__('UOM')}</th>
+							<th class="p-2">${__('Rate')}</th>
+							<th class="p-2">${__('Amount')}</th>
+						</tr>
+					</thead>
+				<tbody>`;
+			delete_items.forEach((item, index) => {
+				item_html += `<tr>
+					<td class="p-2">${item.item_code}</td>
+					<td class="p-2">${item.item_name}</td>
+					<td class="p-2 text-danger bold">${item.qty}</td>
+					<td class="p-2">${item.uom}</td>
+					<td class="p-2">${item.rate}</td>
+					<td class="p-2">${item.amount}</td>
+					</tr>`;
+			});
+			diff_items.forEach((item, index) => {
+				item_html += `<tr>
+					<td class="p-2">${item.item_code}</td>
+					<td class="p-2">${item.item_name}</td>
+					<td class="p-2 text-danger bold">${item.qty}</td>
+					<td class="p-2">${item.uom}</td>
+					<td class="p-2">${item.rate}</td>
+					<td class="p-2">${item.amount}</td>
+					</tr>`;
+			});
+			item_html += `</tbody></table>`;
+
+			let msg = `
+			<p>以下物料为销售提交的原始单据和当前单据的偏差，单据提交后将<b>自动创建新的差额销售出货单</b></p>
+			${item_html}
+			`
+
+			frm.dashboard.clear_comment();
+			frm.dashboard.add_comment(msg, "blue", true);
+		}
+
+	}
 });

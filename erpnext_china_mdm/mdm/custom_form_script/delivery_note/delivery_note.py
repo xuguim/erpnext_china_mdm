@@ -1,4 +1,5 @@
 import frappe
+import json
 from frappe import _
 from frappe.utils import flt
 from erpnext.stock.doctype.delivery_note.delivery_note import DeliveryNote, make_sales_invoice
@@ -335,3 +336,53 @@ def update_internal_po_status(doc,method=None):
 				po_doc = frappe.get_doc("Purchase Order", po_name)
 				po_doc.update_status('Submitted')
 				po_doc.update_delivered_qty_in_sales_order()
+
+def split_delivery_note(doc,method=None):
+	if doc.docstatus == 0 and doc.workflow_state in ('仓库审核','发货员确认出货') and not doc.raw_data:
+		items = []
+		for item in doc.items:
+			item_info = item.as_dict()
+			item_info.creation = None
+			item_info.modified = None
+			items.append(item_info)
+		doc.raw_data = json.dumps({
+			'items': items,
+			'workflow_state': doc.workflow_state
+		})
+	elif doc.docstatus == 1:
+		diff_items = []
+		raw_data = json.loads(doc.raw_data)
+		for row in raw_data['items']:
+			row = frappe._dict(row)
+			diff_status = None
+			for item in doc.items:
+				if item.name == row.name:
+					diff_status = True
+					qty_diff = row.qty - item.qty
+					if qty_diff > 0:
+						row.qty = qty_diff
+						diff_items.append(row)
+			if not diff_status:
+				diff_items.append(row)
+
+		if len(diff_items) > 0:
+			new_dn = frappe.copy_doc(doc)
+			new_dn.workflow_state = None
+			for item in new_dn.items:
+				for row in diff_items:
+					if item.so_detail == row.so_detail:
+						item.qty = row.qty
+			new_dn.raw_data = json.dumps({
+				'items': diff_items,
+				'workflow_state': doc.workflow_state
+			})
+			frappe.log(new_dn.as_dict())
+			new_dn.insert()
+			new_dn.db_set('workflow_state', raw_data.get('workflow_state'))
+			msg = f"""
+			<div>
+				<h5>{_('New Delivery Note Created Successfully')}</h5>
+				<a href="/app/delivery-note/{new_dn.name}" target="_blank">{new_dn.name}</a>
+			</div>
+			"""
+			frappe.msgprint(msg, alert=1)

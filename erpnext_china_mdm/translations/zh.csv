@@ -119,3 +119,5 @@ Lead Expenses, 线索花费
 "Due to insufficient stock balance, the warehouse of {0} has been updated to {1}", 由于物料{0}的库存不足，仓库已更新为{1}
 Customer Owner Employee,客户所属员工
 Customer Owner User,客户所属用户
+#:{0} item {1} {2} is out of stock, #{0}：物料{1} {2} 库存不足
+New Delivery Note Created Successfully, 新销售出货单创建成功
