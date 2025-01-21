@@ -21,20 +21,39 @@ def get_user_all_warehouses(users):
 		finall_warehouses += get_descendants(w['name'], all_warehouses) + [w]
 	return finall_warehouses
 	
-def get_addresses_from_customers(user):
+def get_addresses_from_customers(users):
 	try:
-		if frappe.db.get_value('Has Role',{'parent':user,'role': ['in',['销售']]}):
-			customers = frappe.get_list('Customer', pluck='name')
-			addresses = frappe.get_all('Dynamic Link', filters={
-				'link_doctype': 'Customer', 
-				'parenttype': 'Address',
-				'link_name': ['in', customers]},
-				pluck='parent')
-			is_your_company_addresses = frappe.get_all('Address', filters={'is_your_company_address': 1}, pluck='name')
-			return list(set(addresses + is_your_company_addresses))
-		return []
+		users_str = str(tuple(users)).replace(',)',')')
+		sql = f"""
+			select `name` from tabCustomer where 
+			(`tabCustomer`.`owner` in {users_str} and ISNULL(`tabCustomer`.`custom_customer_owner_user`)) or 
+			`tabCustomer`.`custom_customer_owner_user` in {users_str}
+
+		"""
+		customers = frappe.db.sql(sql, pluck=True)
+
+		share_customers = get_share_customers(users)
+		customers = list(set(list(customers) + share_customers))
+
+		addresses = frappe.get_all('Dynamic Link', filters={
+			'link_doctype': 'Customer', 
+			'parenttype': 'Address',
+			'link_name': ['in', customers]},
+			pluck='parent')
+		return addresses
 	except:
 		return []
+
+def get_share_customers(users):
+	# 分享给当前用户
+	share_customer = frappe.db.get_all("DocShare", 
+		filters={
+			"share_doctype": "Customer", 
+			"user": ["in", users], 
+		},
+		pluck="share_name"
+	)
+	return share_customer
 
 def get_is_your_company_addresses():
 	try:
@@ -73,11 +92,12 @@ def has_query_permission(user):
 			addresses_from_delivery_notes = get_addresses_from_delivery_notes(user)
 			addresses_str = str(tuple(addresses_from_delivery_notes)).replace(',)',')')
 			conditions += f" or tabAddress.`name` in {addresses_str}"
-		# # 有客户权限，则有详细地址权限
-		# addresses = get_addresses_from_customers(user)
-		# if len(addresses) > 0:
-		# 	addresses_str = str(tuple(addresses)).replace(',)',')')
-		# 	conditions += f" or tabAddress.`name` in {addresses_str}"
+		
+		if '销售' in frappe.get_roles(user):
+			addresses = get_addresses_from_customers(users)
+			if len(addresses) > 0:
+				addresses_str = str(tuple(addresses)).replace(',)',')')
+				conditions += f" or tabAddress.`name` in {addresses_str}"
 		
 		is_your_company_addresses = get_is_your_company_addresses()
 		if len(is_your_company_addresses) > 0:
@@ -108,8 +128,10 @@ def has_permission(doc, user, permission_type=None):
 			for delivery_note_warehouse in delivery_note_warehouses:
 				if delivery_note_warehouse in list(set([w['name'] for w in user_warehouses])):
 					delivery_note_address_perm = True
-		# 有客户权限，则有详细地址权限
-		# addresses = get_addresses_from_customers(user)
+		
+		addresses_from_customer = []
+		if '销售' in frappe.get_roles(user):
+			addresses_from_customer = get_addresses_from_customers(users)
 
 		if 'Delivery User' in frappe.get_roles(user):
 			shippers = frappe.get_all('Delivery Note', filters={"shipping_address_name": doc.name,'workflow_state':['in',['发货员确认出货','Approved']]}, pluck='shipper')
@@ -121,7 +143,7 @@ def has_permission(doc, user, permission_type=None):
 
 		is_your_company_addresses = get_is_your_company_addresses()
 
-		if doc.owner in users or doc.name in addresses_from_delivery_notes or doc.name in is_your_company_addresses or delivery_note_address_perm:
+		if doc.owner in users or doc.name in addresses_from_delivery_notes or doc.name in is_your_company_addresses or delivery_note_address_perm or doc.name in addresses_from_customer:
 			return True
 		else:
 			return False
