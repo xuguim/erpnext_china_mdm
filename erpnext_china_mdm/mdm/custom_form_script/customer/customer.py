@@ -19,14 +19,6 @@ class CustomCustomer(Customer):
 		if self.customer_name:
 			self.customer_name = str(self.customer_name).replace(' ', '')
 	
-	# 线索转化为客户后，不修改线索状态为 Converted
-	def update_lead_status(self):
-		"""If Customer created from Lead, update lead status to "Converted"
-		update Customer link in Quotation, Opportunity"""
-		if self.lead_name:
-			# frappe.db.set_value("Lead", self.lead_name, "status", "Converted")
-			pass
-	
 	def check_customer_exists(self):
 		# 同一条线索只能创建一个客户
 		if (self.has_value_changed("customer_type") or self.has_value_changed("customer_name")) and self.customer_type == "Company" and frappe.db.exists("Customer", {"customer_type": "Company", "customer_name": self.customer_name}):
@@ -70,6 +62,12 @@ class CustomCustomer(Customer):
 			doc.custom_is_parent_customer = 1
 			doc.save(ignore_permissions=True)
 
+	def set_default_customer_owner_employee(self):
+		if self.is_new():
+			employee = frappe.db.get_value("Employee", filters={"user_id": self.owner}, fieldname="name")
+			self.custom_customer_owner_employee = employee
+			self.custom_customer_owner_user = self.owner
+
 	def before_save(self):
 		# 如果客户关联的线索发生变化，同时修改客户联系方式子表
 		if self.has_value_changed("lead_name"):
@@ -79,6 +77,7 @@ class CustomCustomer(Customer):
 				self.add_customer_contact_item(lead)
 		self.set_primary_address()
 		self.set_check()
+		self.set_default_customer_owner_employee()
 		
 	def add_customer_contact_item(self, lead):
 		contact_name = lead.first_name
@@ -91,3 +90,24 @@ class CustomCustomer(Customer):
 					"source": "Lead",
 					"lead": lead_name
 				})
+
+
+@frappe.whitelist()
+def transfer_to_user(**kwargs):
+	employee = kwargs.get('employee')
+	doc_name = kwargs.get('doc')
+	employee_info = frappe.db.get_value("Employee", filters={"name": employee}, fieldname=["first_name", "user_id"], as_dict=True)
+	
+	customer = frappe.get_doc("Customer", doc_name)
+	customer.custom_customer_owner_employee = employee
+	customer.custom_customer_owner_user = employee_info.user_id
+	customer.save(ignore_permissions=True)
+	customer.add_comment("Comment", f"{frappe.session.user}将{doc_name}转移给{employee}")
+	
+	lead = frappe.get_doc("Lead", customer.lead_name)
+	lead.custom_lead_owner_employee = employee
+	lead.lead_owner = employee_info.user_id
+	lead.save(ignore_permissions=True)
+	lead.add_comment("Comment", f"{frappe.session.user}通过转移{doc_name}同时将{lead.name}转移给{employee}")
+	
+	return {"employee_name": employee_info.first_name}

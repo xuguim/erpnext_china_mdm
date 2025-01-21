@@ -66,7 +66,17 @@ def has_query_permission(user):
 		users = get_employee_tree(parent=user)
 		users.append(user)
 		users_str = str(tuple(users)).replace(',)',')')
-		conditions = f"tabCustomer.`owner` in {users_str}"
+		
+		conditions = f"(`tabCustomer`.`owner` in {users_str} and ISNULL(`tabCustomer`.`custom_customer_owner_user`))"
+		
+		# 如果经过了客户转移，则客户的当前所属用户及其上级也可以看到
+		conditions += f" or `tabCustomer`.`custom_customer_owner_user` in {users_str}"
+
+		# 分享客户
+		share_customers = frappe.db.get_all("DocShare", filters={"share_doctype": "Customer", "user": ["in", users]}, pluck="share_name")
+		if len(share_customers) > 0:
+			share_customers_str = str(tuple(share_customers)).replace(',)',')')
+			conditions += f" or tabCustomer.`name` in {share_customers_str}" 
 
 		# 如果当前用户是客户关联线索的负责人，也可以看到
 		# 这里要找 已转化的线索
@@ -128,7 +138,26 @@ def has_permission(doc, user, permission_type=None):
 		else:
 			customer_perm = False
 
-		if doc.owner in users or lead_owner == user or doc.name in customers or doc.name in dn_customers or customer_perm:
+		# 是否是分享给所有人
+		share_customer = frappe.db.get_value("DocShare", 
+			filters={
+				"share_doctype": "Customer", 
+				"share_name": doc.name, 
+				"everyone": 1
+			}, fieldname=["read", "write", "share"], as_dict=True)
+		if not share_customer:
+			# 分享给当前用户
+			share_customer = frappe.db.get_value("DocShare", 
+				filters={
+					"share_doctype": "Customer", 
+					"user": ["in", users], 
+					"share_name": doc.name
+				},
+				fieldname=["read", "write", "share"], as_dict=True
+			)
+		share_customer_perm = share_customer and ((share_customer.read and permission_type == 'read') or (share_customer.write and permission_type == 'write') or (share_customer.share and permission_type == 'share'))
+		
+		if (doc.custom_customer_owner_user or doc.owner) in users or lead_owner == user or doc.name in customers or doc.name in dn_customers or customer_perm or share_customer_perm:
 			return True
 		else:
 			return False
