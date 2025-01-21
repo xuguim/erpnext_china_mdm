@@ -104,7 +104,8 @@ class CustomDeliveryNote(DeliveryNote):
 			final_customer = frappe.db.get_value("Sales Order", filters={"name": self.sales_order}, fieldname="final_customer")
 			if final_customer:
 				self.custom_final_customer = final_customer
-
+			else:
+				self.custom_final_customer = self.customer
 	def set_freight(self):
 		if self.sales_order:
 			freight = frappe.db.get_value("Sales Order", self.sales_order, "custom_freight")
@@ -223,6 +224,10 @@ class CustomDeliveryNote(DeliveryNote):
 						frappe.throw(_(msg),title=_('Error'))
 
 def validate_shipper(doc, method=None):
+	if frappe.session.user == 'Administrator':
+		doc.shipper = 'HR-EMP-00218'
+		doc.shipping_user = 'Administrator'
+	return
 	user = doc.owner
 	employee = frappe.db.get_value("Employee", {"user_id": user},["name","employee_name","department","reports_to","company"],as_dict=1)
 
